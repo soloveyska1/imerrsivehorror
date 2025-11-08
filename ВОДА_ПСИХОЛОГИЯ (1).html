@@ -527,11 +527,12 @@
         /* CREEPY SMILE FACE */
         .smile-container {
             position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
+            top: 45%; left: 50%;
+            transform: translate(-50%, -55%);
             width: clamp(300px, 60vw, 600px);
             height: clamp(300px, 60vw, 600px);
             opacity: 0;
+            pointer-events: none;
         }
         
         /* SUBLIMINAL FLASH */
@@ -585,39 +586,56 @@
         }
         
         /* EXPERIENCE CONTAINER */
-        #experience { 
-            display: none; 
-            position: fixed; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            background: #000; 
+        #experience {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #000;
+            overflow: hidden;
+            perspective: 1200px;
         }
-        
-        #content { 
-            position: absolute; 
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%); 
-            width: 90%; 
-            max-width: 1000px; 
+
+        #content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 90%;
+            max-width: 1000px;
             text-align: center;
             padding: 0 15px;
+            transform: translate(calc(-50% + var(--focus-pan, 0px)), -50%) scale(var(--focus-scale, 1)) rotate(var(--focus-tilt, 0deg));
+            filter: blur(var(--focus-blur, 0px)) contrast(var(--focus-contrast, 1.12)) saturate(1.05);
+            transform-origin: center;
+            transition: transform 1.8s cubic-bezier(0.25, 0.1, 0.25, 1), filter 1.8s ease;
         }
         
         /* HYPNOTIC TEXT STYLES */
-        .line { 
+        .line {
             font-size: clamp(22px, 4.5vw, 38px);
-            line-height: 2.2; 
-            color: #4a4a4a; 
-            opacity: 0; 
-            margin: 0; 
+            line-height: 2.2;
+            color: #e4dcd5;
+            opacity: 0;
+            margin: 0;
             letter-spacing: clamp(1px, 0.6vw, 3px);
             position: relative;
-            text-shadow: 0 0 15px rgba(0,0,0,0.8);
-            transition: all 0.3s ease;
+            text-shadow:
+                0 0 22px rgba(0, 0, 0, 0.9),
+                0 0 12px rgba(138, 0, 0, 0.35);
+            transition: color 0.6s ease, text-shadow 0.6s ease, letter-spacing 0.6s ease;
         }
-        .line.active { 
-            animation: hypnoticAppear 1.2s forwards; 
+        .line.active {
+            animation: hypnoticAppear 1.2s forwards;
+        }
+        .line.active::after {
+            content: '';
+            position: absolute;
+            inset: 5% 18%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(210, 196, 180, 0.22) 0%, rgba(106, 0, 0, 0.05) 60%, transparent 100%);
+            filter: blur(18px);
+            opacity: 0.35;
+            pointer-events: none;
         }
         @keyframes hypnoticAppear {
             0% { 
@@ -783,11 +801,120 @@
             }
         }
         
-        .line .filth { 
-            color: #3a2a1a; 
-            text-shadow: 0 0 12px rgba(58, 42, 26, 0.7); 
+        .line .filth {
+            color: #3a2a1a;
+            text-shadow: 0 0 12px rgba(58, 42, 26, 0.7);
         }
-        
+
+        .line.breathing {
+            animation: lineBreath 6s ease-in-out infinite;
+        }
+        @keyframes lineBreath {
+            0%, 100% {
+                letter-spacing: clamp(1px, 0.6vw, 3px);
+                text-shadow:
+                    0 0 28px rgba(0, 0, 0, 0.85),
+                    0 0 18px rgba(138, 0, 0, 0.35);
+            }
+            45% {
+                letter-spacing: clamp(2px, 0.9vw, 6px);
+                text-shadow:
+                    0 0 40px rgba(0, 0, 0, 0.95),
+                    0 0 28px rgba(180, 60, 60, 0.35);
+            }
+        }
+
+        .line.tremor {
+            animation: lineTremor 0.35s infinite;
+        }
+        @keyframes lineTremor {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-3px); }
+            50% { transform: translateX(2px); }
+            75% { transform: translateX(-1px); }
+        }
+
+        .line.active.breathing {
+            animation: hypnoticAppear 1.2s forwards, lineBreath 6s ease-in-out 1.2s infinite;
+        }
+
+        .line.active.tremor {
+            animation: hypnoticAppear 1.2s forwards, lineTremor 0.35s 1.2s infinite;
+        }
+
+        .line .focus-word {
+            color: #f8f2ea;
+            font-weight: 700;
+            letter-spacing: clamp(2px, 1vw, 6px);
+            text-shadow:
+                0 0 28px rgba(255, 240, 220, 0.65),
+                0 0 18px rgba(106, 0, 0, 0.35);
+        }
+
+        .line .pulse-accent {
+            color: #f23d3d;
+            font-weight: 700;
+            letter-spacing: clamp(2px, 0.9vw, 6px);
+            text-transform: uppercase;
+            text-shadow:
+                0 0 18px rgba(242, 61, 61, 0.75),
+                0 0 40px rgba(90, 0, 0, 0.65);
+            animation: focusPulse 1.8s ease-in-out infinite;
+        }
+        @keyframes focusPulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.9;
+            }
+            40% {
+                transform: scale(1.06);
+                opacity: 1;
+            }
+            65% {
+                transform: scale(0.97);
+                opacity: 0.8;
+            }
+        }
+
+        .line .ashen {
+            color: #b9b2ac;
+            font-style: italic;
+            letter-spacing: clamp(3px, 1.1vw, 7px);
+            text-shadow: 0 0 18px rgba(120, 110, 102, 0.7);
+        }
+
+        .line .ghost-echo {
+            color: #aab8d6;
+            letter-spacing: clamp(4px, 1.3vw, 9px);
+            text-shadow:
+                0 0 14px rgba(170, 184, 214, 0.6),
+                0 0 35px rgba(40, 50, 80, 0.55);
+            animation: ghostEcho 3.8s ease-in-out infinite;
+        }
+        @keyframes ghostEcho {
+            0%, 100% {
+                opacity: 0.7;
+                filter: blur(0.2px);
+            }
+            45% {
+                opacity: 1;
+                filter: blur(0);
+            }
+        }
+
+        .line .ember {
+            color: #ff834d;
+            text-shadow:
+                0 0 18px rgba(255, 131, 77, 0.8),
+                0 0 28px rgba(138, 30, 0, 0.5);
+            animation: emberFlicker 2.6s ease-in-out infinite;
+        }
+        @keyframes emberFlicker {
+            0%, 100% { opacity: 0.8; }
+            30% { opacity: 1; }
+            55% { opacity: 0.6; }
+        }
+
         /* BREAKING FOURTH WALL - INTENSE */
         .line.break-wall {
             color: #ddd !important;
@@ -1497,6 +1624,7 @@
             transform: translate(-50%, -50%);
             transition: color 3s ease, text-shadow 3s ease;
             will-change: transform, opacity;
+            filter: blur(1.4px);
         }
         .obsessive-word.active {
             animation: wordFadeInSlow 3s forwards;
@@ -1510,7 +1638,7 @@
             100% {
                 opacity: 0.55;
                 transform: translate(-50%, -50%) scale(1);
-                filter: blur(0);
+                filter: blur(1.1px);
             }
         }
 
@@ -1915,15 +2043,15 @@
     <script>
         // PERFECTED HYPNOTIC IMMERSION
         const story = [
-            'Ты стоишь в дверях.|2000',
-            'Перед тобой — <span class="void">лужа</span>.|2000|obsess:лужа|water',
-            '<span class="death">Тёмная</span>.|1500',
-            'Расползается.|2000|peripheral|wetstain',
+            'Ты <span class="ghost-echo">стоишь</span> в дверях.|2000',
+            'Перед тобой — <span class="void focus-word">лужа</span>.|2000|obsess:лужа|water',
+            '<span class="death ashen">Тёмная</span>.|1500',
+            '<span class="ashen">Расползается</span>.|2000|peripheral|wetstain',
             '|4500|blackout:4500|silence|sound:void_hum',
             'Ты всё ещё здесь?|2500|break|subliminal:ЗДЕСЬ',
             'Ты чувствуешь это?|2200|break|cursormove',
-            'Твоя рука.|2000|break',
-            'Она не твоя.|3000|break|reality',
+            'Твоя <span class="focus-word">рука</span>.|2000|break',
+            'Она <span class="pulse-accent">не твоя</span>.|3000|break|reality',
             'Ты считаешь секунды.|2500',
             'Десять.|1000|sound:tick|heartbeat',
             'Девять.|1000|sound:tick|heartbeat',
@@ -1935,11 +2063,11 @@
             'Три.|1000|sound:tick|heartbeat',
             'Два.|1000|sound:tick|heartbeat',
             'Один.|3000|sound:tick|heartbeat',
-            'Ты входишь.|2500|sound:step|trail|cursormove',
-            'Он смотрит на тебя.|2000',
-            'Не узнаёт.|2500',
-            'В его глазах — <span class="void">страх</span>.|3500|shadow|peripheral',
-            'Ты для него <span class="death">чужой</span>.|4000|distorted',
+            'Ты <span class="ember">входишь</span>.|2500|sound:step|trail|cursormove',
+            'Он смотрит на <span class="focus-word">тебя</span>.|2000',
+            'Не <span class="ashen">узнаёт</span>.|2500',
+            'В его глазах — <span class="void pulse-accent">страх</span>.|3500|shadow|peripheral',
+            'Ты для него <span class="death pulse-accent">чужой</span>.|4000|distorted',
             '|3500|blackout:3500|silence',
             'Посмотри на свои руки.|3000|break|subliminal:РУКИ',
             'Прямо сейчас.|2500|break|peripheralshadow',
@@ -2092,11 +2220,11 @@
             '<span class="machine-word">Три года. Каждый день</span>.|3000|obsess:каждый день',
             'Тысяча девяносто пять дней.|3000|timedistort',
             '<span class="void">Лужа</span>. Вода. <span class="filth">Грязь</span>. <span class="pain">Кровь</span>.|3500|obsess:лужа|water|blooddrop',
-            'Ты <span class="void">сходишь с ума</span>.|2500|shake|double|redFlicker',
+            'Ты <span class="void pulse-accent">сходишь с ума</span>.|2500|shake|double|redFlicker',
             '<span class="machine-word">Медленно</span>.|2000',
             'Но верно.|2000',
             'Он теряет <span class="void">память</span>.|2000',
-            'Ты теряешь <span class="void">себя</span>.|4000|freeze|obsess:теряю',
+            'Ты теряешь <span class="void ghost-echo">себя</span>.|4000|freeze|obsess:теряю',
             'Иногда ночью.|2500|shadow',
             'Ты стоишь над ним.|2000|watching',
             'Думаешь. <span class="death">Подушка</span>.|2500',
@@ -2104,9 +2232,9 @@
             'И всё <span class="death">кончится</span>.|3500|freeze',
             'Ты держишь <span class="death">подушку</span>.|2500|heartbeat',
             'Подносишь к его лицу.|2500|peripheral|breathfog',
-            'Руки <span class="void">трясутся</span>.|2500|shake',
-            'Твои руки.|2000|break|subliminal:ТВОИ РУКИ',
-            'Прямо сейчас.|2000|break|cursormove',
+            'Руки <span class="void pulse-accent">трясутся</span>.|2500|shake',
+            'Твои <span class="focus-word">руки</span>.|2000|break|subliminal:ТВОИ РУКИ',
+            'Прямо <span class="pulse-accent">сейчас</span>.|2000|break|cursormove',
             '<span class="scream">Сейчас</span>.|2500',
             '<span class="scream">Сейчас</span>.|2500|redFlicker',
             '<span class="scream">СЕЙЧАС</span>.|4000|shake|redFlicker|screentear',
@@ -2124,11 +2252,11 @@
             'Внутри что-то <span class="pain">ломается</span>.|3000|shake|blood|chromatic|crack',
             'Хруст.|2000|reality|sound:crack',
             'Ты теряешь <span class="void">человечность</span>.|4000|distorted',
-            'Ты — <span class="machine-word">машина</span>.|2500|sound:machine',
+            'Ты — <span class="machine-word focus-word">машина</span>.|2500|sound:machine',
             'Которая <span class="machine-word">моет. Одевает. Кормит</span>.|3500|obsess:моешь',
             'Ты смотришь в зеркало.|2500|double|watching',
             'Не узнаёшь <span class="void">себя</span>.|2000|sound:distant_voices',
-            'Глаза <span class="void">пустые</span>. Как у него.|3500|freeze|obsess:пустота',
+            'Глаза <span class="void ghost-echo">пустые</span>. Как у него.|3500|freeze|obsess:пустота',
             'Кто смотрит оттуда?|3000|break|peripheral',
             'Это ты?|2500|break|subliminal:КТО ТЫ',
             '|7000|blackout:7000|silence',
@@ -2145,31 +2273,31 @@
             'Стиральная <span class="machine-word">машина</span> гудит.|2500|sound:machine',
             'Вода шумит.|2000|sound:water|water',
             '<span class="machine-word">Каждый день</span>.|3500|trail|obsess:каждый день',
-            'Ты держишь <span class="death">мёртвую</span> руку.|2500',
+            'Ты держишь <span class="death pulse-accent">мёртвую</span> руку.|2500',
             '<span class="death">Живого трупа</span>.|2500|distorted',
-            'Который был твоим <span class="death">отцом</span>.|4000',
+            'Который был твоим <span class="death pulse-accent">отцом</span>.|4000',
             'Который учил тебя не плакать.|3500',
             'Ты не плачешь.|2500',
             'Не можешь.|2500',
-            'Внутри — <span class="void">пустота</span>.|3000|freeze|obsess:пустота',
+            'Внутри — <span class="void ghost-echo">пустота</span>.|3000|freeze|obsess:пустота',
             'Как в его <span class="void">глазах</span>.|4000|shake',
-            'Вы ждёте <span class="death">смерти</span>.|3500|blood|redFlicker|peripheral|blooddrop',
+            'Вы ждёте <span class="death pulse-accent">смерти</span>.|3500|blood|redFlicker|peripheral|blooddrop',
             'Чьей. Не важно.|2500',
-            'Лишь бы <span class="death">кончилось</span>.|4000|double',
+            'Лишь бы <span class="death pulse-accent">кончилось</span>.|4000|double',
             'Но не кончается.|3000|obsess:не кончается',
-            'Никогда.|2500|timedistort',
+            '<span class="focus-word pulse-accent">Никогда</span>.|2500|timedistort',
             'Он дышит. Ты дышишь.|3500|sound:breathing|heartbeat',
             '<span class="machine-word">Завтра то же</span>.|2500|obsess:завтра',
             '<span class="void">Лужа</span>. Вода. <span class="pain">Кровь</span>.|3000|blood|water|blooddrop',
             '<span class="machine-word">И дальше. И дальше</span>.|3000|shake|obsess:и дальше',
             'В <span class="void">аду</span>.|2500',
             'Который называется.|2500|freeze|watching',
-            '<span class="scream">Любовь. Долг. Семья</span>.|5000|shake|blood|redFlicker|chromatic|crack',
+            '<span class="scream focus-word">Любовь. Долг. Семья</span>.|5000|shake|blood|redFlicker|chromatic|crack',
             'Вода течёт.|2500|sound:water|obsess:вода|water',
             '<span class="machine-word">Машина</span> гудит.|2500|sound:machine',
             'И ты ждёшь <span class="death">конца</span>.|3500',
             'Который не приходит.|4000|shadow|obsess:не приходит',
-            'Никогда.|3000|reality',
+            '<span class="focus-word pulse-accent">Никогда</span>.|3000|reality',
             '|8000|blackout:8000|silence',
             'Ты понял?|3000|break|subliminal:ПОНЯЛ',
             'Это не его история.|3000|break|watching',
@@ -2180,7 +2308,7 @@
             'Не.|2000|break',
             'Знаешь.|3000|break|timedistort',
             'Об этом.|4000|break|reality|peripheral',
-            '<span class="void">Никогда</span>.|7000|shake|blood|redFlicker|freeze|chromatic|obsess:никогда|blooddrop|crack',
+            '<span class="void pulse-accent">Никогда</span>.|7000|shake|blood|redFlicker|freeze|chromatic|obsess:никогда|blooddrop|crack',
             '|2000|silence',
             '|12000|finalhorror',
             '|15000|blackout:15000|silence'
@@ -2198,10 +2326,15 @@
         let faceAnchors = [];
         let faceAssignmentCursor = 0;
         let facePhaseActivated = false;
+        let microFlashInterval = null;
+        let finalSequenceActive = false;
+        let lastFocusPan = 0;
+        let lastFocusTilt = 0;
         let mouseX = 0, mouseY = 0, realMouseX = 0, realMouseY = 0;
         let forcedCursorActive = false, isWatching = false;
         let cursorTrails = [];
         let subliminalMessages = ['ЗАБУДЬ', 'БЕЗЫСХОДНОСТЬ', 'ПОВТОР', 'РАСПАД', 'ПУСТОТА', 'БОЛЬ', 'ЦИКЛ', 'НЕТ ВЫХОДА', 'ПОВИНУЙСЯ', 'СТРАХ', 'ТОНЕШЬ', 'ТЕРЯЕШЬСЯ'];
+        const microFlashSymbols = ['🙂', '💀', 'СЛУШАЙ', 'СЕКС', 'СМЕРТЬ', 'ТВОЯ ОЧЕРЕДЬ', 'СТАРИК', '👁️'];
         let waterDrops = [], bloodDrops = [], wetStains = [];
         let lastActivityTime = Date.now();
         let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -2745,6 +2878,7 @@
                     // START IMMEDIATELY
                     setTimeout(startExperience, 1500);
                     setInterval(triggerRandomSubliminal, 12000);
+                    microFlashInterval = setInterval(triggerMicroFlash, 7000);
                 });
             }
 
@@ -2968,6 +3102,17 @@
             subliminal.textContent = msg;
             subliminal.classList.add('active');
             setTimeout(() => subliminal.classList.remove('active'), 40);
+        }
+
+        function triggerMicroFlash() {
+            if (progressionLevel < 0.25 || finalSequenceActive) return;
+            if (Math.random() > 0.55) return;
+            const flash = document.querySelector('.subliminal-flash');
+            if (!flash || flash.classList.contains('active')) return;
+            const flashImg = flash.querySelector('.subliminal-image');
+            flashImg.textContent = microFlashSymbols[Math.floor(Math.random() * microFlashSymbols.length)];
+            flash.classList.add('active');
+            setTimeout(() => flash.classList.remove('active'), 60);
         }
 
         function initAtmosphere() {
@@ -3252,6 +3397,11 @@
         }
 
         async function triggerFinalHorror() {
+            finalSequenceActive = true;
+            if (microFlashInterval) {
+                clearInterval(microFlashInterval);
+                microFlashInterval = null;
+            }
             // Максимальная интенсивность звука
             if (audioContext) {
                 ambientLayers.forEach(layer => {
@@ -3411,18 +3561,23 @@
             const subliminal = document.querySelector('.subliminal-flash');
             const subliminalImg = subliminal.querySelector('.subliminal-image');
             
-            const flashImages = ['😱', '💀', '🩸', '👁️', '🔪', '⚠️'];
-            
-            for (let i = 0; i < 12; i++) {
-                subliminalImg.textContent = flashImages[Math.floor(Math.random() * flashImages.length)];
+            const curatedSequence = ['🙂', '💀', '🙂', 'СЕКС', 'СМЕРТЬ', '💀', '🙂'];
+            const extraFlashes = ['😱', '👁️', '🩸', 'НЕ СПАСЁТСЯ', 'РАСПАД', '⚠️'];
+            const totalFlashes = curatedSequence.length + 9;
+
+            for (let i = 0; i < totalFlashes; i++) {
+                const symbol = i < curatedSequence.length
+                    ? curatedSequence[i]
+                    : extraFlashes[Math.floor(Math.random() * extraFlashes.length)];
+                subliminalImg.textContent = symbol;
                 subliminal.classList.add('active');
-                
+
                 if (audioContext) {
                     const now = audioContext.currentTime;
                     const flash = audioContext.createOscillator();
                     const flashGain = audioContext.createGain();
                     flash.type = 'square';
-                    flash.frequency.value = 1200 + Math.random() * 1800;
+                    flash.frequency.value = 1100 + Math.random() * 1900;
                     flash.connect(flashGain);
                     flashGain.connect(audioContext.destination);
                     flashGain.gain.setValueAtTime(0.08, now);
@@ -3430,10 +3585,11 @@
                     flash.start(now);
                     try { flash.stop(now + 0.05); } catch(e) {}
                 }
-                
+
                 await new Promise(resolve => setTimeout(resolve, 100));
                 subliminal.classList.remove('active');
-                await new Promise(resolve => setTimeout(resolve, Math.random() * 300 + 100));
+                const pause = i < curatedSequence.length ? 120 : Math.random() * 280 + 120;
+                await new Promise(resolve => setTimeout(resolve, pause));
             }
             
             // Финальная distortion
@@ -3575,6 +3731,31 @@
             }
         }
 
+        function updateCinematicFocus(index, text) {
+            const content = document.getElementById('content');
+            if (!content) return;
+            const progress = index / story.length;
+            const lower = text.toLowerCase();
+            const intense = lower.includes('никогда') || lower.includes('сейчас') || lower.includes('кров') || lower.includes('смер');
+            const baseScale = 1 + progress * 0.08;
+            const scaleBoost = intense ? 0.06 : 0.02 * Math.sin(progress * Math.PI);
+            const targetScale = baseScale + scaleBoost;
+            const rawPan = (Math.random() - 0.5) * (16 + progress * 60);
+            const pan = lastFocusPan + (rawPan - lastFocusPan) * 0.55;
+            lastFocusPan = pan;
+            const rawTilt = (Math.random() - 0.5) * (progress > 0.55 ? 8 : 4);
+            const tilt = lastFocusTilt + (rawTilt - lastFocusTilt) * 0.6;
+            lastFocusTilt = tilt;
+            const blur = progress > 0.72 ? Math.min(1.2, (progress - 0.72) * 6) : 0;
+            const contrast = 1.12 + progress * 0.45 + (intense ? 0.12 : 0);
+
+            content.style.setProperty('--focus-scale', targetScale.toFixed(3));
+            content.style.setProperty('--focus-pan', pan.toFixed(1) + 'px');
+            content.style.setProperty('--focus-tilt', tilt.toFixed(2) + 'deg');
+            content.style.setProperty('--focus-contrast', contrast.toFixed(2));
+            content.style.setProperty('--focus-blur', blur.toFixed(2) + 'px');
+        }
+
         async function startExperience() {
             const content = document.getElementById('content');
             try {
@@ -3584,6 +3765,7 @@
                     const wait = parseInt(parts[1]);
                     const effects = parts.slice(2);
                     increaseIntensity(i);
+                    updateCinematicFocus(i, text);
                     content.innerHTML = '';
                     if (text.trim()) {
                         const div = document.createElement('div');
