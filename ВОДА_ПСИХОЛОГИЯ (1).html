@@ -1451,33 +1451,145 @@
             }
         }
         
+        /* OBSESSION FIELD */
+        #obsessive-words {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 68;
+            mix-blend-mode: screen;
+            filter: contrast(0.95) saturate(0.85);
+        }
+        #obsessive-words::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 40%, transparent 0%, rgba(0,0,0,0.35) 65%, rgba(0,0,0,0.85) 100%);
+            opacity: 0.35;
+            pointer-events: none;
+            transition: opacity 6s ease;
+        }
+        #obsessive-words[data-phase='2']::before {
+            opacity: 0.55;
+        }
+        #obsessive-words[data-phase='3']::before {
+            opacity: 0.75;
+        }
+        #obsessive-words[data-phase='0'] {
+            mix-blend-mode: normal;
+        }
+
         /* OBSESSIVE WORDS */
-        .obsessive-word { 
-            position: fixed; 
-            font-family: 'Courier Prime', monospace; 
-            font-size: clamp(13px, 2.2vw, 20px);
-            color: #4a4a4a; 
-            pointer-events: none; 
-            opacity: 0; 
-            z-index: 70; 
-            letter-spacing: 2px; 
+        .obsessive-word {
+            position: absolute;
+            font-family: 'Courier Prime', monospace;
+            font-size: clamp(12px, 2.2vw, 20px);
+            color: #3a3a3a;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 70;
+            letter-spacing: 0.18em;
             font-weight: 700;
-            transition: all 3s ease-out;
+            transform: translate(-50%, -50%);
+            transition: color 3s ease, text-shadow 3s ease;
+            will-change: transform, opacity;
         }
-        .obsessive-word.active { 
-            animation: wordFadeInSlow 3s forwards; 
+        .obsessive-word.active {
+            animation: wordFadeInSlow 3s forwards;
         }
-        @keyframes wordFadeInSlow { 
-            0% { 
-                opacity: 0; 
-                transform: scale(0.6); 
+        @keyframes wordFadeInSlow {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.6);
                 filter: blur(5px);
-            } 
-            100% { 
-                opacity: 0.55; 
-                transform: scale(1); 
+            }
+            100% {
+                opacity: 0.55;
+                transform: translate(-50%, -50%) scale(1);
                 filter: blur(0);
-            } 
+            }
+        }
+
+        .obsessive-word.swarm {
+            color: rgba(70, 70, 70, 0.55);
+            text-shadow: 0 0 25px rgba(30, 30, 30, 0.4);
+        }
+
+        .obsessive-word.rorschach {
+            color: rgba(90, 90, 90, 0.7);
+            text-shadow:
+                0 0 25px rgba(80, 0, 0, 0.4),
+                0 0 55px rgba(0, 0, 0, 0.45);
+            filter: blur(1px);
+        }
+
+        .obsessive-word.pulse {
+            animation: obsessionPulse 4.5s ease-in-out infinite;
+        }
+        @keyframes obsessionPulse {
+            0%, 100% {
+                letter-spacing: 0.16em;
+                text-shadow:
+                    0 0 18px rgba(90, 0, 0, 0.35),
+                    0 0 35px rgba(0, 0, 0, 0.6);
+                filter: blur(0.9px);
+            }
+            45% {
+                letter-spacing: 0.22em;
+                text-shadow:
+                    0 0 30px rgba(120, 0, 0, 0.6),
+                    0 0 60px rgba(0, 0, 0, 0.7);
+                filter: blur(0.4px);
+            }
+        }
+
+        .obsessive-word.blood-sigil {
+            color: rgba(138, 0, 0, 0.85);
+            text-shadow:
+                0 0 12px rgba(138, 0, 0, 0.8),
+                0 0 38px rgba(180, 20, 20, 0.6);
+            animation: bloodSigilPulse 3.6s ease-in-out infinite;
+        }
+        @keyframes bloodSigilPulse {
+            0%, 100% {
+                opacity: 0.75;
+                filter: blur(0.6px) saturate(1.1);
+            }
+            50% {
+                opacity: 1;
+                filter: blur(0.2px) saturate(1.45);
+            }
+        }
+
+        .obsessive-word.whisper {
+            color: rgba(40, 40, 40, 0.4);
+            text-shadow: 0 0 18px rgba(0, 0, 0, 0.55);
+            letter-spacing: 0.24em;
+            filter: blur(1.6px);
+        }
+
+        .obsessive-word.face-phase {
+            color: rgba(210, 178, 162, 0.8);
+            letter-spacing: 0.08em;
+            text-shadow:
+                0 0 12px rgba(255, 230, 210, 0.35),
+                0 0 35px rgba(90, 0, 0, 0.45);
+            filter: blur(1.4px);
+            animation: faceBreath 5.5s ease-in-out infinite;
+        }
+        @keyframes faceBreath {
+            0%, 100% {
+                opacity: 0.65;
+                letter-spacing: 0.08em;
+            }
+            45% {
+                opacity: 0.92;
+                letter-spacing: 0.14em;
+            }
         }
         
         /* PAREIDOLIA WORDS - формируют образы */
@@ -2076,6 +2188,16 @@
 
         let audioContext, ambientLayers = [], progressionLevel = 0;
         let obsessiveWords = [], forgottenWords = [];
+        let obsessionPhase = 0;
+        let obsessionFieldActive = false;
+        let obsessionFrame = null;
+        let lastObsessionTick = null;
+        let ambientWordTimeout = null;
+        let currentAmbientDelay = 2200;
+        let lastBloodPhraseTime = 0;
+        let faceAnchors = [];
+        let faceAssignmentCursor = 0;
+        let facePhaseActivated = false;
         let mouseX = 0, mouseY = 0, realMouseX = 0, realMouseY = 0;
         let forcedCursorActive = false, isWatching = false;
         let cursorTrails = [];
@@ -2085,12 +2207,456 @@
         let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         
         const FORGOTTEN = [
-            'отец', 'помню', 'забыл', 'кто я', 'где я', 'раньше', 'было', 'имя', 'лицо', 'голос', 
-            'давно', 'тогда', 'помнишь', 'стёрлось', 'исчезло', 'потерял', 'не помню', 'узнаю', 
+            'отец', 'помню', 'забыл', 'кто я', 'где я', 'раньше', 'было', 'имя', 'лицо', 'голос',
+            'давно', 'тогда', 'помнишь', 'стёрлось', 'исчезло', 'потерял', 'не помню', 'узнаю',
             'был', 'когда', 'там', 'здесь', 'дома', 'мама', 'детство', 'счастье', 'смех', 'свет',
             'любовь', 'надежда', 'будущее', 'прошлое', 'человек', 'живой', 'помощь', 'конец', 'начало',
             'выход', 'спасение', 'жизнь', 'смерть', 'боль', 'страх', 'время', 'дни', 'годы'
         ];
+
+        const BACKGROUND_OBSESSION_WORDS = [
+            'вода', 'лужа', 'стон', 'шёпот', 'кожа', 'старик', 'отец', 'взгляд', 'скрип', 'ты',
+            'он', 'дыши', 'помни', 'забудь', 'никогда', 'циклы', 'пустота', 'страх', 'тени',
+            'сон', 'глаза', 'видит', 'смех', 'соль', 'кровь', 'мокро', 'туман', 'холод', 'долг',
+            'семья', 'дни', 'ночь', 'тишина', 'давление', 'пульс', 'крик', 'мыть', 'грязь', 'запах',
+            'здесь', 'рядом', 'не уходи', 'останься', 'он ждёт', 'боль', 'время', 'капли', 'безысходность'
+        ];
+
+        const BLOOD_PHRASES = [
+            ['ОН', 'СМОТРИТ', 'НА', 'ТЕБЯ'],
+            ['НИКТО', 'НЕ', 'ПРИДЁТ'],
+            ['ТВОИ', 'РУКИ', 'В', 'КРОВИ'],
+            ['ОН', 'УЖЕ', 'МЁРТВ'],
+            ['ДЫШИ', 'С', 'НИМ', 'ВМЕСТЕ'],
+            ['НЕ', 'СУЩЕСТВУЕТ', 'ВЫХОДА'],
+            ['ПАМЯТЬ', 'ГНИЁТ', 'ЗДЕСЬ'],
+            ['СТАРИК', 'УХОДИТ', 'ВНУТРЬ'],
+            ['НИКТО', 'НЕ', 'УСЛЫШИТ']
+        ];
+
+        function startObsessionField() {
+            if (obsessionFieldActive) return;
+            obsessionFieldActive = true;
+            const container = document.getElementById('obsessive-words');
+            if (container) {
+                container.innerHTML = '';
+                container.setAttribute('data-phase', String(obsessionPhase));
+            }
+            lastObsessionTick = null;
+            if (obsessionFrame) {
+                cancelAnimationFrame(obsessionFrame);
+            }
+            obsessionFrame = requestAnimationFrame(animateObsessionField);
+            scheduleAmbientWord(true);
+        }
+
+        function scheduleAmbientWord(immediate = false) {
+            clearTimeout(ambientWordTimeout);
+            if (!obsessionFieldActive) return;
+            const delay = immediate ? 420 : currentAmbientDelay * (0.6 + Math.random() * 0.8);
+            ambientWordTimeout = setTimeout(() => {
+                spawnAmbientObsessionWord();
+                scheduleAmbientWord(false);
+            }, Math.max(120, delay));
+        }
+
+        function spawnAmbientObsessionWord(forceHighlight = null) {
+            if (!obsessionFieldActive) return;
+            const word = BACKGROUND_OBSESSION_WORDS[Math.floor(Math.random() * BACKGROUND_OBSESSION_WORDS.length)];
+            let highlight = forceHighlight;
+            if (!highlight) {
+                if (obsessionPhase >= 2 && Math.random() < 0.22) {
+                    highlight = 'blood';
+                } else if (Math.random() < 0.18) {
+                    highlight = 'whisper';
+                }
+            }
+            registerObsessionWord(word, { highlight });
+        }
+
+        function registerObsessionWord(word, options = {}) {
+            if (!word) return null;
+            const entry = createObsessionWord(word, options);
+            if (!entry) return null;
+            obsessiveWords.push(entry);
+            if (obsessionPhase >= 1 && !options.skipMirror) {
+                const mirroredPosition = options.forcePosition
+                    ? { x: window.innerWidth - options.forcePosition.x, y: options.forcePosition.y + (Math.random() - 0.5) * 24 }
+                    : null;
+                const signature = typeof entry.signature === 'number' ? -entry.signature : -(Math.random() - 0.5);
+                registerObsessionWord(word, {
+                    ...options,
+                    forcePosition: mirroredPosition,
+                    skipMirror: true,
+                    mirrored: true,
+                    signature
+                });
+            }
+            trimObsessionField();
+            return entry;
+        }
+
+        function createObsessionWord(word, options = {}) {
+            const container = document.getElementById('obsessive-words');
+            if (!container) return null;
+            const el = document.createElement('div');
+            el.className = 'obsessive-word';
+            el.textContent = word;
+            if (options.highlight === 'blood') {
+                el.classList.add('blood-sigil');
+            } else if (options.highlight === 'whisper') {
+                el.classList.add('whisper');
+            }
+
+            const vw = window.innerWidth;
+            const vh = window.innerHeight;
+            const entry = {
+                el,
+                word,
+                highlight: options.highlight || null,
+                x: options.forcePosition ? options.forcePosition.x : vw * (0.3 + Math.random() * 0.4),
+                y: options.forcePosition ? options.forcePosition.y : vh * (0.25 + Math.random() * 0.5),
+                targetX: null,
+                targetY: null,
+                orbitCenterX: vw / 2 + (Math.random() - 0.5) * vw * 0.12,
+                orbitCenterY: vh / 2 + (Math.random() - 0.5) * vh * 0.12,
+                orbitRadius: Math.min(vw, vh) * (0.18 + Math.random() * 0.35),
+                orbitAngle: Math.random() * Math.PI * 2,
+                orbitSpeed: 0.12 + Math.random() * 0.1,
+                stage: obsessionPhase,
+                follow: 1.6 + Math.random() * 1.2,
+                seed: Math.random() * Math.PI * 2,
+                anchor: options.anchor || null,
+                anchorIndex: options.anchorIndex ?? null,
+                signature: options.signature !== undefined ? options.signature : (Math.random() - 0.5),
+                mirrored: options.mirrored || false,
+                life: 0
+            };
+
+            entry.el.style.left = entry.x + 'px';
+            entry.el.style.top = entry.y + 'px';
+            container.appendChild(entry.el);
+            requestAnimationFrame(() => entry.el.classList.add('active'));
+            configureWordForCurrentPhase(entry, true);
+            return entry;
+        }
+
+        function configureWordForCurrentPhase(entry, fresh = false) {
+            if (!entry || !entry.el) return;
+            entry.el.classList.remove('swarm', 'rorschach', 'pulse', 'face-phase');
+            if (entry.highlight !== 'blood') {
+                entry.el.classList.remove('blood-sigil');
+            }
+            if (entry.highlight !== 'whisper') {
+                entry.el.classList.remove('whisper');
+            }
+            if (entry.highlight === 'blood') {
+                entry.el.classList.add('blood-sigil');
+            } else if (entry.highlight === 'whisper') {
+                entry.el.classList.add('whisper');
+            }
+            entry.stage = obsessionPhase;
+            if (entry.stage === 0) {
+                entry.el.classList.add('swarm');
+                entry.follow = 1.6 + Math.random() * 0.9;
+            } else if (entry.stage === 1) {
+                entry.el.classList.add('rorschach');
+                entry.follow = 2.1 + Math.random() * 1.2;
+                assignRorschachAnchor(entry, fresh);
+            } else if (entry.stage === 2) {
+                entry.el.classList.add('rorschach', 'pulse');
+                entry.follow = 2.6 + Math.random() * 1.4;
+                assignRorschachAnchor(entry, fresh);
+                if (!entry.highlight && Math.random() < 0.2) {
+                    entry.highlight = 'whisper';
+                    entry.el.classList.add('whisper');
+                }
+            } else {
+                entry.el.classList.add('face-phase');
+                entry.follow = 3.4 + Math.random() * 1.2;
+                assignFaceAnchor(entry, fresh);
+            }
+        }
+
+        function assignRorschachAnchor(entry, fresh = false) {
+            if (obsessionPhase < 1) return;
+            if (!fresh && entry.anchor && entry.stage === obsessionPhase) return;
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            let signature = entry.signature;
+            if (typeof signature !== 'number') {
+                signature = Math.random() - 0.5;
+                entry.signature = signature;
+            }
+            const absSig = Math.abs(signature);
+            let targetX, targetY;
+            if (absSig > 0.42) {
+                const radiusX = window.innerWidth * (0.22 + absSig * 0.1);
+                targetX = centerX + Math.sign(signature) * radiusX;
+                targetY = centerY + window.innerHeight * 0.12 + Math.sin(entry.seed * 4) * window.innerHeight * 0.05;
+            } else if (absSig > 0.18) {
+                targetX = centerX + Math.sign(signature) * window.innerWidth * (0.12 + absSig * 0.06);
+                targetY = centerY - window.innerHeight * (0.22 - absSig * 0.08) + Math.sin(entry.seed * 5) * 35;
+            } else {
+                targetX = centerX + signature * window.innerWidth * 0.08;
+                targetY = centerY + signature * window.innerHeight * 0.12 + Math.sin(entry.seed * 3) * 45;
+            }
+            if (obsessionPhase === 2) {
+                targetY += Math.sin(entry.seed * 6) * 24;
+            }
+            entry.anchor = { x: targetX, y: targetY };
+        }
+
+        function updateObsessionDynamics(level) {
+            updateObsessionPhase(level);
+            trimObsessionField();
+            if (obsessionPhase >= 2 && Math.random() < 0.14) {
+                maybeSpawnBloodPhrase();
+            }
+            if (obsessionPhase === 3 && !facePhaseActivated && level > 0.8) {
+                ensureFaceDensity(true);
+            }
+        }
+
+        function updateObsessionPhase(level) {
+            let phase = 0;
+            if (level > 0.28) phase = 1;
+            if (level > 0.52) phase = 2;
+            if (level > 0.78) phase = 3;
+            if (phase === obsessionPhase) return;
+            obsessionPhase = phase;
+            const container = document.getElementById('obsessive-words');
+            if (container) {
+                container.setAttribute('data-phase', String(obsessionPhase));
+            }
+            updateAmbientDelay();
+            obsessiveWords.forEach(entry => configureWordForCurrentPhase(entry, true));
+            if (obsessionPhase >= 2) {
+                maybeSpawnBloodPhrase(true);
+            }
+            if (obsessionPhase < 3) {
+                facePhaseActivated = false;
+            }
+        }
+
+        function updateAmbientDelay() {
+            if (obsessionPhase === 0) {
+                currentAmbientDelay = 2200;
+            } else if (obsessionPhase === 1) {
+                currentAmbientDelay = 1400;
+            } else if (obsessionPhase === 2) {
+                currentAmbientDelay = 900;
+            } else {
+                currentAmbientDelay = 600;
+            }
+            scheduleAmbientWord(false);
+        }
+
+        function trimObsessionField(limit = getMaxObsessionWords()) {
+            while (obsessiveWords.length > limit) {
+                const old = obsessiveWords.shift();
+                if (old && old.el && old.el.parentNode) {
+                    old.el.remove();
+                }
+            }
+        }
+
+        function getMaxObsessionWords() {
+            if (obsessionPhase >= 3) return 260;
+            if (obsessionPhase === 2) return 190;
+            if (obsessionPhase === 1) return 130;
+            return 80;
+        }
+
+        function animateObsessionField(timestamp) {
+            if (!obsessionFieldActive) return;
+            if (lastObsessionTick === null) {
+                lastObsessionTick = timestamp;
+            }
+            const dt = Math.min((timestamp - lastObsessionTick) / 1000, 0.05);
+            lastObsessionTick = timestamp;
+            for (let i = obsessiveWords.length - 1; i >= 0; i--) {
+                const entry = obsessiveWords[i];
+                if (!entry || !entry.el || !entry.el.isConnected) {
+                    obsessiveWords.splice(i, 1);
+                    continue;
+                }
+                updateObsessionWord(entry, dt);
+            }
+            obsessionFrame = requestAnimationFrame(animateObsessionField);
+        }
+
+        function updateObsessionWord(entry, dt) {
+            if (!entry || !entry.el) return;
+            entry.life += dt;
+            if (entry.stage === 0) {
+                entry.orbitAngle += entry.orbitSpeed * dt * (1.2 + progressionLevel * 2.3);
+                const breathing = 1 + Math.sin(entry.life * 0.6 + entry.seed) * 0.08;
+                entry.targetX = entry.orbitCenterX + Math.cos(entry.orbitAngle) * entry.orbitRadius * breathing;
+                entry.targetY = entry.orbitCenterY + Math.sin(entry.orbitAngle * 0.92) * entry.orbitRadius * breathing * 0.9;
+            } else if (entry.stage === 1 || entry.stage === 2) {
+                if (!entry.anchor) {
+                    assignRorschachAnchor(entry, true);
+                }
+                const jitterX = entry.stage === 1 ? 28 : 42;
+                const jitterY = entry.stage === 1 ? 36 : 58;
+                entry.targetX = entry.anchor.x + Math.sin(entry.life * 0.8 + entry.seed) * jitterX;
+                entry.targetY = entry.anchor.y + Math.cos(entry.life * 0.6 + entry.seed * 1.3) * jitterY;
+                if (entry.stage === 2) {
+                    entry.targetY += Math.sin(entry.life * 1.8 + progressionLevel * 6) * 18;
+                }
+            } else {
+                if (!entry.anchor) {
+                    assignFaceAnchor(entry, false);
+                }
+                const jitterX = 14 + Math.sin(entry.life * 1.6 + entry.seed) * 9;
+                const jitterY = 18 + Math.cos(entry.life * 1.2 + entry.seed * 0.7) * 11;
+                entry.targetX = entry.anchor.x + Math.sin(entry.life * 0.9 + entry.seed) * jitterX;
+                entry.targetY = entry.anchor.y + Math.cos(entry.life * 1.1 + entry.seed * 0.7) * jitterY;
+            }
+            if (entry.targetX === null || entry.targetY === null) return;
+            const follow = Math.min(1, dt * entry.follow);
+            entry.x += (entry.targetX - entry.x) * follow;
+            entry.y += (entry.targetY - entry.y) * follow;
+            entry.el.style.left = entry.x + 'px';
+            entry.el.style.top = entry.y + 'px';
+            const rotation = Math.sin(entry.life * 0.9 + entry.seed) * (entry.stage >= 2 ? 12 : 6);
+            const scale = 1 + Math.sin(entry.life * 0.7 + entry.seed) * 0.06;
+            entry.el.style.transform = `translate(-50%, -50%) rotate(${rotation}deg) scale(${scale})`;
+        }
+
+        function maybeSpawnBloodPhrase(force = false) {
+            if (obsessionPhase < 2) return;
+            const now = Date.now();
+            const cooldown = Math.max(2200, 6400 - progressionLevel * 2800);
+            if (!force && now - lastBloodPhraseTime < cooldown) return;
+            lastBloodPhraseTime = now;
+            spawnBloodPhrase();
+        }
+
+        function spawnBloodPhrase() {
+            const phrase = BLOOD_PHRASES[Math.floor(Math.random() * BLOOD_PHRASES.length)];
+            const baseX = window.innerWidth / 2 + (Math.random() - 0.5) * window.innerWidth * 0.18;
+            const baseY = window.innerHeight * (0.3 + Math.random() * 0.4);
+            phrase.forEach((word, index) => {
+                registerObsessionWord(word, {
+                    highlight: 'blood',
+                    forcePosition: {
+                        x: baseX + (index - (phrase.length - 1) / 2) * 42,
+                        y: baseY + Math.sin(index * 0.8) * 26
+                    }
+                });
+            });
+        }
+
+        function ensureFaceDensity(refresh = false) {
+            if (!faceAnchors.length || refresh) {
+                faceAnchors = generateOldManFaceAnchors();
+                faceAssignmentCursor = 0;
+            }
+            const required = Math.max(faceAnchors.length + 30, getMaxObsessionWords() - 10);
+            while (obsessiveWords.length < required) {
+                spawnAmbientObsessionWord('whisper');
+            }
+            obsessiveWords.forEach(entry => {
+                if (entry.stage === 3) {
+                    assignFaceAnchor(entry, true);
+                }
+            });
+            facePhaseActivated = true;
+        }
+
+        function generateOldManFaceAnchors() {
+            const anchors = [];
+            const width = Math.min(window.innerWidth * 0.7, 700);
+            const height = Math.min(window.innerHeight * 0.85, 820);
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight * 0.52;
+
+            for (let angle = 0; angle < Math.PI * 2; angle += 0.1) {
+                const rx = width * 0.46;
+                const ry = height * 0.52;
+                anchors.push({ x: centerX + Math.cos(angle) * rx, y: centerY + Math.sin(angle) * ry });
+            }
+
+            for (let angle = 0; angle < Math.PI * 2; angle += 0.22) {
+                const rx = width * 0.11;
+                const ry = height * 0.08;
+                anchors.push({ x: centerX - width * 0.18 + Math.cos(angle) * rx, y: centerY - height * 0.18 + Math.sin(angle) * ry });
+                anchors.push({ x: centerX + width * 0.18 + Math.cos(angle) * rx, y: centerY - height * 0.18 + Math.sin(angle) * ry });
+            }
+
+            for (let angle = 0; angle < Math.PI * 2; angle += 0.4) {
+                const rx = width * 0.05;
+                const ry = height * 0.04;
+                anchors.push({ x: centerX - width * 0.18 + Math.cos(angle) * rx, y: centerY - height * 0.18 + Math.sin(angle) * ry });
+                anchors.push({ x: centerX + width * 0.18 + Math.cos(angle) * rx, y: centerY - height * 0.18 + Math.sin(angle) * ry });
+            }
+
+            for (let i = 0; i <= 40; i++) {
+                const t = i / 40;
+                const offset = (t - 0.5);
+                anchors.push({ x: centerX - width * 0.22 + t * width * 0.18, y: centerY - height * 0.26 - Math.pow(offset * 1.6, 2) * height * 0.12 });
+                anchors.push({ x: centerX + width * 0.04 + t * width * 0.18, y: centerY - height * 0.26 - Math.pow(offset * 1.6, 2) * height * 0.12 });
+            }
+
+            for (let i = 0; i <= 32; i++) {
+                const t = i / 32;
+                anchors.push({ x: centerX + (Math.sin(t * Math.PI) * width * 0.06), y: centerY - height * 0.14 + t * height * 0.22 });
+            }
+
+            for (let t = 0; t <= 1; t += 0.035) {
+                const offset = t - 0.5;
+                const mouthY = centerY + height * 0.24 + Math.pow(offset * 1.4, 2) * height * 0.08;
+                anchors.push({ x: centerX + offset * width * 0.38, y: mouthY });
+            }
+
+            for (let i = 0; i < 80; i++) {
+                const side = i % 2 === 0 ? -1 : 1;
+                const t = (i % 40) / 40;
+                anchors.push({
+                    x: centerX + side * (width * 0.2 + Math.pow(t, 1.5) * width * 0.18),
+                    y: centerY + height * 0.05 + Math.sin(t * Math.PI) * height * 0.18
+                });
+            }
+
+            return anchors;
+        }
+
+        function assignFaceAnchor(entry, refresh = false) {
+            if (obsessionPhase < 3) return;
+            if (!faceAnchors.length || refresh) {
+                faceAnchors = generateOldManFaceAnchors();
+                faceAssignmentCursor = 0;
+            }
+            if (!faceAnchors.length) return;
+            if (refresh || entry.anchorIndex === null || entry.anchorIndex === undefined || entry.anchorIndex >= faceAnchors.length) {
+                entry.anchorIndex = faceAssignmentCursor++ % faceAnchors.length;
+            }
+            const base = faceAnchors[entry.anchorIndex % faceAnchors.length];
+            entry.anchor = {
+                x: base.x + (Math.random() - 0.5) * 14,
+                y: base.y + (Math.random() - 0.5) * 20
+            };
+            entry.el.classList.add('face-phase');
+        }
+
+        window.addEventListener('resize', () => {
+            if (!obsessionFieldActive) return;
+            if (obsessionPhase >= 3) {
+                faceAnchors = generateOldManFaceAnchors();
+                faceAssignmentCursor = 0;
+                obsessiveWords.forEach(entry => {
+                    if (entry.stage >= 3) {
+                        assignFaceAnchor(entry, true);
+                    } else if (entry.stage >= 1) {
+                        assignRorschachAnchor(entry, true);
+                    }
+                });
+            } else if (obsessionPhase >= 1) {
+                obsessiveWords.forEach(entry => assignRorschachAnchor(entry, true));
+            }
+        });
 
         // REAL mouse tracking
         document.addEventListener('mousemove', (e) => {
@@ -2172,6 +2738,9 @@
                         source.start(0);
                         initAtmosphere();
                     } catch (err) {}
+
+                    startObsessionField();
+                    setTimeout(() => spawnAmbientObsessionWord(), 300);
 
                     // START IMMEDIATELY
                     setTimeout(startExperience, 1500);
@@ -2889,10 +3458,11 @@
         function increaseIntensity(lineIndex) {
             progressionLevel = lineIndex / story.length;
             updateAtmosphere(progressionLevel);
+            updateObsessionDynamics(progressionLevel);
             document.querySelector('.static').style.opacity = 0.12 + progressionLevel * 0.55;
-            document.querySelector('.vignette').style.boxShadow = 
+            document.querySelector('.vignette').style.boxShadow =
                 `inset 0 0 ${500 + progressionLevel * 2500}px rgba(0,0,0,${0.95 + progressionLevel * 0.05})`;
-            document.querySelector('.breath-overlay').style.animation = 
+            document.querySelector('.breath-overlay').style.animation =
                 `breatheOppressive ${Math.max(0.5, 7 - progressionLevel * 6.5)}s infinite`;
             document.querySelector('.grain').style.opacity = progressionLevel * 0.6;
             if (progressionLevel > 0.45 && Math.random() < (progressionLevel - 0.45) * 0.15) {
@@ -2910,16 +3480,12 @@
         }
 
         function addObsessiveWord(word) {
-            if (!word || obsessiveWords.length > 60) return;
-            const wordEl = document.createElement('div');
-            wordEl.className = 'obsessive-word';
-            wordEl.textContent = word;
-            wordEl.style.left = (2 + Math.random() * 96) + '%';
-            wordEl.style.top = (2 + Math.random() * 96) + '%';
-            wordEl.style.transform = `rotate(${(Math.random() - 0.5) * 35}deg)`;
-            document.getElementById('obsessive-words').appendChild(wordEl);
-            setTimeout(() => wordEl.classList.add('active'), 100);
-            obsessiveWords.push(wordEl);
+            if (!word) return;
+            if (!obsessionFieldActive) {
+                startObsessionField();
+            }
+            const highlight = progressionLevel > 0.55 && Math.random() < 0.35 ? 'blood' : null;
+            registerObsessionWord(word, { highlight });
         }
 
         function addForgottenWord() {
