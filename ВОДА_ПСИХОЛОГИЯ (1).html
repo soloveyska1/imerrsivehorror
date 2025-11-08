@@ -608,6 +608,7 @@
             filter: blur(var(--focus-blur, 0px)) contrast(var(--focus-contrast, 1.12)) saturate(1.05);
             transform-origin: center;
             transition: transform 1.8s cubic-bezier(0.25, 0.1, 0.25, 1), filter 1.8s ease;
+            z-index: 480;
         }
         
         /* HYPNOTIC TEXT STYLES */
@@ -743,23 +744,68 @@
             }
         }
         
-        .line .void { 
-            color: #2a2a2a;
+        .line .void {
+            color: #c0b3aa;
             letter-spacing: clamp(5px, 1.4vw, 9px);
             animation: voidDissolve 4s ease-in-out infinite;
+            text-shadow:
+                0 0 28px rgba(0, 0, 0, 0.95),
+                0 0 18px rgba(138, 0, 0, 0.45);
+            mix-blend-mode: normal;
         }
         @keyframes voidDissolve {
-            0%, 100% { 
-                opacity: 0.65;
+            0%, 100% {
+                opacity: 0.9;
                 letter-spacing: clamp(5px, 1.4vw, 9px);
                 filter: blur(0);
-                text-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
             }
-            50% { 
-                opacity: 0.3;
+            50% {
+                opacity: 0.7;
                 letter-spacing: clamp(8px, 2vw, 14px);
-                filter: blur(1px);
-                text-shadow: 0 0 25px rgba(0, 0, 0, 1);
+                filter: blur(0.6px);
+            }
+        }
+
+        .line .primal-growl {
+            color: #f8f1eb;
+            letter-spacing: clamp(7px, 2vw, 16px);
+            text-shadow:
+                0 0 18px rgba(255, 90, 90, 0.7),
+                0 0 48px rgba(0, 0, 0, 0.95);
+            animation: primalGrowl 3s ease-in-out infinite;
+        }
+        @keyframes primalGrowl {
+            0%, 100% {
+                filter: blur(0.2px);
+                opacity: 0.95;
+            }
+            40% {
+                filter: blur(0.45px);
+                opacity: 1;
+            }
+            60% {
+                filter: blur(0);
+                opacity: 0.88;
+            }
+        }
+
+        .line .feral-roar {
+            color: #fbd7cc;
+            text-shadow:
+                0 0 14px rgba(200, 30, 30, 0.85),
+                0 0 40px rgba(0, 0, 0, 0.9);
+            letter-spacing: clamp(6px, 1.8vw, 13px);
+            animation: feralSnarl 0.85s ease-in-out infinite;
+        }
+        @keyframes feralSnarl {
+            0%, 100% {
+                transform: scale(1);
+            }
+            35% {
+                transform: scale(1.06) skewX(1.5deg);
+            }
+            55% {
+                transform: scale(0.96) skewX(-1deg);
             }
         }
         
@@ -1587,16 +1633,16 @@
             height: 100%;
             pointer-events: none;
             overflow: hidden;
-            z-index: 68;
+            z-index: 40;
             mix-blend-mode: screen;
-            filter: contrast(0.95) saturate(0.85);
+            filter: contrast(0.9) saturate(0.75) brightness(0.7);
         }
         #obsessive-words::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at 50% 40%, transparent 0%, rgba(0,0,0,0.35) 65%, rgba(0,0,0,0.85) 100%);
-            opacity: 0.35;
+            background: radial-gradient(circle at 50% 40%, transparent 0%, rgba(0,0,0,0.45) 58%, rgba(0,0,0,0.92) 100%);
+            opacity: 0.4;
             pointer-events: none;
             transition: opacity 6s ease;
         }
@@ -1624,7 +1670,8 @@
             transform: translate(-50%, -50%);
             transition: color 3s ease, text-shadow 3s ease;
             will-change: transform, opacity;
-            filter: blur(1.4px);
+            filter: blur(1.6px);
+            -webkit-text-stroke: 0.4px rgba(0, 0, 0, 0.35);
         }
         .obsessive-word.active {
             animation: wordFadeInSlow 3s forwards;
@@ -1636,9 +1683,9 @@
                 filter: blur(5px);
             }
             100% {
-                opacity: 0.55;
+                opacity: 0.6;
                 transform: translate(-50%, -50%) scale(1);
-                filter: blur(1.1px);
+                filter: blur(1px);
             }
         }
 
@@ -1648,11 +1695,11 @@
         }
 
         .obsessive-word.rorschach {
-            color: rgba(90, 90, 90, 0.7);
+            color: rgba(105, 105, 105, 0.65);
             text-shadow:
-                0 0 25px rgba(80, 0, 0, 0.4),
-                0 0 55px rgba(0, 0, 0, 0.45);
-            filter: blur(1px);
+                0 0 18px rgba(80, 0, 0, 0.45),
+                0 0 65px rgba(0, 0, 0, 0.55);
+            filter: blur(1.1px);
         }
 
         .obsessive-word.pulse {
@@ -1662,16 +1709,16 @@
             0%, 100% {
                 letter-spacing: 0.16em;
                 text-shadow:
-                    0 0 18px rgba(90, 0, 0, 0.35),
-                    0 0 35px rgba(0, 0, 0, 0.6);
-                filter: blur(0.9px);
+                    0 0 22px rgba(90, 0, 0, 0.4),
+                    0 0 40px rgba(0, 0, 0, 0.68);
+                filter: blur(0.85px);
             }
             45% {
                 letter-spacing: 0.22em;
                 text-shadow:
-                    0 0 30px rgba(120, 0, 0, 0.6),
-                    0 0 60px rgba(0, 0, 0, 0.7);
-                filter: blur(0.4px);
+                    0 0 32px rgba(120, 0, 0, 0.7),
+                    0 0 70px rgba(0, 0, 0, 0.75);
+                filter: blur(0.55px);
             }
         }
 
@@ -1694,19 +1741,19 @@
         }
 
         .obsessive-word.whisper {
-            color: rgba(40, 40, 40, 0.4);
-            text-shadow: 0 0 18px rgba(0, 0, 0, 0.55);
+            color: rgba(45, 45, 45, 0.42);
+            text-shadow: 0 0 22px rgba(0, 0, 0, 0.6);
             letter-spacing: 0.24em;
-            filter: blur(1.6px);
+            filter: blur(1.8px);
         }
 
         .obsessive-word.face-phase {
-            color: rgba(210, 178, 162, 0.8);
+            color: rgba(210, 178, 162, 0.82);
             letter-spacing: 0.08em;
             text-shadow:
-                0 0 12px rgba(255, 230, 210, 0.35),
-                0 0 35px rgba(90, 0, 0, 0.45);
-            filter: blur(1.4px);
+                0 0 18px rgba(255, 230, 210, 0.45),
+                0 0 45px rgba(90, 0, 0, 0.55);
+            filter: blur(1.5px);
             animation: faceBreath 5.5s ease-in-out infinite;
         }
         @keyframes faceBreath {
@@ -2082,8 +2129,8 @@
             'Ближе.|1800|sound:step|peripheral',
             'Он <span class="scream">кричит</span>.|3000|double|chromatic|sound:scream',
             'Не словами.|2000',
-            '<span class="void">Звуком</span>.|2000',
-            '<span class="void">Животным</span>.|3000|shake|screentear',
+            '<span class="void primal-growl">Звуком</span>.|2000|sound:feral',
+            '<span class="void feral-roar">Животным</span>.|3000|shake|screentear|sound:feral_deep',
             '|5000|blackout:5000|silence',
             'Сколько времени прошло?|2500|break|timedistort',
             'Минута?|1200|break',
@@ -2147,7 +2194,7 @@
             'До <span class="death">костей</span>.|3000',
             '<span class="machine-word">Ты трёшь. Трёшь. Трёшь</span>.|2500|obsess:трёшь|sound:scrub',
             '<span class="machine-word">Монотонно</span>.|2000',
-            '<span class="machine-word">Скрип. Скрип. Скрип</span>.|3000|obsess:скрип',
+            '<span class="machine-word">Скрип. Скрип. Скрип</span>.|3000|obsess:скрип|sound:creak',
             'Как ногти по доске.|2500|reality',
             'Ты моешь его пах.|2000',
             '<span class="machine-word">Каждый день</span> моешь.|2000|obsess:каждый день',
@@ -2270,7 +2317,7 @@
             'Параллельно.|2500',
             'Ты берёшь его руку.|2500',
             '<span class="cold">Холодная</span>. <span class="death">Мёртвая</span> почти.|3500',
-            'Стиральная <span class="machine-word">машина</span> гудит.|2500|sound:machine',
+            'Стиральная <span class="machine-word">машина</span> гудит.|2500|sound:machine|sound:hum',
             'Вода шумит.|2000|sound:water|water',
             '<span class="machine-word">Каждый день</span>.|3500|trail|obsess:каждый день',
             'Ты держишь <span class="death pulse-accent">мёртвую</span> руку.|2500',
@@ -2294,7 +2341,7 @@
             'Который называется.|2500|freeze|watching',
             '<span class="scream focus-word">Любовь. Долг. Семья</span>.|5000|shake|blood|redFlicker|chromatic|crack',
             'Вода течёт.|2500|sound:water|obsess:вода|water',
-            '<span class="machine-word">Машина</span> гудит.|2500|sound:machine',
+            '<span class="machine-word">Машина</span> гудит.|2500|sound:machine|sound:hum',
             'И ты ждёшь <span class="death">конца</span>.|3500',
             'Который не приходит.|4000|shadow|obsess:не приходит',
             '<span class="focus-word pulse-accent">Никогда</span>.|3000|reality',
@@ -2315,6 +2362,7 @@
         ];
 
         let audioContext, ambientLayers = [], progressionLevel = 0;
+        let pendulumTimer = null, pendulumGain = null, pendulumPhase = 0;
         let obsessiveWords = [], forgottenWords = [];
         let obsessionPhase = 0;
         let obsessionFieldActive = false;
@@ -2834,6 +2882,7 @@
                 exitButton.dataset.bound = 'true';
                 exitButton.addEventListener('click', () => {
                     if (confirm('Прервать опыт?')) {
+                        stopPendulum();
                         location.reload();
                     }
                 });
@@ -3169,7 +3218,8 @@
                 createSubsonicPulse();
                 createMetallicAmbient();
                 createDistantEchoes();
-                
+                startPendulum();
+
                 setInterval(() => {
                     ambientLayers.forEach(layer => {
                         if (layer && layer.gain) {
@@ -3186,6 +3236,71 @@
                     });
                 }, 1000);
             } catch (err) {}
+        }
+
+        function startPendulum() {
+            if (!audioContext || pendulumTimer) return;
+            pendulumPhase = 0;
+            pendulumGain = audioContext.createGain();
+            pendulumGain.gain.setValueAtTime(0.02, audioContext.currentTime);
+            pendulumGain.connect(audioContext.destination);
+
+            const playTick = () => {
+                if (!audioContext || !pendulumGain) return;
+                const now = audioContext.currentTime;
+                const length = Math.floor(audioContext.sampleRate * 0.22);
+                const buffer = audioContext.createBuffer(1, length, audioContext.sampleRate);
+                const data = buffer.getChannelData(0);
+                const baseFreq = pendulumPhase % 2 === 0 ? 2100 : 1700;
+                for (let i = 0; i < length; i++) {
+                    const env = Math.exp(-i / (audioContext.sampleRate * 0.05));
+                    const carrier = Math.sin((i / audioContext.sampleRate) * baseFreq * Math.PI * 2);
+                    const noise = (Math.random() * 2 - 1) * 0.25;
+                    data[i] = (carrier * 0.7 + noise) * env;
+                }
+                const source = audioContext.createBufferSource();
+                source.buffer = buffer;
+                const filter = audioContext.createBiquadFilter();
+                filter.type = 'highpass';
+                filter.frequency.value = 780;
+                filter.Q.value = 6;
+                source.connect(filter);
+                if (audioContext.createStereoPanner) {
+                    const panner = audioContext.createStereoPanner();
+                    panner.pan.setValueAtTime(pendulumPhase % 2 === 0 ? -0.55 : 0.55, now);
+                    filter.connect(panner);
+                    panner.connect(pendulumGain);
+                } else {
+                    filter.connect(pendulumGain);
+                }
+                const target = 0.08 + progressionLevel * 0.14;
+                pendulumGain.gain.cancelScheduledValues(now);
+                pendulumGain.gain.setValueAtTime(0.02, now);
+                pendulumGain.gain.linearRampToValueAtTime(target, now + 0.08);
+                pendulumGain.gain.linearRampToValueAtTime(Math.max(0.02, target * 0.35), now + 0.9);
+                source.start(now);
+                try { source.stop(now + 0.22); } catch (e) {}
+                pendulumPhase = (pendulumPhase + 1) % 2;
+            };
+
+            playTick();
+            pendulumTimer = setInterval(playTick, 1200);
+        }
+
+        function stopPendulum() {
+            if (pendulumTimer) {
+                clearInterval(pendulumTimer);
+                pendulumTimer = null;
+            }
+            if (pendulumGain && audioContext) {
+                const time = audioContext.currentTime;
+                pendulumGain.gain.cancelScheduledValues(time);
+                pendulumGain.gain.linearRampToValueAtTime(0.0001, time + 1.5);
+                setTimeout(() => {
+                    try { pendulumGain.disconnect(); } catch (e) {}
+                    pendulumGain = null;
+                }, 1700);
+            }
         }
 
         function createDrone(freq, initialGain, filterType, filterFreq, Q) {
@@ -3879,6 +3994,14 @@
                                             }, 1000);
                                         }
                                     });
+                                    if (pendulumGain) {
+                                        const pTime = audioContext.currentTime;
+                                        const currentPend = pendulumGain.gain.value;
+                                        pendulumGain.gain.cancelScheduledValues(pTime);
+                                        pendulumGain.gain.setValueAtTime(currentPend, pTime);
+                                        pendulumGain.gain.linearRampToValueAtTime(Math.max(0.01, currentPend * 0.25), pTime + 0.6);
+                                        pendulumGain.gain.linearRampToValueAtTime(0.08 + progressionLevel * 0.12, pTime + 2.8);
+                                    }
                                 }
                             }
                             else if (effect.startsWith('subliminal:')) {
@@ -3951,6 +4074,7 @@
                             }
                         });
                     }
+                    stopPendulum();
                     location.reload();
                 }, 15000);
             } catch (err) {}
@@ -4058,6 +4182,42 @@
                             navigator.vibrate([110, 35, 70]);
                         }
                     }, i * 600);
+                }
+            }
+            else if (type === 'creak') {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                const filter = audioContext.createBiquadFilter();
+                const noiseBuffer = audioContext.createBuffer(1, 8192, audioContext.sampleRate);
+                const noiseData = noiseBuffer.getChannelData(0);
+                for (let i = 0; i < 8192; i++) {
+                    const env = Math.pow(1 - i / 8192, 2);
+                    noiseData[i] = (Math.random() * 2 - 1) * env * 0.6;
+                }
+                const noise = audioContext.createBufferSource();
+                noise.buffer = noiseBuffer;
+                noise.playbackRate.value = 0.55;
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(240, now);
+                osc.frequency.exponentialRampToValueAtTime(55, now + 1.1);
+                filter.type = 'bandpass';
+                filter.frequency.value = 320;
+                filter.Q.value = 8;
+                osc.connect(filter);
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioContext.destination);
+                gain.gain.setValueAtTime(0.0001, now);
+                gain.gain.exponentialRampToValueAtTime(0.18, now + 0.18);
+                gain.gain.exponentialRampToValueAtTime(0.02, now + 1.1);
+                osc.start(now);
+                noise.start(now);
+                try {
+                    osc.stop(now + 1.2);
+                    noise.stop(now + 1.2);
+                } catch(e) {}
+                if (navigator.vibrate) {
+                    navigator.vibrate([90, 40, 70]);
                 }
             }
             else if (type === 'metallic') {
@@ -4327,6 +4487,43 @@
                     navigator.vibrate(pattern);
                 }
             }
+            else if (type === 'hum') {
+                const osc = audioContext.createOscillator();
+                const humGain = audioContext.createGain();
+                const humFilter = audioContext.createBiquadFilter();
+                const noiseBuffer = audioContext.createBuffer(1, 32768, audioContext.sampleRate);
+                const noiseData = noiseBuffer.getChannelData(0);
+                for (let i = 0; i < 32768; i++) {
+                    noiseData[i] = (Math.random() * 2 - 1) * (1 - i / 32768);
+                }
+                const noise = audioContext.createBufferSource();
+                noise.buffer = noiseBuffer;
+                noise.playbackRate.value = 0.65;
+                const noiseFilter = audioContext.createBiquadFilter();
+                noiseFilter.type = 'bandpass';
+                noiseFilter.frequency.value = 180;
+                noiseFilter.Q.value = 7;
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(42 + Math.random() * 8, now);
+                humFilter.type = 'lowpass';
+                humFilter.frequency.value = 130;
+                humFilter.Q.value = 12;
+                osc.connect(humFilter);
+                humFilter.connect(humGain);
+                noise.connect(noiseFilter);
+                noiseFilter.connect(humGain);
+                humGain.connect(audioContext.destination);
+                humGain.gain.setValueAtTime(0, now);
+                humGain.gain.linearRampToValueAtTime(0.14, now + 0.4);
+                humGain.gain.linearRampToValueAtTime(0.1, now + 2.8);
+                humGain.gain.linearRampToValueAtTime(0.0001, now + 3.4);
+                osc.start(now);
+                noise.start(now);
+                try {
+                    osc.stop(now + 3.6);
+                    noise.stop(now + 3.6);
+                } catch(e) {}
+            }
             else if (type === 'breathing') {
                 for (let i = 0; i < 2; i++) {
                     setTimeout(() => {
@@ -4519,6 +4716,100 @@
                 } catch(e) {}
                 if (navigator.vibrate) {
                     navigator.vibrate([170, 60, 220, 60, 170]);
+                }
+            }
+            else if (type === 'feral') {
+                const noiseBuffer = audioContext.createBuffer(1, 11025, audioContext.sampleRate);
+                const noiseData = noiseBuffer.getChannelData(0);
+                for (let i = 0; i < 11025; i++) {
+                    const t = i / 11025;
+                    const envelope = Math.pow(t, 0.35) * Math.pow(1 - t, 2);
+                    noiseData[i] = (Math.random() * 2 - 1) * envelope;
+                }
+                const noise = audioContext.createBufferSource();
+                noise.buffer = noiseBuffer;
+                const filter = audioContext.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.value = 420;
+                filter.Q.value = 12;
+                const gain = audioContext.createGain();
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioContext.destination);
+                const osc = audioContext.createOscillator();
+                const oscGain = audioContext.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(160, now);
+                osc.frequency.exponentialRampToValueAtTime(88, now + 0.55);
+                oscGain.gain.setValueAtTime(0, now);
+                oscGain.gain.linearRampToValueAtTime(0.14, now + 0.08);
+                oscGain.gain.linearRampToValueAtTime(0.02, now + 0.7);
+                osc.connect(oscGain);
+                oscGain.connect(filter);
+                gain.gain.setValueAtTime(0.0001, now);
+                gain.gain.linearRampToValueAtTime(0.22, now + 0.1);
+                gain.gain.linearRampToValueAtTime(0.04, now + 0.8);
+                gain.gain.linearRampToValueAtTime(0.0001, now + 1.1);
+                noise.start(now);
+                osc.start(now);
+                try {
+                    noise.stop(now + 1.1);
+                    osc.stop(now + 1.1);
+                } catch(e) {}
+                if (navigator.vibrate) {
+                    navigator.vibrate([140, 50, 140]);
+                }
+            }
+            else if (type === 'feral_deep') {
+                const osc1 = audioContext.createOscillator();
+                const osc2 = audioContext.createOscillator();
+                const growlGain = audioContext.createGain();
+                const roarFilter = audioContext.createBiquadFilter();
+                const noiseBuffer = audioContext.createBuffer(1, 22050, audioContext.sampleRate);
+                const noiseData = noiseBuffer.getChannelData(0);
+                for (let i = 0; i < 22050; i++) {
+                    const t = i / 22050;
+                    const env = Math.pow(1 - t, 1.8);
+                    noiseData[i] = (Math.random() * 2 - 1) * env * 0.6;
+                }
+                const noise = audioContext.createBufferSource();
+                noise.buffer = noiseBuffer;
+                noise.playbackRate.value = 0.6;
+                osc1.type = 'sawtooth';
+                osc1.frequency.setValueAtTime(110, now);
+                osc1.frequency.exponentialRampToValueAtTime(48, now + 0.9);
+                osc2.type = 'square';
+                osc2.frequency.setValueAtTime(52, now);
+                roarFilter.type = 'bandpass';
+                roarFilter.frequency.value = 190;
+                roarFilter.Q.value = 6;
+                osc1.connect(roarFilter);
+                osc2.connect(roarFilter);
+                noise.connect(roarFilter);
+                roarFilter.connect(growlGain);
+                growlGain.connect(audioContext.destination);
+                growlGain.gain.setValueAtTime(0.0001, now);
+                growlGain.gain.linearRampToValueAtTime(0.32, now + 0.12);
+                growlGain.gain.linearRampToValueAtTime(0.08, now + 0.9);
+                growlGain.gain.linearRampToValueAtTime(0.0001, now + 1.6);
+                const tremor = audioContext.createOscillator();
+                const tremorGain = audioContext.createGain();
+                tremor.frequency.value = 7;
+                tremorGain.gain.value = 24;
+                tremor.connect(tremorGain);
+                tremorGain.connect(roarFilter.frequency);
+                osc1.start(now);
+                osc2.start(now);
+                noise.start(now);
+                tremor.start(now);
+                try {
+                    osc1.stop(now + 1.6);
+                    osc2.stop(now + 1.6);
+                    noise.stop(now + 1.6);
+                    tremor.stop(now + 1.6);
+                } catch(e) {}
+                if (navigator.vibrate) {
+                    navigator.vibrate([220, 90, 260, 90, 220]);
                 }
             }
             else if (type === 'crack') {
