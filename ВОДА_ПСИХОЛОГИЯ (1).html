@@ -18,86 +18,7 @@
             -webkit-user-select: none;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
-            cursor: none;
         }
-        
-        /* HYPNOTIC CURSOR */
-        #cursor { 
-            position: fixed; 
-            width: 20px; 
-            height: 20px; 
-            border: 1px solid rgba(80,0,0,0.4); 
-            border-radius: 50%; 
-            pointer-events: none; 
-            z-index: 10000; 
-            transition: all 0.08s ease-out;
-            will-change: transform;
-            mix-blend-mode: difference;
-        }
-        #cursor::before {
-            content: '';
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: rgba(139,0,0,0.5);
-            border-radius: 50%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            transition: all 0.15s;
-        }
-        #cursor.watching {
-            width: 80px;
-            height: 80px;
-            border-color: rgba(139,0,0,0.95);
-            border-width: 2px;
-            animation: watchingBreath 3s infinite;
-        }
-        #cursor.watching::before {
-            width: 35px;
-            height: 35px;
-            background: rgba(139,0,0,0.8);
-            animation: pupilContract 4s infinite;
-        }
-        @keyframes watchingBreath {
-            0%, 100% { transform: scale(1); opacity: 0.6; }
-            50% { transform: scale(1.15); opacity: 0.95; }
-        }
-        @keyframes pupilContract {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            30% { transform: translate(-50%, -50%) scale(0.6); }
-            50% { transform: translate(-50%, -50%) scale(1.3); }
-            70% { transform: translate(-50%, -50%) scale(0.8); }
-        }
-        #cursor.forced {
-            border-color: rgba(139,0,0,0.9);
-            border-width: 2px;
-            animation: forcedPulse 0.6s infinite;
-        }
-        @keyframes forcedPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.4); }
-        }
-        
-        @media (hover: none) and (pointer: coarse) {
-            #cursor { display: none; }
-        }
-        
-        /* CURSOR TRAIL */
-        .cursor-trail {
-            position: fixed;
-            width: 3px;
-            height: 3px;
-            background: rgba(80, 0, 0, 0.5);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            animation: trailFade 0.8s forwards;
-        }
-        @keyframes trailFade {
-            to { opacity: 0; transform: scale(0); }
-        }
-        
         /* HYPNOTIC WARNING SCREEN */
         #warning { 
             position: fixed; 
@@ -532,6 +453,31 @@
             width: clamp(300px, 60vw, 600px);
             height: clamp(300px, 60vw, 600px);
             opacity: 0;
+            pointer-events: none;
+            mix-blend-mode: screen;
+        }
+        .smile-container::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(circle, rgba(180,0,0,0.2) 0%, rgba(0,0,0,0.9) 75%);
+            filter: blur(80px);
+            opacity: 0.8;
+        }
+        .smile-container::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70%;
+            height: 70%;
+            border-radius: 50%;
+            border: 2px solid rgba(180,0,0,0.4);
+            filter: blur(12px);
+            opacity: 0.6;
         }
         
         /* SUBLIMINAL FLASH */
@@ -619,12 +565,85 @@
         .line.active { 
             animation: hypnoticAppear 1.2s forwards; 
         }
-        @keyframes hypnoticAppear {
-            0% { 
-                opacity: 0; 
-                transform: scale(0.92); 
-                filter: blur(8px);
-            }
+
+        .line.spotlight {
+            position: relative;
+        }
+        .line.spotlight::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 115%;
+            height: 190%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(120,0,0,0.25) 45%, rgba(0,0,0,0.95) 100%);
+            opacity: 0;
+            filter: blur(25px);
+            transition: opacity 0.6s ease;
+            z-index: -1;
+        }
+        .line.spotlight.active::before,
+        .line.spotlight::before {
+            opacity: 1;
+        }
+        .line.hemorrhage {
+            position: relative;
+            color: #8a0000;
+            text-shadow:
+                0 0 25px rgba(138,0,0,0.9),
+                0 0 55px rgba(80,0,0,0.65);
+            animation: hemorrhageDrip 3.6s ease-in-out infinite;
+        }
+        .line.hemorrhage::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -18%;
+            width: 60%;
+            height: 2px;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, transparent, rgba(138,0,0,0.85), transparent);
+            filter: blur(4px);
+            animation: hemorrhagePulse 2.4s ease-in-out infinite;
+        }
+        @keyframes hemorrhageDrip {
+            0%, 100% { letter-spacing: clamp(1px, 0.6vw, 4px); filter: drop-shadow(0 0 12px rgba(138,0,0,0.7)); }
+            50% { letter-spacing: clamp(5px, 1.2vw, 12px); filter: drop-shadow(0 0 28px rgba(200,0,0,1)); }
+        }
+        @keyframes hemorrhagePulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.9; }
+        }
+        .line.never {
+            position: relative;
+            animation: neverCollapse 8s ease-in forwards;
+        }
+        .line.never::after {
+            content: attr(data-echo);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(138, 0, 0, 0.25);
+            font-size: 140%;
+            letter-spacing: 1.2em;
+            text-transform: uppercase;
+            opacity: 0;
+            filter: blur(14px);
+            animation: neverEcho 7s ease-in-out infinite;
+            pointer-events: none;
+        }
+        @keyframes neverCollapse {
+            0% { filter: blur(0); letter-spacing: inherit; opacity: 1; }
+            40% { filter: blur(1px); letter-spacing: 0.3em; opacity: 0.9; }
+            60% { filter: blur(5px); letter-spacing: 0.8em; opacity: 0.6; }
+            100% { filter: blur(9px); letter-spacing: 1.2em; opacity: 0.35; }
+        }
+        @keyframes neverEcho {
+            0%, 100% { opacity: 0; filter: blur(14px); }
+            50% { opacity: 0.65; filter: blur(4px); }
+        }
             70% {
                 opacity: 1;
                 transform: scale(1.02);
@@ -1170,15 +1189,57 @@
                 transform: scale(1.05); 
             } 
         }
-        
-        .vignette { 
-            position: fixed; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            box-shadow: inset 0 0 500px rgba(0,0,0,0.95); 
-            pointer-events: none; 
-            z-index: 50; 
-            transition: box-shadow 4s; 
+        .vignette {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 50;
+            --focus-x: 50%;
+            --focus-y: 50%;
+            --focus-inner: 46%;
+            --focus-outer: 68%;
+            --focus-opacity: 1;
+            transition: opacity 2s ease;
+            opacity: 1;
+        }
+        .vignette::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at var(--focus-x) var(--focus-y),
+                rgba(0,0,0,0) var(--focus-inner),
+                rgba(0,0,0,0.78) var(--focus-outer),
+                rgba(0,0,0,0.98) 100%);
+            opacity: var(--focus-opacity);
+            transition: background 1.4s ease, opacity 1.6s ease, filter 1s ease;
+        }
+        .vignette.focused::after,
+        .vignette.focus-ring::after {
+            background: radial-gradient(circle at var(--focus-x) var(--focus-y),
+                rgba(0,0,0,0) calc(var(--focus-inner) - 14%),
+                rgba(0,0,0,0.88) calc(var(--focus-outer) - 10%),
+                rgba(0,0,0,0.99) 100%);
+        }
+        .vignette.collapsing::after {
+            background: radial-gradient(circle at var(--focus-x) var(--focus-y),
+                rgba(0,0,0,0) calc(var(--focus-inner) - 18%),
+                rgba(0,0,0,0.92) calc(var(--focus-outer) - 14%),
+                rgba(0,0,0,1) 100%);
+        }
+        .vignette.focus-lock::after {
+            background: radial-gradient(circle at var(--focus-x) var(--focus-y),
+                rgba(0,0,0,0) 12%,
+                rgba(0,0,0,0.9) 26%,
+                rgba(0,0,0,1) 100%);
+        }
+        .vignette.pulse::after {
+            animation: vignettePulse 1.4s ease;
+        }
+        @keyframes vignettePulse {
+            0% { filter: brightness(1); }
+            40% { filter: brightness(1.35); }
+            100% { filter: brightness(1); }
         }
         
         .static { 
@@ -1285,7 +1346,6 @@
             75% { transform: translate(-4%, -4%); } 
             100% { transform: translate(4%, 4%); } 
         }
-        
         /* WATCHING YOU */
         .watching-overlay {
             position: fixed;
@@ -1294,20 +1354,59 @@
             pointer-events: none;
             opacity: 0;
             z-index: 600;
-            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), 
-                transparent 0%, 
-                transparent 10%,
-                rgba(90,0,0,0.15) 20%,
-                rgba(0,0,0,0.95) 50%);
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%),
+                transparent 0%,
+                rgba(120,0,0,0.12) 18%,
+                rgba(0,0,0,0.92) 52%);
+            transition: opacity 0.6s ease;
+            mix-blend-mode: multiply;
         }
         .watching-overlay.active {
-            animation: watchingPulseSlow 5s;
+            opacity: 1;
+            animation: watchingPulseSlow 5s ease-in-out;
         }
         @keyframes watchingPulseSlow {
-            0%, 100% { opacity: 0; }
-            50% { opacity: 1; }
+            0%, 100% {
+                opacity: 1;
+                background: radial-gradient(circle at var(--x, 50%) var(--y, 50%),
+                    transparent 0%,
+                    rgba(120,0,0,0.12) 18%,
+                    rgba(0,0,0,0.92) 52%);
+            }
+            50% {
+                opacity: 0.6;
+                background: radial-gradient(circle at var(--x, 50%) var(--y, 50%),
+                    rgba(120,0,0,0.25) 5%,
+                    rgba(0,0,0,0.98) 65%);
+            }
         }
-        
+
+        .gaze-focus {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 140;
+            background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%),
+                rgba(255,255,255,0.02) 0%,
+                rgba(180,0,0,0.18) 12%,
+                rgba(0,0,0,0.82) 48%,
+                rgba(0,0,0,0.98) 100%);
+            transition: opacity 0.6s ease, background-size 0.8s ease;
+            background-size: 140% 140%;
+            mix-blend-mode: screen;
+        }
+        .gaze-focus.active {
+            opacity: 1;
+            animation: gazePulse 5s ease-in-out;
+        }
+        @keyframes gazePulse {
+            0% { background-size: 120% 120%; filter: saturate(1); }
+            50% { background-size: 165% 165%; filter: saturate(1.5); }
+            100% { background-size: 130% 130%; filter: saturate(1.1); }
+        }
+
         /* SCREEN TEAR */
         .screen-tear {
             position: fixed;
@@ -1450,36 +1549,221 @@
                 background: repeating-linear-gradient(45deg, #8a8a00 0px, #8a8a00 2px, #00008a 2px, #00008a 4px);
             }
         }
-        
+        /* OBSESSIVE WORD FIELD */
+        #obsessive-words {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 70;
+            opacity: 0.22;
+            transition: opacity 6s ease, filter 5s ease;
+        }
+        #obsessive-words.word-phase-0 {
+            opacity: 0.22;
+            filter: blur(7px) saturate(0.7);
+        }
+        #obsessive-words.word-phase-1 {
+            opacity: 0.32;
+            filter: blur(6px) saturate(0.85);
+        }
+        #obsessive-words.word-phase-2 {
+            opacity: 0.48;
+            filter: blur(4.8px) saturate(1.05);
+        }
+        #obsessive-words.word-phase-3 {
+            opacity: 0.62;
+            filter: blur(3.6px) saturate(1.2);
+        }
+        #obsessive-words.word-phase-4 {
+            opacity: 0.78;
+            filter: blur(2.6px) saturate(1.4);
+        }
+        #obsessive-words.word-flood {
+            opacity: 0.92;
+            filter: blur(1.6px) saturate(1.65) contrast(1.2);
+        }
+        #obsessive-words.word-flood::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle, rgba(120,0,0,0.04) 0%, rgba(0,0,0,0.75) 120%);
+            mix-blend-mode: screen;
+            animation: wordVeilBreath 8s ease-in-out infinite;
+        }
+        @keyframes wordVeilBreath {
+            0%, 100% { opacity: 0.35; }
+            50% { opacity: 0.7; }
+        }
+
         /* OBSESSIVE WORDS */
-        .obsessive-word { 
-            position: fixed; 
-            font-family: 'Courier Prime', monospace; 
-            font-size: clamp(13px, 2.2vw, 20px);
-            color: #4a4a4a; 
-            pointer-events: none; 
-            opacity: 0; 
-            z-index: 70; 
-            letter-spacing: 2px; 
-            font-weight: 700;
-            transition: all 3s ease-out;
+        .obsessive-word {
+            position: fixed;
+            font-family: 'Courier Prime', monospace;
+            font-size: clamp(12px, 2.1vw, 22px);
+            color: rgba(160, 160, 160, 0.85);
+            pointer-events: none;
+            opacity: 0;
+            z-index: 70;
+            letter-spacing: 2px;
+            font-weight: 600;
+            --targetOpacity: 0.18;
+            --wordScale: 1;
+            --wordDuration: 14s;
+            --driftX: 0px;
+            --driftY: 0px;
+            filter: blur(8px);
+            text-transform: uppercase;
+            transition:
+                opacity 6s ease,
+                transform 7s cubic-bezier(0.33, 0, 0.2, 1),
+                filter 5s ease,
+                letter-spacing 6s ease;
+            mix-blend-mode: screen;
         }
-        .obsessive-word.active { 
-            animation: wordFadeInSlow 3s forwards; 
+        .obsessive-word.active {
+            opacity: var(--targetOpacity);
+            filter: blur(3px);
+            transform: translate3d(var(--driftX), var(--driftY), 0) scale(var(--wordScale));
+            animation:
+                wordPulse var(--wordDuration) ease-in-out infinite alternate,
+                wordFlicker calc(var(--wordDuration) * 0.5) steps(6) infinite;
         }
-        @keyframes wordFadeInSlow { 
-            0% { 
-                opacity: 0; 
-                transform: scale(0.6); 
-                filter: blur(5px);
-            } 
-            100% { 
-                opacity: 0.55; 
-                transform: scale(1); 
-                filter: blur(0);
-            } 
+        .obsessive-word.seed {
+            font-size: clamp(28px, 6vw, 60px);
+            letter-spacing: 18px;
+            color: rgba(255, 255, 255, 0.18);
+            filter: blur(14px);
+            text-shadow:
+                0 0 35px rgba(255, 255, 255, 0.2),
+                0 0 120px rgba(180, 0, 0, 0.45);
+            mix-blend-mode: screen;
+            animation: seedExpand 18s ease-in-out infinite alternate;
         }
-        
+        .obsessive-word.seed.active {
+            animation: seedExpand 18s ease-in-out infinite alternate;
+            opacity: 0.24;
+            transform: scale(1.05);
+        }
+        .obsessive-word.seed-awaken {
+            color: rgba(220, 20, 20, 0.28);
+            text-shadow:
+                0 0 45px rgba(200, 0, 0, 0.5),
+                0 0 120px rgba(120, 0, 0, 0.65);
+            animation: seedExpand 14s ease-in-out infinite alternate-reverse;
+            filter: blur(10px);
+        }
+        .obsessive-word.focused-word {
+            color: rgba(220, 40, 40, 0.9);
+            text-shadow:
+                0 0 25px rgba(150, 0, 0, 0.9),
+                0 0 55px rgba(255, 0, 0, 0.35);
+            mix-blend-mode: lighten;
+            letter-spacing: 4px;
+        }
+        .obsessive-word.sigil {
+            color: rgba(200, 0, 0, 0.58);
+            text-shadow:
+                0 0 30px rgba(200, 0, 0, 0.6),
+                0 0 80px rgba(80, 0, 0, 0.8);
+            animation: sigilGlimmer 10s ease-in-out infinite;
+        }
+        .obsessive-word.whisper {
+            color: rgba(90, 90, 90, 0.55);
+            filter: blur(4px);
+            --targetOpacity: 0.14;
+        }
+        .obsessive-word.rorschach {
+            color: rgba(180, 0, 0, 0.7);
+            letter-spacing: 8px;
+            filter: blur(6px);
+            --targetOpacity: 0.32;
+            animation:
+                wordPulse var(--wordDuration) ease-in-out infinite alternate,
+                rorschachPulse calc(var(--wordDuration) * 1.3) ease-in-out infinite;
+        }
+        .obsessive-word.silhouette {
+            text-shadow:
+                0 0 40px rgba(140, 0, 0, 0.65),
+                0 0 90px rgba(0, 0, 0, 0.7);
+            mix-blend-mode: screen;
+        }
+        .obsessive-word.halo {
+            color: rgba(255, 255, 255, 0.65);
+            text-shadow:
+                0 0 40px rgba(255, 255, 255, 0.7),
+                0 0 90px rgba(150, 0, 0, 0.7);
+            --targetOpacity: 0.4;
+        }
+        .obsessive-word.mirror {
+            filter: blur(5px);
+        }
+        .obsessive-word.overrun {
+            mix-blend-mode: lighten;
+            filter: blur(2.4px);
+            text-shadow:
+                0 0 45px rgba(255, 40, 40, 0.35),
+                0 0 90px rgba(120, 0, 0, 0.45);
+        }
+        .obsessive-word.never-spiral {
+            color: rgba(210, 20, 20, 0.7);
+            letter-spacing: 10px;
+            animation:
+                neverSpiralDrift 14s ease-in-out infinite alternate,
+                wordFlicker 6s steps(8) infinite;
+        }
+        .obsessive-word.smile-foreshadow {
+            color: rgba(255, 255, 255, 0.5);
+            text-shadow:
+                0 0 25px rgba(200, 200, 200, 0.45),
+                0 0 55px rgba(150, 0, 0, 0.55);
+            filter: blur(3px);
+            animation: smilePhantom 9s ease-in-out forwards;
+        }
+        .obsessive-word.dissolve {
+            animation: wordFadeAway 6s forwards;
+        }
+        @keyframes wordPulse {
+            0% { letter-spacing: 2px; filter: blur(3px); }
+            50% { letter-spacing: 10px; filter: blur(6px); }
+            100% { letter-spacing: 4px; filter: blur(3px); }
+        }
+        @keyframes wordFlicker {
+            0%, 100% { opacity: 1; }
+            48% { opacity: 0.7; }
+            50% { opacity: 0.35; text-shadow: 0 0 30px rgba(200, 0, 0, 0.5); }
+            52% { opacity: 0.85; }
+        }
+        @keyframes seedExpand {
+            0% { letter-spacing: 12px; filter: blur(18px); opacity: 0.12; transform: scale(0.9); }
+            45% { letter-spacing: 22px; filter: blur(8px); opacity: 0.22; transform: scale(1.05); }
+            100% { letter-spacing: 36px; filter: blur(4px); opacity: 0.28; transform: scale(1.2); }
+        }
+        @keyframes rorschachPulse {
+            0% { filter: blur(6px); text-shadow: 0 0 40px rgba(120, 0, 0, 0.6); }
+            50% { filter: blur(3px); text-shadow: 0 0 80px rgba(200, 0, 0, 0.85); }
+            100% { filter: blur(6px); text-shadow: 0 0 45px rgba(90, 0, 0, 0.6); }
+        }
+        @keyframes wordFadeAway {
+            0% { opacity: var(--targetOpacity); filter: blur(3px); }
+            100% { opacity: 0; filter: blur(12px); }
+        }
+        @keyframes sigilGlimmer {
+            0%, 100% { opacity: 0.45; filter: blur(3px); }
+            40% { opacity: 0.85; filter: blur(1.2px); }
+            60% { opacity: 0.65; filter: blur(2.4px); }
+        }
+        @keyframes neverSpiralDrift {
+            0% { transform: translate3d(calc(var(--driftX) * -0.3), calc(var(--driftY) * -0.3), 0) scale(0.8); }
+            50% { transform: translate3d(calc(var(--driftX) * 0.4), calc(var(--driftY) * 0.4), 0) scale(1.05); }
+            100% { transform: translate3d(calc(var(--driftX) * 0.6), calc(var(--driftY) * 0.6), 0) scale(1.2); }
+        }
+        @keyframes smilePhantom {
+            0% { opacity: 0; filter: blur(8px); }
+            40% { opacity: 0.55; filter: blur(3px); }
+            70% { opacity: 0.35; filter: blur(4px); }
+            100% { opacity: 0; filter: blur(12px); }
+        }
         /* PAREIDOLIA WORDS - формируют образы */
         .obsessive-word.pareidolia {
             filter: blur(3px);
@@ -1515,11 +1799,10 @@
             opacity: 0;
             z-index: 150;
             filter: blur(40px);
-            transition: all 0.8s ease-out;
+            transition: opacity 2s ease, transform 5s ease-in-out;
         }
         .peripheral-shadow.active {
-            opacity: 1;
-            animation: shadowDrift 12s ease-in-out infinite;
+            opacity: 0.85;
         }
         @keyframes shadowDrift {
             0%, 100% {
@@ -1726,7 +2009,6 @@
     </style>
 </head>
 <body>
-    <div id="cursor"></div>
     
     <div id="warning">
         <div id="warning-content">
@@ -1765,6 +2047,7 @@
         <div class="strobe"></div>
         <div class="chromatic"></div>
         <div class="watching-overlay"></div>
+        <div class="gaze-focus"></div>
         <div class="breath-overlay"></div>
         <div class="vignette"></div>
         <div class="static"></div>
@@ -2076,9 +2359,16 @@
 
         let audioContext, ambientLayers = [], progressionLevel = 0;
         let obsessiveWords = [], forgottenWords = [];
-        let mouseX = 0, mouseY = 0, realMouseX = 0, realMouseY = 0;
-        let forcedCursorActive = false, isWatching = false;
-        let cursorTrails = [];
+        let realMouseX = window.innerWidth / 2, realMouseY = window.innerHeight / 2;
+        let isWatching = false;
+        let currentLineElement = null;
+        let wordStormInterval = null, wordPatternInterval = null;
+        let obsessionPhase = 0;
+        let obsessionEscalationInterval = null;
+        let wordFloodInterval = null;
+        let wordFloodActive = false;
+        let smileForeshadowed = false;
+        let vignettePulseTimeout = null;
         let subliminalMessages = ['ЗАБУДЬ', 'БЕЗЫСХОДНОСТЬ', 'ПОВТОР', 'РАСПАД', 'ПУСТОТА', 'БОЛЬ', 'ЦИКЛ', 'НЕТ ВЫХОДА', 'ПОВИНУЙСЯ', 'СТРАХ', 'ТОНЕШЬ', 'ТЕРЯЕШЬСЯ'];
         let waterDrops = [], bloodDrops = [], wetStains = [];
         let lastActivityTime = Date.now();
@@ -2091,25 +2381,26 @@
             'любовь', 'надежда', 'будущее', 'прошлое', 'человек', 'живой', 'помощь', 'конец', 'начало',
             'выход', 'спасение', 'жизнь', 'смерть', 'боль', 'страх', 'время', 'дни', 'годы'
         ];
+        const RORSCHACH_POOL = [
+            'ГЛАЗА', 'ТЫ', 'ОН', 'СТРАХ', 'ВОДА', 'КРОВЬ', 'СМОТРИТ', 'ЖДИ', 'НИКОГДА', 'МОЛЧИ',
+            'ГНИЁТ', 'ПУСТО', 'БОЛЬ', 'ТЕМНО', 'ХОЛОД', 'ДОЛГ', 'СМОТРИ', 'СЛЫШИШЬ', 'БЕЗ ВЫХОДА',
+            'ДЫШИ', 'УТОНИ', 'ШЕПОТ', 'ПАМЯТЬ', 'РАСПАД', 'ПРОПАДИ', 'СТЕРЕТЬ', 'ГЛУБОКО'
+        ];
+
 
         // REAL mouse tracking
         document.addEventListener('mousemove', (e) => {
             realMouseX = e.clientX;
             realMouseY = e.clientY;
             lastActivityTime = Date.now();
-            
-            if (!forcedCursorActive) {
-                mouseX = realMouseX;
-                mouseY = realMouseY;
-                const cursor = document.getElementById('cursor');
-                if (cursor) {
-                    cursor.style.left = mouseX + 'px';
-                    cursor.style.top = mouseY + 'px';
-                }
-            }
-            
-            if (Math.random() < 0.25 && progressionLevel > 0.3) {
-                createCursorTrail();
+
+            if (!isWatching) {
+                const watching = document.querySelector('.watching-overlay');
+                const gaze = document.querySelector('.gaze-focus');
+                watching.style.setProperty('--x', (realMouseX / window.innerWidth * 100) + '%');
+                watching.style.setProperty('--y', (realMouseY / window.innerHeight * 100) + '%');
+                gaze.style.setProperty('--gx', (realMouseX / window.innerWidth * 100) + '%');
+                gaze.style.setProperty('--gy', (realMouseY / window.innerHeight * 100) + '%');
             }
         });
 
@@ -2117,8 +2408,20 @@
             lastActivityTime = Date.now();
         });
 
-        document.addEventListener('touchmove', () => {
+        document.addEventListener('touchmove', (e) => {
             lastActivityTime = Date.now();
+            if (e.touches && e.touches[0]) {
+                realMouseX = e.touches[0].clientX;
+                realMouseY = e.touches[0].clientY;
+                if (!isWatching) {
+                    const watching = document.querySelector('.watching-overlay');
+                    const gaze = document.querySelector('.gaze-focus');
+                    watching.style.setProperty('--x', (realMouseX / window.innerWidth * 100) + '%');
+                    watching.style.setProperty('--y', (realMouseY / window.innerHeight * 100) + '%');
+                    gaze.style.setProperty('--gx', (realMouseX / window.innerWidth * 100) + '%');
+                    gaze.style.setProperty('--gy', (realMouseY / window.innerHeight * 100) + '%');
+                }
+            }
         });
 
         // Emergency exit
@@ -2163,15 +2466,6 @@
             setTimeout(startExperience, 1500);
             setInterval(triggerRandomSubliminal, 12000);
         });
-
-        function createCursorTrail() {
-            const trail = document.createElement('div');
-            trail.className = 'cursor-trail';
-            trail.style.left = mouseX + 'px';
-            trail.style.top = mouseY + 'px';
-            document.body.appendChild(trail);
-            setTimeout(() => trail.remove(), 800);
-        }
 
         function createWaterDrop() {
             const drop = document.createElement('div');
@@ -2228,28 +2522,40 @@
             const shadows = ['shadow-left', 'shadow-right', 'shadow-top'];
             const shadowId = shadows[Math.floor(Math.random() * shadows.length)];
             const shadow = document.getElementById(shadowId);
-            
-            // Случайная позиция в периферии
-            let x, y;
+            if (!shadow) return;
+
+            let left = 0;
+            let top = 0;
             if (shadowId === 'shadow-left') {
-                x = -50 + Math.random() * 150;
-                y = Math.random() * (window.innerHeight - 200);
+                left = -160 + Math.random() * 90;
+                top = Math.random() * (window.innerHeight - 220);
             } else if (shadowId === 'shadow-right') {
-                x = window.innerWidth - 250 + Math.random() * 150;
-                y = Math.random() * (window.innerHeight - 200);
+                left = window.innerWidth - 120 + Math.random() * 90;
+                top = Math.random() * (window.innerHeight - 220);
             } else {
-                x = Math.random() * (window.innerWidth - 250);
-                y = -50 + Math.random() * 150;
+                left = Math.random() * (window.innerWidth - 220);
+                top = -160 + Math.random() * 120;
             }
-            
-            shadow.style.left = x + 'px';
-            shadow.style.top = y + 'px';
+
+            shadow.style.left = left + 'px';
+            shadow.style.top = top + 'px';
+            const scale = 1 + progressionLevel * 0.6 + Math.random() * 0.3;
+            const rotate = (Math.random() - 0.5) * 14;
+            const driftX = (Math.random() - 0.5) * 120;
+            const driftY = (Math.random() - 0.5) * 90;
+            shadow.style.transition = 'transform 5.5s ease-in-out, opacity 2s ease';
+            shadow.style.transform = `translate(${driftX}px, ${driftY}px) scale(${scale}) rotate(${rotate}deg)`;
+            shadow.style.opacity = 0.25 + progressionLevel * 0.5;
             shadow.classList.add('active');
-            
+            if (Math.random() < 0.6) {
+                spawnAmbientWordFromPool();
+            }
             setTimeout(() => {
                 shadow.classList.remove('active');
-            }, 12000);
-            
+                shadow.style.transform = '';
+                shadow.style.opacity = '';
+            }, 8000);
+
             if (navigator.vibrate && Math.random() < 0.3) {
                 navigator.vibrate([50, 100, 50]);
             }
@@ -2259,7 +2565,7 @@
         function createPareidoliaPattern(type = 'eyes') {
             const container = document.getElementById('obsessive-words');
             const words = ['СМОТРИТ', 'ВИДИШЬ', 'ГЛАЗА', 'ПУСТОТА', 'ТЬМА', 'ЗДЕСЬ', 'ОН', 'ТЫ'];
-            
+
             if (type === 'eyes') {
                 // Создаем два "глаза" из слов
                 const leftEyeX = window.innerWidth * 0.35;
@@ -2324,6 +2630,215 @@
             }
         }
 
+        function setVignetteBase(inner, outer) {
+            const vignette = document.querySelector('.vignette');
+            if (!vignette) return;
+            const safeInner = clamp(inner, 10, 52);
+            const safeOuter = clamp(outer, safeInner + 6, 90);
+            vignette.dataset.baseInner = safeInner;
+            vignette.dataset.baseOuter = safeOuter;
+            if (!vignette.classList.contains('focus-lock')) {
+                vignette.style.setProperty('--focus-inner', safeInner + '%');
+                vignette.style.setProperty('--focus-outer', safeOuter + '%');
+            }
+        }
+
+        function alignVignetteToElement(element, intensity = 0.3, options = {}) {
+            const vignette = document.querySelector('.vignette');
+            if (!vignette || !element) return;
+            const rect = element.getBoundingClientRect();
+            const centerX = ((rect.left + rect.width / 2) / window.innerWidth) * 100;
+            const centerY = ((rect.top + rect.height / 2) / window.innerHeight) * 100;
+            vignette.style.setProperty('--focus-x', centerX.toFixed(2) + '%');
+            vignette.style.setProperty('--focus-y', centerY.toFixed(2) + '%');
+            if (vignette.classList.contains('focus-lock') && !options.overrideLock) {
+                return;
+            }
+            const baseInner = parseFloat(vignette.dataset.baseInner ?? '46');
+            const baseOuter = parseFloat(vignette.dataset.baseOuter ?? '68');
+            const targetInner = clamp(baseInner - intensity * 16, 8, baseInner);
+            const targetOuter = clamp(baseOuter - intensity * 18, targetInner + 8, baseOuter);
+            vignette.style.setProperty('--focus-inner', targetInner + '%');
+            vignette.style.setProperty('--focus-outer', targetOuter + '%');
+            vignette.classList.add('pulse');
+            if (vignettePulseTimeout) {
+                clearTimeout(vignettePulseTimeout);
+            }
+            vignettePulseTimeout = setTimeout(() => {
+                vignette.classList.remove('pulse');
+                if (!vignette.classList.contains('focus-lock')) {
+                    const restoreInner = parseFloat(vignette.dataset.baseInner ?? targetInner);
+                    const restoreOuter = parseFloat(vignette.dataset.baseOuter ?? targetOuter);
+                    vignette.style.setProperty('--focus-inner', restoreInner + '%');
+                    vignette.style.setProperty('--focus-outer', restoreOuter + '%');
+                }
+                vignettePulseTimeout = null;
+            }, 1400);
+        }
+
+        function computeFocusIntensity(effects = [], text = '') {
+            let intensity = 0.18 + progressionLevel * 0.45;
+            const lower = text.toLowerCase();
+            if (effects.includes('blood') || /кров/.test(lower)) intensity += 0.3;
+            if (effects.includes('shake') || effects.includes('screentear') || effects.includes('watching')) intensity += 0.2;
+            if (effects.includes('peripheral') || effects.includes('shadow')) intensity += 0.1;
+            if (/страх/.test(lower) || /глаз/.test(lower)) intensity += 0.15;
+            if (/никогда/.test(lower)) intensity = Math.max(intensity, 0.9);
+            return clamp(intensity, 0.15, 1);
+        }
+
+        function pulseWordsAroundLine(element, intensity = 0.5) {
+            if (!element) return;
+            const rect = element.getBoundingClientRect();
+            const baseX = ((rect.left + rect.width / 2) / window.innerWidth) * 100;
+            const baseY = ((rect.top + rect.height / 2) / window.innerHeight) * 100;
+            const count = Math.floor(5 + intensity * 18);
+            for (let i = 0; i < count; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const radius = (6 + Math.random() * 18) * (1 + intensity * 0.8);
+                const left = clamp(baseX + Math.cos(angle) * radius, 2, 98);
+                const top = clamp(baseY + Math.sin(angle) * radius, 4, 96);
+                const word = RORSCHACH_POOL[Math.floor(Math.random() * RORSCHACH_POOL.length)];
+                const classes = ['sigil'];
+                if (Math.random() < 0.4) classes.push('mirror');
+                createObsessiveWordElement(word, left, top, classes, { opacity: 0.22 + intensity * 0.4, scale: 0.9 + intensity * 0.9, unlockDelay: 6000 + Math.random() * 3000 });
+            }
+        }
+
+        function igniteObsessionField() {
+            const container = document.getElementById('obsessive-words');
+            if (!container) return;
+            if (!container.classList.contains('word-phase-0')) {
+                container.classList.add('word-phase-0');
+            }
+            if (!container.dataset.seeded) {
+                const seed = createObsessiveWordElement('Смотри', 50, 48, ['seed'], { opacity: 0.22, scale: 1.05, duration: 28, driftX: 0, driftY: 0, unlockDelay: 10000, preserveCase: true });
+                if (seed) {
+                    setTimeout(() => seed.classList.add('seed-awaken'), 9000);
+                }
+                container.dataset.seeded = 'true';
+            }
+            applyObsessionPhase(0);
+            if (!obsessionEscalationInterval) {
+                obsessionEscalationInterval = setInterval(() => {
+                    if (obsessionPhase < 4) {
+                        applyObsessionPhase(obsessionPhase + 1);
+                    } else {
+                        densifyAmbientWords(true);
+                        reorganizeObsessiveWords(true);
+                    }
+                }, 14000);
+            }
+        }
+
+        function applyObsessionPhase(targetPhase = obsessionPhase) {
+            const container = document.getElementById('obsessive-words');
+            if (!container) return;
+            const nextPhase = clamp(targetPhase, 0, 4);
+            if (nextPhase <= obsessionPhase && container.classList.contains(`word-phase-${obsessionPhase}`)) {
+                return;
+            }
+            obsessionPhase = Math.max(obsessionPhase, nextPhase);
+            for (let i = 0; i <= 4; i++) {
+                container.classList.remove(`word-phase-${i}`);
+            }
+            container.classList.add(`word-phase-${obsessionPhase}`);
+            container.dataset.phase = obsessionPhase;
+            if (obsessionPhase >= 1) {
+                densifyAmbientWords(true);
+            }
+            if (obsessionPhase >= 2) {
+                spawnRorschachCluster();
+            }
+            if (obsessionPhase >= 3) {
+                setTimeout(() => createPareidoliaPattern(Math.random() < 0.6 ? 'eyes' : 'figure'), 600);
+            }
+            if (obsessionPhase >= 4) {
+                triggerWordFlood();
+            }
+        }
+
+        function syncObsessionPhase() {
+            const target = Math.min(4, Math.floor(progressionLevel * 5));
+            if (target > obsessionPhase) {
+                applyObsessionPhase(target);
+            }
+        }
+
+        function triggerWordFlood() {
+            const container = document.getElementById('obsessive-words');
+            if (!container || wordFloodActive) return;
+            wordFloodActive = true;
+            container.classList.add('word-flood');
+            obsessiveWords.forEach(word => {
+                if (!word) return;
+                word.classList.add('overrun');
+                const currentOpacity = parseFloat(word.style.getPropertyValue('--targetOpacity')) || 0.25;
+                const currentScale = parseFloat(word.style.getPropertyValue('--wordScale')) || 1;
+                word.style.setProperty('--targetOpacity', Math.min(0.9, currentOpacity + 0.3).toFixed(2));
+                word.style.setProperty('--wordScale', Math.min(2.4, currentScale + 0.4).toFixed(2));
+            });
+            let bursts = 0;
+            wordFloodInterval = setInterval(() => {
+                for (let i = 0; i < 14; i++) {
+                    spawnAmbientWordFromPool();
+                }
+                if (Math.random() < 0.7) {
+                    spawnRorschachCluster();
+                }
+                if (bursts % 2 === 0) {
+                    createPareidoliaPattern(Math.random() < 0.6 ? 'eyes' : 'figure');
+                }
+                bursts++;
+                if (bursts > 18) {
+                    clearInterval(wordFloodInterval);
+                    wordFloodInterval = null;
+                }
+            }, 900);
+        }
+
+        function manifestSmilePreview() {
+            const container = document.getElementById('obsessive-words');
+            if (!container) return;
+            const centerX = 50;
+            const centerY = 52 + (Math.random() - 0.5) * 6;
+            const mouthRadius = 14 + progressionLevel * 10;
+            for (let angle = 0; angle <= Math.PI; angle += 0.08) {
+                const left = clamp(centerX + Math.cos(angle) * mouthRadius, 4, 96);
+                const top = clamp(centerY + Math.sin(angle) * mouthRadius * 0.5, 6, 94);
+                createObsessiveWordElement('УЛЫБКА', left, top, ['smile-foreshadow'], { opacity: 0.22 + progressionLevel * 0.3, scale: 0.8 + Math.random() * 0.4, unlockDelay: 7000 });
+                createObsessiveWordElement('УЛЫБКА', 100 - left, top + (Math.random() - 0.5) * 2, ['smile-foreshadow', 'mirror'], { opacity: 0.18 + progressionLevel * 0.25, scale: 0.75 + Math.random() * 0.35, unlockDelay: 7000 });
+            }
+            const eyeOffsetX = 12 + progressionLevel * 6;
+            const eyeOffsetY = 12;
+            for (let side = -1; side <= 1; side += 2) {
+                for (let i = 0; i < 10; i++) {
+                    const angle = (Math.PI * 2 / 10) * i;
+                    const left = clamp(centerX + side * eyeOffsetX + Math.cos(angle) * 4, 4, 96);
+                    const top = clamp(centerY - eyeOffsetY + Math.sin(angle) * 4, 6, 94);
+                    createObsessiveWordElement(side === -1 ? 'ОН' : 'ТЫ', left, top, ['smile-foreshadow'], { opacity: 0.26 + progressionLevel * 0.2, scale: 0.7 + Math.random() * 0.2, unlockDelay: 6500 });
+                }
+            }
+        }
+
+        function triggerNeverSpiral(element) {
+            if (!element) return;
+            const rect = element.getBoundingClientRect();
+            const centerX = ((rect.left + rect.width / 2) / window.innerWidth) * 100;
+            const centerY = ((rect.top + rect.height / 2) / window.innerHeight) * 100;
+            const arms = 4 + Math.floor(progressionLevel * 4);
+            const steps = 10 + Math.floor(progressionLevel * 14);
+            for (let arm = 0; arm < arms; arm++) {
+                for (let step = 0; step < steps; step++) {
+                    const angle = (step / steps) * Math.PI * 2 + arm * (Math.PI / 2);
+                    const radius = (step + 1) * (0.9 + progressionLevel * 1.4);
+                    const left = clamp(centerX + Math.cos(angle) * radius, 2, 98);
+                    const top = clamp(centerY + Math.sin(angle) * radius, 4, 96);
+                    createObsessiveWordElement('НИКОГДА', left, top, ['never-spiral'], { opacity: 0.2 + progressionLevel * 0.4, scale: 0.85 + step / steps, unlockDelay: 10000 + step * 120, duration: 18 + Math.random() * 6 });
+                }
+            }
+        }
+
         // ДЫХАНИЕ И ТРЕМОР ТЕКСТА
         function applyBreathingToText(lineElement) {
             setTimeout(() => {
@@ -2336,33 +2851,6 @@
                 lineElement.classList.add('tremor');
             }, 100);
         }
-
-        function forceCursorMovement(duration = 2500) {
-            if (isMobile) return;
-            forcedCursorActive = true;
-            const cursor = document.getElementById('cursor');
-            cursor.classList.add('forced');
-            const startX = mouseX;
-            const startY = mouseY;
-            const targetX = Math.random() * window.innerWidth;
-            const targetY = Math.random() * window.innerHeight;
-            const startTime = Date.now();
-            const animate = () => {
-                const elapsed = Date.now() - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                const eased = progress < 0.5 
-                    ? 4 * progress * progress * progress 
-                    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-                mouseX = startX + (targetX - startX) * eased + (Math.sin(progress * Math.PI * 5) * 40);
-                mouseY = startY + (targetY - startY) * eased + (Math.cos(progress * Math.PI * 5) * 40);
-                cursor.style.left = mouseX + 'px';
-                cursor.style.top = mouseY + 'px';
-                if (progress < 1) {
-                    requestAnimationFrame(animate);
-                } else {
-                    forcedCursorActive = false;
-                    cursor.classList.remove('forced');
-                }
             };
             animate();
             if (navigator.vibrate) {
@@ -2867,12 +3355,41 @@
         function increaseIntensity(lineIndex) {
             progressionLevel = lineIndex / story.length;
             updateAtmosphere(progressionLevel);
-            document.querySelector('.static').style.opacity = 0.12 + progressionLevel * 0.55;
-            document.querySelector('.vignette').style.boxShadow = 
-                `inset 0 0 ${500 + progressionLevel * 2500}px rgba(0,0,0,${0.95 + progressionLevel * 0.05})`;
-            document.querySelector('.breath-overlay').style.animation = 
-                `breatheOppressive ${Math.max(0.5, 7 - progressionLevel * 6.5)}s infinite`;
-            document.querySelector('.grain').style.opacity = progressionLevel * 0.6;
+            densifyAmbientWords();
+            if (progressionLevel > 0.25) {
+                reorganizeObsessiveWords();
+            }
+            syncObsessionPhase();
+            const staticLayer = document.querySelector('.static');
+            if (staticLayer) {
+                staticLayer.style.opacity = 0.12 + progressionLevel * 0.55;
+            }
+            const vignette = document.querySelector('.vignette');
+            if (vignette) {
+                const baseInner = 46 - progressionLevel * 22;
+                const baseOuter = 68 - progressionLevel * 26;
+                setVignetteBase(baseInner, baseOuter);
+                if (progressionLevel > 0.7) {
+                    vignette.classList.add('collapsing');
+                } else {
+                    vignette.classList.remove('collapsing');
+                }
+            }
+            const breath = document.querySelector('.breath-overlay');
+            if (breath) {
+                breath.style.animation = `breatheOppressive ${Math.max(0.5, 7 - progressionLevel * 6.5)}s infinite`;
+            }
+            const grain = document.querySelector('.grain');
+            if (grain) {
+                grain.style.opacity = progressionLevel * 0.6;
+            }
+            if (!smileForeshadowed && progressionLevel > 0.62) {
+                manifestSmilePreview();
+                smileForeshadowed = true;
+            }
+            if (progressionLevel > 0.5 && Math.random() < (progressionLevel - 0.5) * 0.2) {
+                createPareidoliaPattern(Math.random() < 0.55 ? 'eyes' : 'figure');
+            }
             if (progressionLevel > 0.45 && Math.random() < (progressionLevel - 0.45) * 0.15) {
                 triggerWatching();
             }
@@ -2882,22 +3399,185 @@
             if (progressionLevel > 0.25 && Math.random() < (progressionLevel - 0.25) * 0.9) {
                 addForgottenWord();
             }
+            if (progressionLevel > 0.84) {
+                triggerWordFlood();
+            }
             if (progressionLevel > 0.5 && Math.random() < 0.04) {
                 triggerScreenTear();
             }
         }
 
-        function addObsessiveWord(word) {
-            if (!word || obsessiveWords.length > 60) return;
+        function clamp(value, min, max) {
+            return Math.min(max, Math.max(min, value));
+        }
+
+        function currentMaxObsessiveWords() {
+            return Math.floor(60 + progressionLevel * 260);
+        }
+
+        function enforceObsessiveLimit(limit) {
+            while (obsessiveWords.length >= limit) {
+                const old = obsessiveWords.shift();
+                if (old && old.parentNode) {
+                    old.classList.add('dissolve');
+                    setTimeout(() => old.remove(), 6000);
+                }
+            }
+        }
+
+        function createObsessiveWordElement(text, leftPercent, topPercent, classNames = [], overrides = {}) {
+            const limit = overrides.limit || currentMaxObsessiveWords();
+            enforceObsessiveLimit(limit);
+            const container = document.getElementById('obsessive-words');
             const wordEl = document.createElement('div');
             wordEl.className = 'obsessive-word';
-            wordEl.textContent = word;
-            wordEl.style.left = (2 + Math.random() * 96) + '%';
-            wordEl.style.top = (2 + Math.random() * 96) + '%';
-            wordEl.style.transform = `rotate(${(Math.random() - 0.5) * 35}deg)`;
-            document.getElementById('obsessive-words').appendChild(wordEl);
-            setTimeout(() => wordEl.classList.add('active'), 100);
+            classNames.forEach(cls => wordEl.classList.add(cls));
+            const content = overrides.preserveCase ? text : text.toUpperCase();
+            wordEl.textContent = content;
+            const left = clamp(leftPercent, 2, 98);
+            const top = clamp(topPercent, 4, 96);
+            wordEl.style.left = left + '%';
+            wordEl.style.top = top + '%';
+            const opacity = overrides.opacity ?? (0.1 + progressionLevel * 0.4 + Math.random() * 0.08);
+            const scale = overrides.scale ?? (0.85 + progressionLevel * 0.6 + Math.random() * 0.4);
+            const duration = overrides.duration ?? (10 + Math.random() * 12);
+            const driftX = overrides.driftX ?? ((Math.random() - 0.5) * (24 + progressionLevel * 140));
+            const driftY = overrides.driftY ?? ((Math.random() - 0.5) * (20 + progressionLevel * 110));
+            wordEl.style.setProperty('--targetOpacity', opacity.toFixed(2));
+            wordEl.style.setProperty('--wordScale', scale.toFixed(2));
+            wordEl.style.setProperty('--wordDuration', duration.toFixed(2) + 's');
+            wordEl.style.setProperty('--driftX', driftX.toFixed(1) + 'px');
+            wordEl.style.setProperty('--driftY', driftY.toFixed(1) + 'px');
+            wordEl.dataset.locked = 'true';
+            container.appendChild(wordEl);
+            requestAnimationFrame(() => wordEl.classList.add('active'));
             obsessiveWords.push(wordEl);
+            const unlockDelay = overrides.unlockDelay ?? (4000 + Math.random() * 4000);
+            setTimeout(() => { wordEl.dataset.locked = 'false'; }, unlockDelay);
+            return wordEl;
+        }
+
+        function spawnAmbientWordFromPool(pool = RORSCHACH_POOL) {
+            const text = pool[Math.floor(Math.random() * pool.length)];
+            const spread = 40 + progressionLevel * 35;
+            const baseX = clamp(50 + (Math.random() - 0.5) * spread, 2, 98);
+            const baseY = clamp(50 + (Math.random() - 0.5) * spread * 0.8, 4, 96);
+            const classes = [];
+            let mirrored = false;
+            if (progressionLevel > 0.45 && Math.random() < 0.6) {
+                classes.push('rorschach', 'silhouette');
+                mirrored = true;
+            } else if (Math.random() < 0.4) {
+                classes.push('whisper');
+                mirrored = true;
+            }
+            createObsessiveWordElement(text, baseX, baseY, classes, {});
+            if (mirrored) {
+                createObsessiveWordElement(text, 100 - baseX + (Math.random() - 0.5) * 4, baseY + (Math.random() - 0.5) * 4, classes.concat('mirror'), {});
+            } else if (Math.random() < 0.25) {
+                createObsessiveWordElement(text, 100 - baseX + (Math.random() - 0.5) * 6, baseY + (Math.random() - 0.5) * 3, ['whisper', 'mirror'], {});
+            }
+        }
+
+        function densifyAmbientWords(force = false) {
+            const limit = currentMaxObsessiveWords();
+            const target = Math.floor(limit * (0.3 + progressionLevel * 0.55));
+            if (force) {
+                for (let i = 0; i < 4 + Math.floor(progressionLevel * 6); i++) {
+                    spawnAmbientWordFromPool();
+                }
+            }
+            while (obsessiveWords.length < target) {
+                spawnAmbientWordFromPool();
+            }
+        }
+
+        function reorganizeObsessiveWords(forcePattern = false) {
+            const swirl = Math.min(1, progressionLevel * 1.5 + 0.2);
+            obsessiveWords.forEach((word) => {
+                if (!word || word.dataset.locked === 'true' || word.classList.contains('rorschach')) return;
+                const jitterX = (Math.random() - 0.5) * (20 + swirl * 60);
+                const jitterY = (Math.random() - 0.5) * (18 + swirl * 48);
+                word.style.setProperty('--driftX', jitterX.toFixed(1) + 'px');
+                word.style.setProperty('--driftY', jitterY.toFixed(1) + 'px');
+                const currentOpacity = parseFloat(word.style.getPropertyValue('--targetOpacity')) || 0.2;
+                const newOpacity = clamp(currentOpacity + (Math.random() - 0.5) * 0.08 + swirl * 0.05, 0.08, 0.7);
+                word.style.setProperty('--targetOpacity', newOpacity.toFixed(2));
+                if (Math.random() < 0.35) {
+                    const left = clamp(parseFloat(word.style.left) + (Math.random() - 0.5) * swirl * 8, 2, 98);
+                    const top = clamp(parseFloat(word.style.top) + (Math.random() - 0.5) * swirl * 7, 3, 97);
+                    word.style.left = left + '%';
+                    word.style.top = top + '%';
+                }
+            });
+            if (progressionLevel > 0.55 && (forcePattern || Math.random() < 0.35)) {
+                spawnRorschachCluster();
+            }
+        }
+
+        function spawnRorschachCluster() {
+            const centerX = 50 + (Math.random() - 0.5) * 10;
+            const centerY = 45 + (Math.random() - 0.5) * 12;
+            const rings = 3 + Math.floor(Math.random() * 2);
+            for (let ring = 0; ring < rings; ring++) {
+                const points = 10 + ring * 4;
+                const radius = 6 + ring * (6 + progressionLevel * 12);
+                for (let i = 0; i < points; i++) {
+                    const angle = (i / points) * Math.PI;
+                    const offsetX = Math.cos(angle) * radius;
+                    const offsetY = Math.sin(angle) * radius * 1.6;
+                    const leftA = clamp(centerX + offsetX, 3, 97);
+                    const leftB = clamp(centerX - offsetX, 3, 97);
+                    const top = clamp(centerY + offsetY, 5, 95);
+                    const text = RORSCHACH_POOL[Math.floor(Math.random() * RORSCHACH_POOL.length)];
+                    createObsessiveWordElement(text, leftA, top, ['rorschach', 'silhouette'], {opacity: 0.22 + progressionLevel * 0.35, scale: 1.1 + ring * 0.1, unlockDelay: 9000 + Math.random() * 4000});
+                    createObsessiveWordElement(text, leftB, top + (Math.random() - 0.5) * 2, ['rorschach', 'silhouette', 'mirror'], {opacity: 0.22 + progressionLevel * 0.35, scale: 1.1 + ring * 0.1, unlockDelay: 9000 + Math.random() * 4000});
+                }
+            }
+        }
+
+        function triggerParanoiaEcho() {
+            const baseX = clamp((realMouseX / window.innerWidth) * 100 || 50, 5, 95);
+            const baseY = clamp((realMouseY / window.innerHeight) * 100 || 50, 5, 95);
+            const count = 6 + Math.floor(Math.random() * 6) + Math.floor(progressionLevel * 10);
+            for (let i = 0; i < count; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const radius = 4 + Math.random() * (12 + progressionLevel * 18);
+                const left = clamp(baseX + Math.cos(angle) * radius, 4, 96);
+                const top = clamp(baseY + Math.sin(angle) * radius, 4, 96);
+                const word = RORSCHACH_POOL[Math.floor(Math.random() * RORSCHACH_POOL.length)];
+                createObsessiveWordElement(word, left, top, ['halo', 'rorschach'], {opacity: 0.28 + progressionLevel * 0.3, unlockDelay: 7000});
+                if (Math.random() < 0.8) {
+                    createObsessiveWordElement(word, 100 - left + (Math.random() - 0.5) * 3, top + (Math.random() - 0.5) * 3, ['halo', 'mirror'], {opacity: 0.2 + progressionLevel * 0.25, unlockDelay: 7000});
+                }
+            }
+        }
+
+        function createWordHalo(element) {
+            if (!element) return;
+            const rect = element.getBoundingClientRect();
+            const centerX = (rect.left + rect.width / 2) / window.innerWidth * 100;
+            const centerY = (rect.top + rect.height / 2) / window.innerHeight * 100;
+            const layers = 8 + Math.floor(progressionLevel * 16);
+            for (let i = 0; i < layers; i++) {
+                const angle = (i / layers) * Math.PI * 2 + Math.random() * 0.4;
+                const radius = 3 + Math.random() * (10 + progressionLevel * 16);
+                const left = clamp(centerX + Math.cos(angle) * radius, 4, 96);
+                const top = clamp(centerY + Math.sin(angle) * radius, 4, 96);
+                const word = RORSCHACH_POOL[Math.floor(Math.random() * RORSCHACH_POOL.length)];
+                createObsessiveWordElement(word, left, top, ['halo'], {opacity: 0.32 + progressionLevel * 0.3, unlockDelay: 8000});
+                createObsessiveWordElement(word, 100 - left + (Math.random() - 0.5) * 2, top + (Math.random() - 0.5) * 2, ['halo', 'mirror'], {opacity: 0.28 + progressionLevel * 0.25, unlockDelay: 8000});
+            }
+        }
+
+        function addObsessiveWord(word) {
+            if (!word) return;
+            densifyAmbientWords();
+            const left = clamp(45 + (Math.random() - 0.5) * 30, 5, 95);
+            const top = clamp(40 + (Math.random() - 0.5) * 24, 5, 95);
+            const focusText = word.toUpperCase();
+            createObsessiveWordElement(focusText, left, top, ['focused-word'], {opacity: 0.26 + progressionLevel * 0.4, unlockDelay: 6500});
+            createObsessiveWordElement(focusText, 100 - left + (Math.random() - 0.5) * 4, top + (Math.random() - 0.5) * 3, ['focused-word', 'mirror'], {opacity: 0.22 + progressionLevel * 0.4, unlockDelay: 6500});
         }
 
         function addForgottenWord() {
@@ -2905,7 +3585,7 @@
             const word = FORGOTTEN[Math.floor(Math.random() * FORGOTTEN.length)];
             const wordEl = document.createElement('div');
             wordEl.className = 'forgotten-word';
-            wordEl.textContent = word;
+            wordEl.textContent = word.toUpperCase();
             wordEl.style.left = (1 + Math.random() * 98) + '%';
             wordEl.style.top = (1 + Math.random() * 98) + '%';
             wordEl.style.transform = `rotate(${(Math.random() - 0.5) * 45}deg)`;
@@ -2942,15 +3622,65 @@
         function triggerWatching() {
             isWatching = true;
             const watching = document.querySelector('.watching-overlay');
-            watching.style.setProperty('--x', (mouseX / window.innerWidth * 100) + '%');
-            watching.style.setProperty('--y', (mouseY / window.innerHeight * 100) + '%');
+            const gaze = document.querySelector('.gaze-focus');
+            const lineSnapshot = currentLineElement;
+            let focusX = realMouseX;
+            let focusY = realMouseY;
+            if (lineSnapshot) {
+                const rect = lineSnapshot.getBoundingClientRect();
+                focusX = rect.left + rect.width / 2;
+                focusY = rect.top + rect.height / 2;
+                lineSnapshot.classList.add('spotlight');
+                createWordHalo(lineSnapshot);
+                pulseWordsAroundLine(lineSnapshot, 0.8);
+            }
+            const xPercent = (focusX / window.innerWidth) * 100;
+            const yPercent = (focusY / window.innerHeight) * 100;
+            watching.style.setProperty('--x', xPercent + '%');
+            watching.style.setProperty('--y', yPercent + '%');
+            gaze.style.setProperty('--gx', xPercent + '%');
+            gaze.style.setProperty('--gy', yPercent + '%');
             watching.classList.add('active');
-            document.getElementById('cursor').classList.add('watching');
+            gaze.classList.add('active');
+            const vignette = document.querySelector('.vignette');
+            if (vignette) {
+                const prevInner = vignette.style.getPropertyValue('--focus-inner') || (vignette.dataset.baseInner ? vignette.dataset.baseInner + '%' : '46%');
+                const prevOuter = vignette.style.getPropertyValue('--focus-outer') || (vignette.dataset.baseOuter ? vignette.dataset.baseOuter + '%' : '68%');
+                vignette.dataset.prevInnerStyle = prevInner;
+                vignette.dataset.prevOuterStyle = prevOuter;
+                vignette.style.setProperty('--focus-x', xPercent.toFixed(2) + '%');
+                vignette.style.setProperty('--focus-y', yPercent.toFixed(2) + '%');
+                vignette.style.setProperty('--focus-inner', '14%');
+                vignette.style.setProperty('--focus-outer', '30%');
+                vignette.classList.add('focused', 'focus-ring', 'focus-lock', 'pulse');
+                if (vignettePulseTimeout) {
+                    clearTimeout(vignettePulseTimeout);
+                    vignettePulseTimeout = null;
+                }
+            }
+            densifyAmbientWords(true);
+            reorganizeObsessiveWords(true);
             setTimeout(() => {
                 watching.classList.remove('active');
-                document.getElementById('cursor').classList.remove('watching');
+                gaze.classList.remove('active');
+                if (vignette) {
+                    const baseInner = vignette.dataset.baseInner ? vignette.dataset.baseInner + '%' : vignette.dataset.prevInnerStyle || '46%';
+                    const baseOuter = vignette.dataset.baseOuter ? vignette.dataset.baseOuter + '%' : vignette.dataset.prevOuterStyle || '68%';
+                    vignette.style.setProperty('--focus-inner', baseInner);
+                    vignette.style.setProperty('--focus-outer', baseOuter);
+                    vignette.classList.remove('focused', 'focus-ring', 'focus-lock', 'pulse');
+                    delete vignette.dataset.prevInnerStyle;
+                    delete vignette.dataset.prevOuterStyle;
+                    if (vignettePulseTimeout) {
+                        clearTimeout(vignettePulseTimeout);
+                        vignettePulseTimeout = null;
+                    }
+                }
+                if (lineSnapshot) {
+                    lineSnapshot.classList.remove('spotlight');
+                }
                 isWatching = false;
-            }, 5000);
+            }, 5200);
             if (navigator.vibrate) {
                 navigator.vibrate([120, 60, 120, 60, 120]);
             }
@@ -2989,6 +3719,14 @@
 
         async function startExperience() {
             const content = document.getElementById('content');
+            igniteObsessionField();
+            if (!wordStormInterval) {
+                wordStormInterval = setInterval(() => densifyAmbientWords(), 3600);
+            }
+            if (!wordPatternInterval) {
+                wordPatternInterval = setInterval(() => reorganizeObsessiveWords(), 5200);
+            }
+            densifyAmbientWords(true);
             try {
                 for (let i = 0; i < story.length; i++) {
                     const parts = story[i].split('|');
@@ -2997,11 +3735,32 @@
                     const effects = parts.slice(2);
                     increaseIntensity(i);
                     content.innerHTML = '';
+                    currentLineElement = null;
                     if (text.trim()) {
                         const div = document.createElement('div');
                         div.className = 'line';
                         div.innerHTML = text;
                         content.appendChild(div);
+                        currentLineElement = div;
+                        const plainText = div.textContent.replace(/\s+/g, ' ').trim();
+                        const focusIntensity = computeFocusIntensity(effects, plainText);
+                        alignVignetteToElement(div, focusIntensity);
+                        if (/никогда/i.test(plainText)) {
+                            div.classList.add('never');
+                            const echoText = plainText.toUpperCase().replace(/[.,!?…:;]+/g, '');
+                            div.dataset.echo = echoText || 'НИКОГДА';
+                            reorganizeObsessiveWords(true);
+                            densifyAmbientWords(true);
+                            triggerParanoiaEcho();
+                            setTimeout(() => triggerNeverSpiral(div), 250);
+                            alignVignetteToElement(div, 1, { overrideLock: true });
+                        }
+                        if (/кров/i.test(plainText) || effects.includes('blood')) {
+                            div.classList.add('hemorrhage');
+                        }
+                        if (focusIntensity > 0.55) {
+                            setTimeout(() => pulseWordsAroundLine(div, focusIntensity), 260);
+                        }
                         setTimeout(() => div.classList.add('active'), 100);
                         
                         // АВТОМАТИЧЕСКОЕ ПРИМЕНЕНИЕ ПСИХОЛОГИЧЕСКИХ ЭФФЕКТОВ
@@ -3049,6 +3808,7 @@
                                 }
                             }
                             else if (effect === 'cursormove' || effect === 'peripheralshadow') {
+                                triggerParanoiaEcho();
                                 triggerPeripheralShadows();
                             }
                             else if (effect === 'peripheral') {
@@ -3134,6 +3894,9 @@
                             }
                             else if (effect === 'blood') {
                                 div.classList.add('blood');
+                                div.classList.add('hemorrhage');
+                                densifyAmbientWords(true);
+                                reorganizeObsessiveWords(true);
                                 document.querySelector('.blood-screen').classList.add('active');
                                 setTimeout(() => document.querySelector('.blood-screen').classList.remove('active'), 4000);
                             }
@@ -3180,6 +3943,22 @@
                                 try { layer.osc.stop(); } catch(e) {}
                             }
                         });
+                    }
+                    if (wordStormInterval) {
+                        clearInterval(wordStormInterval);
+                        wordStormInterval = null;
+                    }
+                    if (wordPatternInterval) {
+                        clearInterval(wordPatternInterval);
+                        wordPatternInterval = null;
+                    }
+                    if (obsessionEscalationInterval) {
+                        clearInterval(obsessionEscalationInterval);
+                        obsessionEscalationInterval = null;
+                    }
+                    if (wordFloodInterval) {
+                        clearInterval(wordFloodInterval);
+                        wordFloodInterval = null;
                     }
                     location.reload();
                 }, 15000);
