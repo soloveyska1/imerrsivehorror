@@ -527,11 +527,12 @@
         /* CREEPY SMILE FACE */
         .smile-container {
             position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
+            top: 45%; left: 50%;
+            transform: translate(-50%, -55%);
             width: clamp(300px, 60vw, 600px);
             height: clamp(300px, 60vw, 600px);
             opacity: 0;
+            pointer-events: none;
         }
         
         /* SUBLIMINAL FLASH */
@@ -585,39 +586,97 @@
         }
         
         /* EXPERIENCE CONTAINER */
-        #experience { 
-            display: none; 
-            position: fixed; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            background: #000; 
+        #experience {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 42%, #050100 0%, #010001 55%, #000 100%);
+            overflow: hidden;
+            perspective: 1200px;
+            isolation: isolate;
         }
-        
-        #content { 
-            position: absolute; 
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%); 
-            width: 90%; 
-            max-width: 1000px; 
+        #experience::before {
+            content: '';
+            position: absolute;
+            inset: -18%;
+            background: radial-gradient(circle at 50% 48%, rgba(35, 0, 0, 0.35) 0%, rgba(5, 0, 0, 0.78) 55%, rgba(0, 0, 0, 0.94) 100%);
+            opacity: 0.85;
+            filter: blur(45px) contrast(1.3);
+            mix-blend-mode: multiply;
+            animation: dreadPulse 18s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 5;
+        }
+        @keyframes dreadPulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.75;
+            }
+            45% {
+                transform: scale(1.05) translateY(-2%);
+                opacity: 1;
+            }
+            65% {
+                transform: scale(1.08) translateY(2%);
+                opacity: 0.92;
+            }
+        }
+
+        #content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 90%;
+            max-width: 1000px;
             text-align: center;
             padding: 0 15px;
+            transform: translate(calc(-50% + var(--focus-pan, 0px)), -50%) scale(var(--focus-scale, 1)) rotate(var(--focus-tilt, 0deg));
+            filter: blur(var(--focus-blur, 0px)) contrast(var(--focus-contrast, 1.12)) saturate(1.05);
+            transform-origin: center;
+            transition: transform 1.8s cubic-bezier(0.25, 0.1, 0.25, 1), filter 1.8s ease;
+            z-index: 480;
+            isolation: isolate;
+        }
+        #content::before {
+            content: '';
+            position: absolute;
+            inset: clamp(30px, 8vh, 140px) clamp(18px, 9vw, 160px);
+            background: radial-gradient(circle at 50% 40%, rgba(8, 0, 0, 0.92) 0%, rgba(4, 0, 0, 0.75) 55%, rgba(0, 0, 0, 0.95) 100%);
+            filter: blur(38px) saturate(1.1);
+            opacity: 0.85;
+            pointer-events: none;
+            transition: opacity 1.6s ease;
+            z-index: -1;
         }
         
         /* HYPNOTIC TEXT STYLES */
-        .line { 
+        .line {
             font-size: clamp(22px, 4.5vw, 38px);
-            line-height: 2.2; 
-            color: #4a4a4a; 
-            opacity: 0; 
-            margin: 0; 
+            line-height: 2.2;
+            color: #f6f0e8;
+            opacity: 0;
+            margin: 0;
             letter-spacing: clamp(1px, 0.6vw, 3px);
             position: relative;
-            text-shadow: 0 0 15px rgba(0,0,0,0.8);
-            transition: all 0.3s ease;
+            text-shadow:
+                0 0 28px rgba(0, 0, 0, 0.98),
+                0 0 18px rgba(120, 0, 0, 0.55),
+                0 0 6px rgba(0, 0, 0, 0.85);
+            transition: color 0.6s ease, text-shadow 0.6s ease, letter-spacing 0.6s ease;
         }
-        .line.active { 
-            animation: hypnoticAppear 1.2s forwards; 
+        .line.active {
+            animation: hypnoticAppear 1.2s forwards;
+        }
+        .line.active::after {
+            content: '';
+            position: absolute;
+            inset: 5% 18%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(210, 196, 180, 0.22) 0%, rgba(106, 0, 0, 0.05) 60%, transparent 100%);
+            filter: blur(18px);
+            opacity: 0.35;
+            pointer-events: none;
         }
         @keyframes hypnoticAppear {
             0% { 
@@ -676,25 +735,31 @@
             }
         }
         
-        .line .death { 
-            color: #3a3a3a;
-            text-shadow: 0 0 12px rgba(0, 0, 0, 0.7);
+        .line .death {
+            color: #c8b7b3;
+            text-shadow:
+                0 0 16px rgba(0, 0, 0, 0.9),
+                0 0 24px rgba(90, 0, 0, 0.55);
             letter-spacing: clamp(4px, 1.2vw, 7px);
-            opacity: 0.75;
+            opacity: 0.92;
             animation: deathStroopEffect 5s ease-in-out forwards;
         }
         @keyframes deathStroopEffect {
-            0% { 
-                color: #3a3a3a;
-                text-shadow: 0 0 12px rgba(0, 0, 0, 0.7);
+            0% {
+                color: #b79e99;
+                text-shadow:
+                    0 0 14px rgba(0, 0, 0, 0.8),
+                    0 0 18px rgba(90, 0, 0, 0.45);
             }
             60% {
-                color: #2a2a2a;
+                color: #d5c4c0;
             }
-            100% { 
-                color: #4a0000;
-                text-shadow: 0 0 18px rgba(74, 0, 0, 0.8);
-                opacity: 0.9;
+            100% {
+                color: #f0d3ce;
+                text-shadow:
+                    0 0 22px rgba(90, 0, 0, 0.75),
+                    0 0 32px rgba(0, 0, 0, 0.9);
+                opacity: 1;
             }
         }
         
@@ -725,32 +790,80 @@
             }
         }
         
-        .line .void { 
-            color: #2a2a2a;
+        .line .void {
+            color: #c0b3aa;
             letter-spacing: clamp(5px, 1.4vw, 9px);
             animation: voidDissolve 4s ease-in-out infinite;
+            text-shadow:
+                0 0 28px rgba(0, 0, 0, 0.95),
+                0 0 18px rgba(138, 0, 0, 0.45);
+            mix-blend-mode: normal;
         }
         @keyframes voidDissolve {
-            0%, 100% { 
-                opacity: 0.65;
+            0%, 100% {
+                opacity: 0.9;
                 letter-spacing: clamp(5px, 1.4vw, 9px);
                 filter: blur(0);
-                text-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
             }
-            50% { 
-                opacity: 0.3;
+            50% {
+                opacity: 0.7;
                 letter-spacing: clamp(8px, 2vw, 14px);
-                filter: blur(1px);
-                text-shadow: 0 0 25px rgba(0, 0, 0, 1);
+                filter: blur(0.6px);
+            }
+        }
+
+        .line .primal-growl {
+            color: #f8f1eb;
+            letter-spacing: clamp(7px, 2vw, 16px);
+            text-shadow:
+                0 0 18px rgba(255, 90, 90, 0.7),
+                0 0 48px rgba(0, 0, 0, 0.95);
+            animation: primalGrowl 3s ease-in-out infinite;
+        }
+        @keyframes primalGrowl {
+            0%, 100% {
+                filter: blur(0.2px);
+                opacity: 0.95;
+            }
+            40% {
+                filter: blur(0.45px);
+                opacity: 1;
+            }
+            60% {
+                filter: blur(0);
+                opacity: 0.88;
+            }
+        }
+
+        .line .feral-roar {
+            color: #fbd7cc;
+            text-shadow:
+                0 0 14px rgba(200, 30, 30, 0.85),
+                0 0 40px rgba(0, 0, 0, 0.9);
+            letter-spacing: clamp(6px, 1.8vw, 13px);
+            animation: feralSnarl 0.85s ease-in-out infinite;
+        }
+        @keyframes feralSnarl {
+            0%, 100% {
+                transform: scale(1);
+            }
+            35% {
+                transform: scale(1.06) skewX(1.5deg);
+            }
+            55% {
+                transform: scale(0.96) skewX(-1deg);
             }
         }
         
-        .line .machine-word { 
-            color: #4a4a4a;
+        .line .machine-word {
+            color: #b8b2ac;
             letter-spacing: 2px;
             font-weight: 700;
             animation: mechanicalPulse 1.5s ease-in-out infinite;
             font-family: 'Courier Prime', monospace;
+            text-shadow:
+                0 0 18px rgba(0, 0, 0, 0.85),
+                0 0 24px rgba(90, 0, 0, 0.45);
         }
         @keyframes mechanicalPulse {
             0%, 100% {
@@ -783,11 +896,120 @@
             }
         }
         
-        .line .filth { 
-            color: #3a2a1a; 
-            text-shadow: 0 0 12px rgba(58, 42, 26, 0.7); 
+        .line .filth {
+            color: #3a2a1a;
+            text-shadow: 0 0 12px rgba(58, 42, 26, 0.7);
         }
-        
+
+        .line.breathing {
+            animation: lineBreath 6s ease-in-out infinite;
+        }
+        @keyframes lineBreath {
+            0%, 100% {
+                letter-spacing: clamp(1px, 0.6vw, 3px);
+                text-shadow:
+                    0 0 28px rgba(0, 0, 0, 0.85),
+                    0 0 18px rgba(138, 0, 0, 0.35);
+            }
+            45% {
+                letter-spacing: clamp(2px, 0.9vw, 6px);
+                text-shadow:
+                    0 0 40px rgba(0, 0, 0, 0.95),
+                    0 0 28px rgba(180, 60, 60, 0.35);
+            }
+        }
+
+        .line.tremor {
+            animation: lineTremor 0.35s infinite;
+        }
+        @keyframes lineTremor {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-3px); }
+            50% { transform: translateX(2px); }
+            75% { transform: translateX(-1px); }
+        }
+
+        .line.active.breathing {
+            animation: hypnoticAppear 1.2s forwards, lineBreath 6s ease-in-out 1.2s infinite;
+        }
+
+        .line.active.tremor {
+            animation: hypnoticAppear 1.2s forwards, lineTremor 0.35s 1.2s infinite;
+        }
+
+        .line .focus-word {
+            color: #f8f2ea;
+            font-weight: 700;
+            letter-spacing: clamp(2px, 1vw, 6px);
+            text-shadow:
+                0 0 28px rgba(255, 240, 220, 0.65),
+                0 0 18px rgba(106, 0, 0, 0.35);
+        }
+
+        .line .pulse-accent {
+            color: #f23d3d;
+            font-weight: 700;
+            letter-spacing: clamp(2px, 0.9vw, 6px);
+            text-transform: uppercase;
+            text-shadow:
+                0 0 18px rgba(242, 61, 61, 0.75),
+                0 0 40px rgba(90, 0, 0, 0.65);
+            animation: focusPulse 1.8s ease-in-out infinite;
+        }
+        @keyframes focusPulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.9;
+            }
+            40% {
+                transform: scale(1.06);
+                opacity: 1;
+            }
+            65% {
+                transform: scale(0.97);
+                opacity: 0.8;
+            }
+        }
+
+        .line .ashen {
+            color: #b9b2ac;
+            font-style: italic;
+            letter-spacing: clamp(3px, 1.1vw, 7px);
+            text-shadow: 0 0 18px rgba(120, 110, 102, 0.7);
+        }
+
+        .line .ghost-echo {
+            color: #aab8d6;
+            letter-spacing: clamp(4px, 1.3vw, 9px);
+            text-shadow:
+                0 0 14px rgba(170, 184, 214, 0.6),
+                0 0 35px rgba(40, 50, 80, 0.55);
+            animation: ghostEcho 3.8s ease-in-out infinite;
+        }
+        @keyframes ghostEcho {
+            0%, 100% {
+                opacity: 0.7;
+                filter: blur(0.2px);
+            }
+            45% {
+                opacity: 1;
+                filter: blur(0);
+            }
+        }
+
+        .line .ember {
+            color: #ff834d;
+            text-shadow:
+                0 0 18px rgba(255, 131, 77, 0.8),
+                0 0 28px rgba(138, 30, 0, 0.5);
+            animation: emberFlicker 2.6s ease-in-out infinite;
+        }
+        @keyframes emberFlicker {
+            0%, 100% { opacity: 0.8; }
+            30% { opacity: 1; }
+            55% { opacity: 0.6; }
+        }
+
         /* BREAKING FOURTH WALL - INTENSE */
         .line.break-wall {
             color: #ddd !important;
@@ -1451,33 +1673,148 @@
             }
         }
         
+        /* OBSESSION FIELD */
+        #obsessive-words {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 40;
+            mix-blend-mode: soft-light;
+            filter: contrast(1.35) saturate(0.65) brightness(0.45);
+        }
+        #obsessive-words::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 40%, transparent 0%, rgba(0,0,0,0.45) 58%, rgba(0,0,0,0.92) 100%);
+            opacity: 0.4;
+            pointer-events: none;
+            transition: opacity 6s ease;
+        }
+        #obsessive-words[data-phase='2']::before {
+            opacity: 0.55;
+        }
+        #obsessive-words[data-phase='3']::before {
+            opacity: 0.75;
+        }
+        #obsessive-words[data-phase='0'] {
+            mix-blend-mode: soft-light;
+        }
+
         /* OBSESSIVE WORDS */
-        .obsessive-word { 
-            position: fixed; 
-            font-family: 'Courier Prime', monospace; 
-            font-size: clamp(13px, 2.2vw, 20px);
-            color: #4a4a4a; 
-            pointer-events: none; 
-            opacity: 0; 
-            z-index: 70; 
-            letter-spacing: 2px; 
+        .obsessive-word {
+            position: absolute;
+            font-family: 'Courier Prime', monospace;
+            font-size: clamp(12px, 2.2vw, 20px);
+            color: rgba(184, 170, 164, 0.38);
+            pointer-events: none;
+            opacity: 0;
+            z-index: 70;
+            letter-spacing: 0.18em;
             font-weight: 700;
-            transition: all 3s ease-out;
+            transform: translate(-50%, -50%);
+            transition: color 3s ease, text-shadow 3s ease;
+            will-change: transform, opacity;
+            filter: blur(1.8px);
+            -webkit-text-stroke: 0.25px rgba(0, 0, 0, 0.5);
+            text-shadow: 0 0 32px rgba(0, 0, 0, 0.75);
         }
-        .obsessive-word.active { 
-            animation: wordFadeInSlow 3s forwards; 
+        .obsessive-word.active {
+            animation: wordFadeInSlow 3s forwards;
         }
-        @keyframes wordFadeInSlow { 
-            0% { 
-                opacity: 0; 
-                transform: scale(0.6); 
+        @keyframes wordFadeInSlow {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.6);
                 filter: blur(5px);
-            } 
-            100% { 
-                opacity: 0.55; 
-                transform: scale(1); 
-                filter: blur(0);
-            } 
+            }
+            100% {
+                opacity: 0.5;
+                transform: translate(-50%, -50%) scale(1);
+                filter: blur(1.2px);
+            }
+        }
+
+        .obsessive-word.swarm {
+            color: rgba(70, 70, 70, 0.55);
+            text-shadow: 0 0 25px rgba(30, 30, 30, 0.4);
+        }
+
+        .obsessive-word.rorschach {
+            color: rgba(105, 105, 105, 0.65);
+            text-shadow:
+                0 0 18px rgba(80, 0, 0, 0.45),
+                0 0 65px rgba(0, 0, 0, 0.55);
+            filter: blur(1.1px);
+        }
+
+        .obsessive-word.pulse {
+            animation: obsessionPulse 4.5s ease-in-out infinite;
+        }
+        @keyframes obsessionPulse {
+            0%, 100% {
+                letter-spacing: 0.16em;
+                text-shadow:
+                    0 0 22px rgba(90, 0, 0, 0.4),
+                    0 0 40px rgba(0, 0, 0, 0.68);
+                filter: blur(0.85px);
+            }
+            45% {
+                letter-spacing: 0.22em;
+                text-shadow:
+                    0 0 32px rgba(120, 0, 0, 0.7),
+                    0 0 70px rgba(0, 0, 0, 0.75);
+                filter: blur(0.55px);
+            }
+        }
+
+        .obsessive-word.blood-sigil {
+            color: rgba(138, 0, 0, 0.85);
+            text-shadow:
+                0 0 12px rgba(138, 0, 0, 0.8),
+                0 0 38px rgba(180, 20, 20, 0.6);
+            animation: bloodSigilPulse 3.6s ease-in-out infinite;
+        }
+        @keyframes bloodSigilPulse {
+            0%, 100% {
+                opacity: 0.75;
+                filter: blur(0.6px) saturate(1.1);
+            }
+            50% {
+                opacity: 1;
+                filter: blur(0.2px) saturate(1.45);
+            }
+        }
+
+        .obsessive-word.whisper {
+            color: rgba(45, 45, 45, 0.42);
+            text-shadow: 0 0 22px rgba(0, 0, 0, 0.6);
+            letter-spacing: 0.24em;
+            filter: blur(1.8px);
+        }
+
+        .obsessive-word.face-phase {
+            color: rgba(210, 178, 162, 0.82);
+            letter-spacing: 0.08em;
+            text-shadow:
+                0 0 18px rgba(255, 230, 210, 0.45),
+                0 0 45px rgba(90, 0, 0, 0.55);
+            filter: blur(1.5px);
+            animation: faceBreath 5.5s ease-in-out infinite;
+        }
+        @keyframes faceBreath {
+            0%, 100% {
+                opacity: 0.65;
+                letter-spacing: 0.08em;
+            }
+            45% {
+                opacity: 0.92;
+                letter-spacing: 0.14em;
+            }
         }
         
         /* PAREIDOLIA WORDS - формируют образы */
@@ -1803,15 +2140,15 @@
     <script>
         // PERFECTED HYPNOTIC IMMERSION
         const story = [
-            'Ты стоишь в дверях.|2000',
-            'Перед тобой — <span class="void">лужа</span>.|2000|obsess:лужа|water',
-            '<span class="death">Тёмная</span>.|1500',
-            'Расползается.|2000|peripheral|wetstain',
+            'Ты <span class="ghost-echo">стоишь</span> в дверях.|2000',
+            'Перед тобой — <span class="void focus-word">лужа</span>.|2000|obsess:лужа|water',
+            '<span class="death ashen">Тёмная</span>.|1500',
+            '<span class="ashen">Расползается</span>.|2000|peripheral|wetstain',
             '|4500|blackout:4500|silence|sound:void_hum',
             'Ты всё ещё здесь?|2500|break|subliminal:ЗДЕСЬ',
             'Ты чувствуешь это?|2200|break|cursormove',
-            'Твоя рука.|2000|break',
-            'Она не твоя.|3000|break|reality',
+            'Твоя <span class="focus-word">рука</span>.|2000|break',
+            'Она <span class="pulse-accent">не твоя</span>.|3000|break|reality',
             'Ты считаешь секунды.|2500',
             'Десять.|1000|sound:tick|heartbeat',
             'Девять.|1000|sound:tick|heartbeat',
@@ -1823,11 +2160,11 @@
             'Три.|1000|sound:tick|heartbeat',
             'Два.|1000|sound:tick|heartbeat',
             'Один.|3000|sound:tick|heartbeat',
-            'Ты входишь.|2500|sound:step|trail|cursormove',
-            'Он смотрит на тебя.|2000',
-            'Не узнаёт.|2500',
-            'В его глазах — <span class="void">страх</span>.|3500|shadow|peripheral',
-            'Ты для него <span class="death">чужой</span>.|4000|distorted',
+            'Ты <span class="ember">входишь</span>.|2500|sound:step|trail|cursormove',
+            'Он смотрит на <span class="focus-word">тебя</span>.|2000',
+            'Не <span class="ashen">узнаёт</span>.|2500',
+            'В его глазах — <span class="void pulse-accent">страх</span>.|3500|shadow|peripheral',
+            'Ты для него <span class="death pulse-accent">чужой</span>.|4000|distorted',
             '|3500|blackout:3500|silence',
             'Посмотри на свои руки.|3000|break|subliminal:РУКИ',
             'Прямо сейчас.|2500|break|peripheralshadow',
@@ -1842,8 +2179,8 @@
             'Ближе.|1800|sound:step|peripheral',
             'Он <span class="scream">кричит</span>.|3000|double|chromatic|sound:scream',
             'Не словами.|2000',
-            '<span class="void">Звуком</span>.|2000',
-            '<span class="void">Животным</span>.|3000|shake|screentear',
+            '<span class="void primal-growl">Звуком</span>.|2000|sound:feral',
+            '<span class="void feral-roar">Животным</span>.|3000|shake|screentear|sound:feral_deep',
             '|5000|blackout:5000|silence',
             'Сколько времени прошло?|2500|break|timedistort',
             'Минута?|1200|break',
@@ -1907,7 +2244,7 @@
             'До <span class="death">костей</span>.|3000',
             '<span class="machine-word">Ты трёшь. Трёшь. Трёшь</span>.|2500|obsess:трёшь|sound:scrub',
             '<span class="machine-word">Монотонно</span>.|2000',
-            '<span class="machine-word">Скрип. Скрип. Скрип</span>.|3000|obsess:скрип',
+            '<span class="machine-word">Скрип. Скрип. Скрип</span>.|3000|obsess:скрип|sound:creak',
             'Как ногти по доске.|2500|reality',
             'Ты моешь его пах.|2000',
             '<span class="machine-word">Каждый день</span> моешь.|2000|obsess:каждый день',
@@ -1980,11 +2317,11 @@
             '<span class="machine-word">Три года. Каждый день</span>.|3000|obsess:каждый день',
             'Тысяча девяносто пять дней.|3000|timedistort',
             '<span class="void">Лужа</span>. Вода. <span class="filth">Грязь</span>. <span class="pain">Кровь</span>.|3500|obsess:лужа|water|blooddrop',
-            'Ты <span class="void">сходишь с ума</span>.|2500|shake|double|redFlicker',
+            'Ты <span class="void pulse-accent">сходишь с ума</span>.|2500|shake|double|redFlicker',
             '<span class="machine-word">Медленно</span>.|2000',
             'Но верно.|2000',
             'Он теряет <span class="void">память</span>.|2000',
-            'Ты теряешь <span class="void">себя</span>.|4000|freeze|obsess:теряю',
+            'Ты теряешь <span class="void ghost-echo">себя</span>.|4000|freeze|obsess:теряю',
             'Иногда ночью.|2500|shadow',
             'Ты стоишь над ним.|2000|watching',
             'Думаешь. <span class="death">Подушка</span>.|2500',
@@ -1992,9 +2329,9 @@
             'И всё <span class="death">кончится</span>.|3500|freeze',
             'Ты держишь <span class="death">подушку</span>.|2500|heartbeat',
             'Подносишь к его лицу.|2500|peripheral|breathfog',
-            'Руки <span class="void">трясутся</span>.|2500|shake',
-            'Твои руки.|2000|break|subliminal:ТВОИ РУКИ',
-            'Прямо сейчас.|2000|break|cursormove',
+            'Руки <span class="void pulse-accent">трясутся</span>.|2500|shake',
+            'Твои <span class="focus-word">руки</span>.|2000|break|subliminal:ТВОИ РУКИ',
+            'Прямо <span class="pulse-accent">сейчас</span>.|2000|break|cursormove',
             '<span class="scream">Сейчас</span>.|2500',
             '<span class="scream">Сейчас</span>.|2500|redFlicker',
             '<span class="scream">СЕЙЧАС</span>.|4000|shake|redFlicker|screentear',
@@ -2012,11 +2349,11 @@
             'Внутри что-то <span class="pain">ломается</span>.|3000|shake|blood|chromatic|crack',
             'Хруст.|2000|reality|sound:crack',
             'Ты теряешь <span class="void">человечность</span>.|4000|distorted',
-            'Ты — <span class="machine-word">машина</span>.|2500|sound:machine',
+            'Ты — <span class="machine-word focus-word">машина</span>.|2500|sound:machine',
             'Которая <span class="machine-word">моет. Одевает. Кормит</span>.|3500|obsess:моешь',
             'Ты смотришь в зеркало.|2500|double|watching',
             'Не узнаёшь <span class="void">себя</span>.|2000|sound:distant_voices',
-            'Глаза <span class="void">пустые</span>. Как у него.|3500|freeze|obsess:пустота',
+            'Глаза <span class="void ghost-echo">пустые</span>. Как у него.|3500|freeze|obsess:пустота',
             'Кто смотрит оттуда?|3000|break|peripheral',
             'Это ты?|2500|break|subliminal:КТО ТЫ',
             '|7000|blackout:7000|silence',
@@ -2030,34 +2367,34 @@
             'Параллельно.|2500',
             'Ты берёшь его руку.|2500',
             '<span class="cold">Холодная</span>. <span class="death">Мёртвая</span> почти.|3500',
-            'Стиральная <span class="machine-word">машина</span> гудит.|2500|sound:machine',
+            'Стиральная <span class="machine-word">машина</span> гудит.|2500|sound:machine|sound:hum',
             'Вода шумит.|2000|sound:water|water',
             '<span class="machine-word">Каждый день</span>.|3500|trail|obsess:каждый день',
-            'Ты держишь <span class="death">мёртвую</span> руку.|2500',
+            'Ты держишь <span class="death pulse-accent">мёртвую</span> руку.|2500',
             '<span class="death">Живого трупа</span>.|2500|distorted',
-            'Который был твоим <span class="death">отцом</span>.|4000',
+            'Который был твоим <span class="death pulse-accent">отцом</span>.|4000',
             'Который учил тебя не плакать.|3500',
             'Ты не плачешь.|2500',
             'Не можешь.|2500',
-            'Внутри — <span class="void">пустота</span>.|3000|freeze|obsess:пустота',
+            'Внутри — <span class="void ghost-echo">пустота</span>.|3000|freeze|obsess:пустота',
             'Как в его <span class="void">глазах</span>.|4000|shake',
-            'Вы ждёте <span class="death">смерти</span>.|3500|blood|redFlicker|peripheral|blooddrop',
+            'Вы ждёте <span class="death pulse-accent">смерти</span>.|3500|blood|redFlicker|peripheral|blooddrop',
             'Чьей. Не важно.|2500',
-            'Лишь бы <span class="death">кончилось</span>.|4000|double',
+            'Лишь бы <span class="death pulse-accent">кончилось</span>.|4000|double',
             'Но не кончается.|3000|obsess:не кончается',
-            'Никогда.|2500|timedistort',
+            '<span class="focus-word pulse-accent">Никогда</span>.|2500|timedistort',
             'Он дышит. Ты дышишь.|3500|sound:breathing|heartbeat',
             '<span class="machine-word">Завтра то же</span>.|2500|obsess:завтра',
             '<span class="void">Лужа</span>. Вода. <span class="pain">Кровь</span>.|3000|blood|water|blooddrop',
             '<span class="machine-word">И дальше. И дальше</span>.|3000|shake|obsess:и дальше',
             'В <span class="void">аду</span>.|2500',
             'Который называется.|2500|freeze|watching',
-            '<span class="scream">Любовь. Долг. Семья</span>.|5000|shake|blood|redFlicker|chromatic|crack',
+            '<span class="scream focus-word">Любовь. Долг. Семья</span>.|5000|shake|blood|redFlicker|chromatic|crack',
             'Вода течёт.|2500|sound:water|obsess:вода|water',
-            '<span class="machine-word">Машина</span> гудит.|2500|sound:machine',
+            '<span class="machine-word">Машина</span> гудит.|2500|sound:machine|sound:hum',
             'И ты ждёшь <span class="death">конца</span>.|3500',
             'Который не приходит.|4000|shadow|obsess:не приходит',
-            'Никогда.|3000|reality',
+            '<span class="focus-word pulse-accent">Никогда</span>.|3000|reality',
             '|8000|blackout:8000|silence',
             'Ты понял?|3000|break|subliminal:ПОНЯЛ',
             'Это не его история.|3000|break|watching',
@@ -2068,29 +2405,489 @@
             'Не.|2000|break',
             'Знаешь.|3000|break|timedistort',
             'Об этом.|4000|break|reality|peripheral',
-            '<span class="void">Никогда</span>.|7000|shake|blood|redFlicker|freeze|chromatic|obsess:никогда|blooddrop|crack',
+            '<span class="void pulse-accent">Никогда</span>.|7000|shake|blood|redFlicker|freeze|chromatic|obsess:никогда|blooddrop|crack',
             '|2000|silence',
             '|12000|finalhorror',
             '|15000|blackout:15000|silence'
         ];
 
         let audioContext, ambientLayers = [], progressionLevel = 0;
+        let pendulumTimer = null, pendulumGain = null, pendulumPhase = 0;
         let obsessiveWords = [], forgottenWords = [];
+        let obsessionPhase = 0;
+        let obsessionFieldActive = false;
+        let obsessionFrame = null;
+        let lastObsessionTick = null;
+        let ambientWordTimeout = null;
+        let currentAmbientDelay = 2200;
+        let lastBloodPhraseTime = 0;
+        let faceAnchors = [];
+        let faceAssignmentCursor = 0;
+        let facePhaseActivated = false;
+        let microFlashInterval = null;
+        let finalSequenceActive = false;
+        let lastFocusPan = 0;
+        let lastFocusTilt = 0;
         let mouseX = 0, mouseY = 0, realMouseX = 0, realMouseY = 0;
         let forcedCursorActive = false, isWatching = false;
         let cursorTrails = [];
         let subliminalMessages = ['ЗАБУДЬ', 'БЕЗЫСХОДНОСТЬ', 'ПОВТОР', 'РАСПАД', 'ПУСТОТА', 'БОЛЬ', 'ЦИКЛ', 'НЕТ ВЫХОДА', 'ПОВИНУЙСЯ', 'СТРАХ', 'ТОНЕШЬ', 'ТЕРЯЕШЬСЯ'];
+        const microFlashSymbols = ['ГНИЙ', 'НЕ СПАСЁШЬСЯ', 'СМОТРИ', 'ДЫШИ С НИМ', 'СТАРИК', 'БЕЗ ВЫХОДА', 'ПОД КОЖЕЙ', 'РАСПАД'];
         let waterDrops = [], bloodDrops = [], wetStains = [];
         let lastActivityTime = Date.now();
         let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         
         const FORGOTTEN = [
-            'отец', 'помню', 'забыл', 'кто я', 'где я', 'раньше', 'было', 'имя', 'лицо', 'голос', 
-            'давно', 'тогда', 'помнишь', 'стёрлось', 'исчезло', 'потерял', 'не помню', 'узнаю', 
+            'отец', 'помню', 'забыл', 'кто я', 'где я', 'раньше', 'было', 'имя', 'лицо', 'голос',
+            'давно', 'тогда', 'помнишь', 'стёрлось', 'исчезло', 'потерял', 'не помню', 'узнаю',
             'был', 'когда', 'там', 'здесь', 'дома', 'мама', 'детство', 'счастье', 'смех', 'свет',
             'любовь', 'надежда', 'будущее', 'прошлое', 'человек', 'живой', 'помощь', 'конец', 'начало',
             'выход', 'спасение', 'жизнь', 'смерть', 'боль', 'страх', 'время', 'дни', 'годы'
         ];
+
+        const BACKGROUND_OBSESSION_WORDS = [
+            'вода', 'лужа', 'стон', 'шёпот', 'кожа', 'старик', 'отец', 'взгляд', 'скрип', 'ты',
+            'он', 'дыши', 'помни', 'забудь', 'никогда', 'циклы', 'пустота', 'страх', 'тени',
+            'сон', 'глаза', 'видит', 'смех', 'соль', 'кровь', 'мокро', 'туман', 'холод', 'долг',
+            'семья', 'дни', 'ночь', 'тишина', 'давление', 'пульс', 'крик', 'мыть', 'грязь', 'запах',
+            'здесь', 'рядом', 'не уходи', 'останься', 'он ждёт', 'боль', 'время', 'капли', 'безысходность'
+        ];
+
+        const BLOOD_PHRASES = [
+            ['ОН', 'СМОТРИТ', 'НА', 'ТЕБЯ'],
+            ['НИКТО', 'НЕ', 'ПРИДЁТ'],
+            ['ТВОИ', 'РУКИ', 'В', 'КРОВИ'],
+            ['ОН', 'УЖЕ', 'МЁРТВ'],
+            ['ДЫШИ', 'С', 'НИМ', 'ВМЕСТЕ'],
+            ['НЕ', 'СУЩЕСТВУЕТ', 'ВЫХОДА'],
+            ['ПАМЯТЬ', 'ГНИЁТ', 'ЗДЕСЬ'],
+            ['СТАРИК', 'УХОДИТ', 'ВНУТРЬ'],
+            ['НИКТО', 'НЕ', 'УСЛЫШИТ']
+        ];
+
+        function startObsessionField() {
+            if (obsessionFieldActive) return;
+            obsessionFieldActive = true;
+            const container = document.getElementById('obsessive-words');
+            if (container) {
+                container.innerHTML = '';
+                container.setAttribute('data-phase', String(obsessionPhase));
+            }
+            lastObsessionTick = null;
+            if (obsessionFrame) {
+                cancelAnimationFrame(obsessionFrame);
+            }
+            obsessionFrame = requestAnimationFrame(animateObsessionField);
+            scheduleAmbientWord(true);
+        }
+
+        function scheduleAmbientWord(immediate = false) {
+            clearTimeout(ambientWordTimeout);
+            if (!obsessionFieldActive) return;
+            const delay = immediate ? 420 : currentAmbientDelay * (0.6 + Math.random() * 0.8);
+            ambientWordTimeout = setTimeout(() => {
+                spawnAmbientObsessionWord();
+                scheduleAmbientWord(false);
+            }, Math.max(120, delay));
+        }
+
+        function spawnAmbientObsessionWord(forceHighlight = null) {
+            if (!obsessionFieldActive) return;
+            const word = BACKGROUND_OBSESSION_WORDS[Math.floor(Math.random() * BACKGROUND_OBSESSION_WORDS.length)];
+            let highlight = forceHighlight;
+            if (!highlight) {
+                if (obsessionPhase >= 2 && Math.random() < 0.22) {
+                    highlight = 'blood';
+                } else if (Math.random() < 0.18) {
+                    highlight = 'whisper';
+                }
+            }
+            registerObsessionWord(word, { highlight });
+        }
+
+        function registerObsessionWord(word, options = {}) {
+            if (!word) return null;
+            const entry = createObsessionWord(word, options);
+            if (!entry) return null;
+            obsessiveWords.push(entry);
+            if (obsessionPhase >= 1 && !options.skipMirror) {
+                const mirroredPosition = options.forcePosition
+                    ? { x: window.innerWidth - options.forcePosition.x, y: options.forcePosition.y + (Math.random() - 0.5) * 24 }
+                    : null;
+                const signature = typeof entry.signature === 'number' ? -entry.signature : -(Math.random() - 0.5);
+                registerObsessionWord(word, {
+                    ...options,
+                    forcePosition: mirroredPosition,
+                    skipMirror: true,
+                    mirrored: true,
+                    signature
+                });
+            }
+            trimObsessionField();
+            return entry;
+        }
+
+        function createObsessionWord(word, options = {}) {
+            const container = document.getElementById('obsessive-words');
+            if (!container) return null;
+            const el = document.createElement('div');
+            el.className = 'obsessive-word';
+            el.textContent = word;
+            if (options.highlight === 'blood') {
+                el.classList.add('blood-sigil');
+            } else if (options.highlight === 'whisper') {
+                el.classList.add('whisper');
+            }
+
+            const vw = window.innerWidth;
+            const vh = window.innerHeight;
+            const entry = {
+                el,
+                word,
+                highlight: options.highlight || null,
+                x: options.forcePosition ? options.forcePosition.x : vw * (0.3 + Math.random() * 0.4),
+                y: options.forcePosition ? options.forcePosition.y : vh * (0.25 + Math.random() * 0.5),
+                targetX: null,
+                targetY: null,
+                orbitCenterX: vw / 2 + (Math.random() - 0.5) * vw * 0.12,
+                orbitCenterY: vh / 2 + (Math.random() - 0.5) * vh * 0.12,
+                orbitRadius: Math.min(vw, vh) * (0.18 + Math.random() * 0.35),
+                orbitAngle: Math.random() * Math.PI * 2,
+                orbitSpeed: 0.12 + Math.random() * 0.1,
+                stage: obsessionPhase,
+                follow: 1.6 + Math.random() * 1.2,
+                seed: Math.random() * Math.PI * 2,
+                anchor: options.anchor || null,
+                anchorIndex: options.anchorIndex ?? null,
+                signature: options.signature !== undefined ? options.signature : (Math.random() - 0.5),
+                mirrored: options.mirrored || false,
+                life: 0
+            };
+
+            entry.el.style.left = entry.x + 'px';
+            entry.el.style.top = entry.y + 'px';
+            container.appendChild(entry.el);
+            requestAnimationFrame(() => entry.el.classList.add('active'));
+            configureWordForCurrentPhase(entry, true);
+            return entry;
+        }
+
+        function configureWordForCurrentPhase(entry, fresh = false) {
+            if (!entry || !entry.el) return;
+            entry.el.classList.remove('swarm', 'rorschach', 'pulse', 'face-phase');
+            if (entry.highlight !== 'blood') {
+                entry.el.classList.remove('blood-sigil');
+            }
+            if (entry.highlight !== 'whisper') {
+                entry.el.classList.remove('whisper');
+            }
+            if (entry.highlight === 'blood') {
+                entry.el.classList.add('blood-sigil');
+            } else if (entry.highlight === 'whisper') {
+                entry.el.classList.add('whisper');
+            }
+            entry.stage = obsessionPhase;
+            if (entry.stage === 0) {
+                entry.el.classList.add('swarm');
+                entry.follow = 1.6 + Math.random() * 0.9;
+            } else if (entry.stage === 1) {
+                entry.el.classList.add('rorschach');
+                entry.follow = 2.1 + Math.random() * 1.2;
+                assignRorschachAnchor(entry, fresh);
+            } else if (entry.stage === 2) {
+                entry.el.classList.add('rorschach', 'pulse');
+                entry.follow = 2.6 + Math.random() * 1.4;
+                assignRorschachAnchor(entry, fresh);
+                if (!entry.highlight && Math.random() < 0.2) {
+                    entry.highlight = 'whisper';
+                    entry.el.classList.add('whisper');
+                }
+            } else {
+                entry.el.classList.add('face-phase');
+                entry.follow = 3.4 + Math.random() * 1.2;
+                assignFaceAnchor(entry, fresh);
+            }
+        }
+
+        function assignRorschachAnchor(entry, fresh = false) {
+            if (obsessionPhase < 1) return;
+            if (!fresh && entry.anchor && entry.stage === obsessionPhase) return;
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            let signature = entry.signature;
+            if (typeof signature !== 'number') {
+                signature = Math.random() - 0.5;
+                entry.signature = signature;
+            }
+            const absSig = Math.abs(signature);
+            let targetX, targetY;
+            if (absSig > 0.42) {
+                const radiusX = window.innerWidth * (0.22 + absSig * 0.1);
+                targetX = centerX + Math.sign(signature) * radiusX;
+                targetY = centerY + window.innerHeight * 0.12 + Math.sin(entry.seed * 4) * window.innerHeight * 0.05;
+            } else if (absSig > 0.18) {
+                targetX = centerX + Math.sign(signature) * window.innerWidth * (0.12 + absSig * 0.06);
+                targetY = centerY - window.innerHeight * (0.22 - absSig * 0.08) + Math.sin(entry.seed * 5) * 35;
+            } else {
+                targetX = centerX + signature * window.innerWidth * 0.08;
+                targetY = centerY + signature * window.innerHeight * 0.12 + Math.sin(entry.seed * 3) * 45;
+            }
+            if (obsessionPhase === 2) {
+                targetY += Math.sin(entry.seed * 6) * 24;
+            }
+            entry.anchor = { x: targetX, y: targetY };
+        }
+
+        function updateObsessionDynamics(level) {
+            updateObsessionPhase(level);
+            trimObsessionField();
+            if (obsessionPhase >= 2 && Math.random() < 0.14) {
+                maybeSpawnBloodPhrase();
+            }
+            if (obsessionPhase === 3 && !facePhaseActivated && level > 0.8) {
+                ensureFaceDensity(true);
+            }
+        }
+
+        function updateObsessionPhase(level) {
+            let phase = 0;
+            if (level > 0.28) phase = 1;
+            if (level > 0.52) phase = 2;
+            if (level > 0.78) phase = 3;
+            if (phase === obsessionPhase) return;
+            obsessionPhase = phase;
+            const container = document.getElementById('obsessive-words');
+            if (container) {
+                container.setAttribute('data-phase', String(obsessionPhase));
+            }
+            updateAmbientDelay();
+            obsessiveWords.forEach(entry => configureWordForCurrentPhase(entry, true));
+            if (obsessionPhase >= 2) {
+                maybeSpawnBloodPhrase(true);
+            }
+            if (obsessionPhase < 3) {
+                facePhaseActivated = false;
+            }
+        }
+
+        function updateAmbientDelay() {
+            if (obsessionPhase === 0) {
+                currentAmbientDelay = 2200;
+            } else if (obsessionPhase === 1) {
+                currentAmbientDelay = 1400;
+            } else if (obsessionPhase === 2) {
+                currentAmbientDelay = 900;
+            } else {
+                currentAmbientDelay = 600;
+            }
+            scheduleAmbientWord(false);
+        }
+
+        function trimObsessionField(limit = getMaxObsessionWords()) {
+            while (obsessiveWords.length > limit) {
+                const old = obsessiveWords.shift();
+                if (old && old.el && old.el.parentNode) {
+                    old.el.remove();
+                }
+            }
+        }
+
+        function getMaxObsessionWords() {
+            if (obsessionPhase >= 3) return 260;
+            if (obsessionPhase === 2) return 190;
+            if (obsessionPhase === 1) return 130;
+            return 80;
+        }
+
+        function animateObsessionField(timestamp) {
+            if (!obsessionFieldActive) return;
+            if (lastObsessionTick === null) {
+                lastObsessionTick = timestamp;
+            }
+            const dt = Math.min((timestamp - lastObsessionTick) / 1000, 0.05);
+            lastObsessionTick = timestamp;
+            for (let i = obsessiveWords.length - 1; i >= 0; i--) {
+                const entry = obsessiveWords[i];
+                if (!entry || !entry.el || !entry.el.isConnected) {
+                    obsessiveWords.splice(i, 1);
+                    continue;
+                }
+                updateObsessionWord(entry, dt);
+            }
+            obsessionFrame = requestAnimationFrame(animateObsessionField);
+        }
+
+        function updateObsessionWord(entry, dt) {
+            if (!entry || !entry.el) return;
+            entry.life += dt;
+            if (entry.stage === 0) {
+                entry.orbitAngle += entry.orbitSpeed * dt * (1.2 + progressionLevel * 2.3);
+                const breathing = 1 + Math.sin(entry.life * 0.6 + entry.seed) * 0.08;
+                entry.targetX = entry.orbitCenterX + Math.cos(entry.orbitAngle) * entry.orbitRadius * breathing;
+                entry.targetY = entry.orbitCenterY + Math.sin(entry.orbitAngle * 0.92) * entry.orbitRadius * breathing * 0.9;
+            } else if (entry.stage === 1 || entry.stage === 2) {
+                if (!entry.anchor) {
+                    assignRorschachAnchor(entry, true);
+                }
+                const jitterX = entry.stage === 1 ? 28 : 42;
+                const jitterY = entry.stage === 1 ? 36 : 58;
+                entry.targetX = entry.anchor.x + Math.sin(entry.life * 0.8 + entry.seed) * jitterX;
+                entry.targetY = entry.anchor.y + Math.cos(entry.life * 0.6 + entry.seed * 1.3) * jitterY;
+                if (entry.stage === 2) {
+                    entry.targetY += Math.sin(entry.life * 1.8 + progressionLevel * 6) * 18;
+                }
+            } else {
+                if (!entry.anchor) {
+                    assignFaceAnchor(entry, false);
+                }
+                const jitterX = 14 + Math.sin(entry.life * 1.6 + entry.seed) * 9;
+                const jitterY = 18 + Math.cos(entry.life * 1.2 + entry.seed * 0.7) * 11;
+                entry.targetX = entry.anchor.x + Math.sin(entry.life * 0.9 + entry.seed) * jitterX;
+                entry.targetY = entry.anchor.y + Math.cos(entry.life * 1.1 + entry.seed * 0.7) * jitterY;
+            }
+            if (entry.targetX === null || entry.targetY === null) return;
+            const follow = Math.min(1, dt * entry.follow);
+            entry.x += (entry.targetX - entry.x) * follow;
+            entry.y += (entry.targetY - entry.y) * follow;
+            entry.el.style.left = entry.x + 'px';
+            entry.el.style.top = entry.y + 'px';
+            const rotation = Math.sin(entry.life * 0.9 + entry.seed) * (entry.stage >= 2 ? 12 : 6);
+            const scale = 1 + Math.sin(entry.life * 0.7 + entry.seed) * 0.06;
+            entry.el.style.transform = `translate(-50%, -50%) rotate(${rotation}deg) scale(${scale})`;
+        }
+
+        function maybeSpawnBloodPhrase(force = false) {
+            if (obsessionPhase < 2) return;
+            const now = Date.now();
+            const cooldown = Math.max(2200, 6400 - progressionLevel * 2800);
+            if (!force && now - lastBloodPhraseTime < cooldown) return;
+            lastBloodPhraseTime = now;
+            spawnBloodPhrase();
+        }
+
+        function spawnBloodPhrase() {
+            const phrase = BLOOD_PHRASES[Math.floor(Math.random() * BLOOD_PHRASES.length)];
+            const baseX = window.innerWidth / 2 + (Math.random() - 0.5) * window.innerWidth * 0.18;
+            const baseY = window.innerHeight * (0.3 + Math.random() * 0.4);
+            phrase.forEach((word, index) => {
+                registerObsessionWord(word, {
+                    highlight: 'blood',
+                    forcePosition: {
+                        x: baseX + (index - (phrase.length - 1) / 2) * 42,
+                        y: baseY + Math.sin(index * 0.8) * 26
+                    }
+                });
+            });
+        }
+
+        function ensureFaceDensity(refresh = false) {
+            if (!faceAnchors.length || refresh) {
+                faceAnchors = generateOldManFaceAnchors();
+                faceAssignmentCursor = 0;
+            }
+            const required = Math.max(faceAnchors.length + 30, getMaxObsessionWords() - 10);
+            while (obsessiveWords.length < required) {
+                spawnAmbientObsessionWord('whisper');
+            }
+            obsessiveWords.forEach(entry => {
+                if (entry.stage === 3) {
+                    assignFaceAnchor(entry, true);
+                }
+            });
+            facePhaseActivated = true;
+        }
+
+        function generateOldManFaceAnchors() {
+            const anchors = [];
+            const width = Math.min(window.innerWidth * 0.7, 700);
+            const height = Math.min(window.innerHeight * 0.85, 820);
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight * 0.52;
+
+            for (let angle = 0; angle < Math.PI * 2; angle += 0.1) {
+                const rx = width * 0.46;
+                const ry = height * 0.52;
+                anchors.push({ x: centerX + Math.cos(angle) * rx, y: centerY + Math.sin(angle) * ry });
+            }
+
+            for (let angle = 0; angle < Math.PI * 2; angle += 0.22) {
+                const rx = width * 0.11;
+                const ry = height * 0.08;
+                anchors.push({ x: centerX - width * 0.18 + Math.cos(angle) * rx, y: centerY - height * 0.18 + Math.sin(angle) * ry });
+                anchors.push({ x: centerX + width * 0.18 + Math.cos(angle) * rx, y: centerY - height * 0.18 + Math.sin(angle) * ry });
+            }
+
+            for (let angle = 0; angle < Math.PI * 2; angle += 0.4) {
+                const rx = width * 0.05;
+                const ry = height * 0.04;
+                anchors.push({ x: centerX - width * 0.18 + Math.cos(angle) * rx, y: centerY - height * 0.18 + Math.sin(angle) * ry });
+                anchors.push({ x: centerX + width * 0.18 + Math.cos(angle) * rx, y: centerY - height * 0.18 + Math.sin(angle) * ry });
+            }
+
+            for (let i = 0; i <= 40; i++) {
+                const t = i / 40;
+                const offset = (t - 0.5);
+                anchors.push({ x: centerX - width * 0.22 + t * width * 0.18, y: centerY - height * 0.26 - Math.pow(offset * 1.6, 2) * height * 0.12 });
+                anchors.push({ x: centerX + width * 0.04 + t * width * 0.18, y: centerY - height * 0.26 - Math.pow(offset * 1.6, 2) * height * 0.12 });
+            }
+
+            for (let i = 0; i <= 32; i++) {
+                const t = i / 32;
+                anchors.push({ x: centerX + (Math.sin(t * Math.PI) * width * 0.06), y: centerY - height * 0.14 + t * height * 0.22 });
+            }
+
+            for (let t = 0; t <= 1; t += 0.035) {
+                const offset = t - 0.5;
+                const mouthY = centerY + height * 0.24 + Math.pow(offset * 1.4, 2) * height * 0.08;
+                anchors.push({ x: centerX + offset * width * 0.38, y: mouthY });
+            }
+
+            for (let i = 0; i < 80; i++) {
+                const side = i % 2 === 0 ? -1 : 1;
+                const t = (i % 40) / 40;
+                anchors.push({
+                    x: centerX + side * (width * 0.2 + Math.pow(t, 1.5) * width * 0.18),
+                    y: centerY + height * 0.05 + Math.sin(t * Math.PI) * height * 0.18
+                });
+            }
+
+            return anchors;
+        }
+
+        function assignFaceAnchor(entry, refresh = false) {
+            if (obsessionPhase < 3) return;
+            if (!faceAnchors.length || refresh) {
+                faceAnchors = generateOldManFaceAnchors();
+                faceAssignmentCursor = 0;
+            }
+            if (!faceAnchors.length) return;
+            if (refresh || entry.anchorIndex === null || entry.anchorIndex === undefined || entry.anchorIndex >= faceAnchors.length) {
+                entry.anchorIndex = faceAssignmentCursor++ % faceAnchors.length;
+            }
+            const base = faceAnchors[entry.anchorIndex % faceAnchors.length];
+            entry.anchor = {
+                x: base.x + (Math.random() - 0.5) * 14,
+                y: base.y + (Math.random() - 0.5) * 20
+            };
+            entry.el.classList.add('face-phase');
+        }
+
+        window.addEventListener('resize', () => {
+            if (!obsessionFieldActive) return;
+            if (obsessionPhase >= 3) {
+                faceAnchors = generateOldManFaceAnchors();
+                faceAssignmentCursor = 0;
+                obsessiveWords.forEach(entry => {
+                    if (entry.stage >= 3) {
+                        assignFaceAnchor(entry, true);
+                    } else if (entry.stage >= 1) {
+                        assignRorschachAnchor(entry, true);
+                    }
+                });
+            } else if (obsessionPhase >= 1) {
+                obsessiveWords.forEach(entry => assignRorschachAnchor(entry, true));
+            }
+        });
 
         // REAL mouse tracking
         document.addEventListener('mousemove', (e) => {
@@ -2121,48 +2918,75 @@
             lastActivityTime = Date.now();
         });
 
-        // Emergency exit
-        document.getElementById('emergency-exit').addEventListener('click', () => {
-            if (confirm('Прервать опыт?')) {
-                location.reload();
-            }
-        });
+        function bindExperienceControls() {
+            const exitButton = document.getElementById('emergency-exit');
+            const enterButton = document.getElementById('enter');
+            const warningScreen = document.getElementById('warning');
+            const experienceScreen = document.getElementById('experience');
 
-        document.getElementById('enter').addEventListener('click', async () => {
-            // IMMEDIATE START - NO DELAY
-            document.getElementById('warning').style.display = 'none';
-            document.getElementById('experience').style.display = 'block';
-            
-            // Fullscreen attempt (silent fail on mobile)
-            try {
-                const elem = document.documentElement;
-                if (elem.requestFullscreen) {
-                    await elem.requestFullscreen();
-                } else if (elem.webkitRequestFullscreen) {
-                    elem.webkitRequestFullscreen();
-                } else if (elem.msRequestFullscreen) {
-                    elem.msRequestFullscreen();
-                }
-            } catch (err) {}
-            
-            // Audio initialization
-            try {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                if (audioContext.state === 'suspended') {
-                    await audioContext.resume();
-                }
-                const buffer = audioContext.createBuffer(1, 1, 22050);
-                const source = audioContext.createBufferSource();
-                source.buffer = buffer;
-                source.connect(audioContext.destination);
-                source.start(0);
-                initAtmosphere();
-            } catch (err) {}
-            
-            // START IMMEDIATELY
-            setTimeout(startExperience, 1500);
-            setInterval(triggerRandomSubliminal, 12000);
-        });
+            if (!exitButton || !enterButton || !warningScreen || !experienceScreen) {
+                return false;
+            }
+
+            if (!exitButton.dataset.bound) {
+                exitButton.dataset.bound = 'true';
+                exitButton.addEventListener('click', () => {
+                    if (confirm('Прервать опыт?')) {
+                        stopPendulum();
+                        location.reload();
+                    }
+                });
+            }
+
+            if (!enterButton.dataset.bound) {
+                enterButton.dataset.bound = 'true';
+                enterButton.addEventListener('click', async () => {
+                    // IMMEDIATE START - NO DELAY
+                    warningScreen.style.display = 'none';
+                    experienceScreen.style.display = 'block';
+
+                    // Fullscreen attempt (silent fail on mobile)
+                    try {
+                        const elem = document.documentElement;
+                        if (elem.requestFullscreen) {
+                            await elem.requestFullscreen();
+                        } else if (elem.webkitRequestFullscreen) {
+                            elem.webkitRequestFullscreen();
+                        } else if (elem.msRequestFullscreen) {
+                            elem.msRequestFullscreen();
+                        }
+                    } catch (err) {}
+
+                    // Audio initialization
+                    try {
+                        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                        if (audioContext.state === 'suspended') {
+                            await audioContext.resume();
+                        }
+                        const buffer = audioContext.createBuffer(1, 1, 22050);
+                        const source = audioContext.createBufferSource();
+                        source.buffer = buffer;
+                        source.connect(audioContext.destination);
+                        source.start(0);
+                        initAtmosphere();
+                    } catch (err) {}
+
+                    startObsessionField();
+                    setTimeout(() => spawnAmbientObsessionWord(), 300);
+
+                    // START IMMEDIATELY
+                    setTimeout(startExperience, 1500);
+                    setInterval(triggerRandomSubliminal, 12000);
+                    microFlashInterval = setInterval(triggerMicroFlash, 7000);
+                });
+            }
+
+            return true;
+        }
+
+        if (!bindExperienceControls()) {
+            document.addEventListener('DOMContentLoaded', bindExperienceControls, { once: true });
+        }
 
         function createCursorTrail() {
             const trail = document.createElement('div');
@@ -2210,12 +3034,14 @@
 
         function triggerBreathFog() {
             const fog = document.querySelector('.breath-fog');
+            if (!fog) return;
             fog.classList.add('active');
             setTimeout(() => fog.classList.remove('active'), 5000);
         }
 
         function triggerScreenCrack() {
             const crack = document.querySelector('.screen-crack');
+            if (!crack) return;
             crack.classList.add('active');
             if (navigator.vibrate) {
                 navigator.vibrate([350, 120, 350]);
@@ -2241,7 +3067,8 @@
                 x = Math.random() * (window.innerWidth - 250);
                 y = -50 + Math.random() * 150;
             }
-            
+
+            if (!shadow) return;
             shadow.style.left = x + 'px';
             shadow.style.top = y + 'px';
             shadow.classList.add('active');
@@ -2379,6 +3206,17 @@
             setTimeout(() => subliminal.classList.remove('active'), 40);
         }
 
+        function triggerMicroFlash() {
+            if (progressionLevel < 0.25 || finalSequenceActive) return;
+            if (Math.random() > 0.55) return;
+            const flash = document.querySelector('.subliminal-flash');
+            if (!flash || flash.classList.contains('active')) return;
+            const flashImg = flash.querySelector('.subliminal-image');
+            flashImg.textContent = microFlashSymbols[Math.floor(Math.random() * microFlashSymbols.length)];
+            flash.classList.add('active');
+            setTimeout(() => flash.classList.remove('active'), 60);
+        }
+
         function initAtmosphere() {
             if (!audioContext) return;
             try {
@@ -2433,7 +3271,8 @@
                 createSubsonicPulse();
                 createMetallicAmbient();
                 createDistantEchoes();
-                
+                startPendulum();
+
                 setInterval(() => {
                     ambientLayers.forEach(layer => {
                         if (layer && layer.gain) {
@@ -2450,6 +3289,71 @@
                     });
                 }, 1000);
             } catch (err) {}
+        }
+
+        function startPendulum() {
+            if (!audioContext || pendulumTimer) return;
+            pendulumPhase = 0;
+            pendulumGain = audioContext.createGain();
+            pendulumGain.gain.setValueAtTime(0.02, audioContext.currentTime);
+            pendulumGain.connect(audioContext.destination);
+
+            const playTick = () => {
+                if (!audioContext || !pendulumGain) return;
+                const now = audioContext.currentTime;
+                const length = Math.floor(audioContext.sampleRate * 0.22);
+                const buffer = audioContext.createBuffer(1, length, audioContext.sampleRate);
+                const data = buffer.getChannelData(0);
+                const baseFreq = pendulumPhase % 2 === 0 ? 2100 : 1700;
+                for (let i = 0; i < length; i++) {
+                    const env = Math.exp(-i / (audioContext.sampleRate * 0.05));
+                    const carrier = Math.sin((i / audioContext.sampleRate) * baseFreq * Math.PI * 2);
+                    const noise = (Math.random() * 2 - 1) * 0.25;
+                    data[i] = (carrier * 0.7 + noise) * env;
+                }
+                const source = audioContext.createBufferSource();
+                source.buffer = buffer;
+                const filter = audioContext.createBiquadFilter();
+                filter.type = 'highpass';
+                filter.frequency.value = 780;
+                filter.Q.value = 6;
+                source.connect(filter);
+                if (audioContext.createStereoPanner) {
+                    const panner = audioContext.createStereoPanner();
+                    panner.pan.setValueAtTime(pendulumPhase % 2 === 0 ? -0.55 : 0.55, now);
+                    filter.connect(panner);
+                    panner.connect(pendulumGain);
+                } else {
+                    filter.connect(pendulumGain);
+                }
+                const target = 0.08 + progressionLevel * 0.14;
+                pendulumGain.gain.cancelScheduledValues(now);
+                pendulumGain.gain.setValueAtTime(0.02, now);
+                pendulumGain.gain.linearRampToValueAtTime(target, now + 0.08);
+                pendulumGain.gain.linearRampToValueAtTime(Math.max(0.02, target * 0.35), now + 0.9);
+                source.start(now);
+                try { source.stop(now + 0.22); } catch (e) {}
+                pendulumPhase = (pendulumPhase + 1) % 2;
+            };
+
+            playTick();
+            pendulumTimer = setInterval(playTick, 1200);
+        }
+
+        function stopPendulum() {
+            if (pendulumTimer) {
+                clearInterval(pendulumTimer);
+                pendulumTimer = null;
+            }
+            if (pendulumGain && audioContext) {
+                const time = audioContext.currentTime;
+                pendulumGain.gain.cancelScheduledValues(time);
+                pendulumGain.gain.linearRampToValueAtTime(0.0001, time + 1.5);
+                setTimeout(() => {
+                    try { pendulumGain.disconnect(); } catch (e) {}
+                    pendulumGain = null;
+                }, 1700);
+            }
         }
 
         function createDrone(freq, initialGain, filterType, filterFreq, Q) {
@@ -2661,6 +3565,11 @@
         }
 
         async function triggerFinalHorror() {
+            finalSequenceActive = true;
+            if (microFlashInterval) {
+                clearInterval(microFlashInterval);
+                microFlashInterval = null;
+            }
             // Максимальная интенсивность звука
             if (audioContext) {
                 ambientLayers.forEach(layer => {
@@ -2820,18 +3729,23 @@
             const subliminal = document.querySelector('.subliminal-flash');
             const subliminalImg = subliminal.querySelector('.subliminal-image');
             
-            const flashImages = ['😱', '💀', '🩸', '👁️', '🔪', '⚠️'];
-            
-            for (let i = 0; i < 12; i++) {
-                subliminalImg.textContent = flashImages[Math.floor(Math.random() * flashImages.length)];
+            const curatedSequence = ['ГНИЙ', 'ГЛАЗА', 'ПОД КОЖЕЙ', 'ХОЛОД', 'СМЕРТЬ', 'ПУСТОТА', 'НЕ СПАСЁШЬСЯ'];
+            const extraFlashes = ['НЕ ДЫШИ', 'ГЛАЗА', 'МОКРО', 'НЕ СПАСЁТСЯ', 'РАСПАД', 'НЕ СМОТРИ'];
+            const totalFlashes = curatedSequence.length + 9;
+
+            for (let i = 0; i < totalFlashes; i++) {
+                const symbol = i < curatedSequence.length
+                    ? curatedSequence[i]
+                    : extraFlashes[Math.floor(Math.random() * extraFlashes.length)];
+                subliminalImg.textContent = symbol;
                 subliminal.classList.add('active');
-                
+
                 if (audioContext) {
                     const now = audioContext.currentTime;
                     const flash = audioContext.createOscillator();
                     const flashGain = audioContext.createGain();
                     flash.type = 'square';
-                    flash.frequency.value = 1200 + Math.random() * 1800;
+                    flash.frequency.value = 1100 + Math.random() * 1900;
                     flash.connect(flashGain);
                     flashGain.connect(audioContext.destination);
                     flashGain.gain.setValueAtTime(0.08, now);
@@ -2839,10 +3753,11 @@
                     flash.start(now);
                     try { flash.stop(now + 0.05); } catch(e) {}
                 }
-                
+
                 await new Promise(resolve => setTimeout(resolve, 100));
                 subliminal.classList.remove('active');
-                await new Promise(resolve => setTimeout(resolve, Math.random() * 300 + 100));
+                const pause = i < curatedSequence.length ? 120 : Math.random() * 280 + 120;
+                await new Promise(resolve => setTimeout(resolve, pause));
             }
             
             // Финальная distortion
@@ -2867,10 +3782,11 @@
         function increaseIntensity(lineIndex) {
             progressionLevel = lineIndex / story.length;
             updateAtmosphere(progressionLevel);
+            updateObsessionDynamics(progressionLevel);
             document.querySelector('.static').style.opacity = 0.12 + progressionLevel * 0.55;
-            document.querySelector('.vignette').style.boxShadow = 
+            document.querySelector('.vignette').style.boxShadow =
                 `inset 0 0 ${500 + progressionLevel * 2500}px rgba(0,0,0,${0.95 + progressionLevel * 0.05})`;
-            document.querySelector('.breath-overlay').style.animation = 
+            document.querySelector('.breath-overlay').style.animation =
                 `breatheOppressive ${Math.max(0.5, 7 - progressionLevel * 6.5)}s infinite`;
             document.querySelector('.grain').style.opacity = progressionLevel * 0.6;
             if (progressionLevel > 0.45 && Math.random() < (progressionLevel - 0.45) * 0.15) {
@@ -2888,16 +3804,12 @@
         }
 
         function addObsessiveWord(word) {
-            if (!word || obsessiveWords.length > 60) return;
-            const wordEl = document.createElement('div');
-            wordEl.className = 'obsessive-word';
-            wordEl.textContent = word;
-            wordEl.style.left = (2 + Math.random() * 96) + '%';
-            wordEl.style.top = (2 + Math.random() * 96) + '%';
-            wordEl.style.transform = `rotate(${(Math.random() - 0.5) * 35}deg)`;
-            document.getElementById('obsessive-words').appendChild(wordEl);
-            setTimeout(() => wordEl.classList.add('active'), 100);
-            obsessiveWords.push(wordEl);
+            if (!word) return;
+            if (!obsessionFieldActive) {
+                startObsessionField();
+            }
+            const highlight = progressionLevel > 0.55 && Math.random() < 0.35 ? 'blood' : null;
+            registerObsessionWord(word, { highlight });
         }
 
         function addForgottenWord() {
@@ -2916,12 +3828,14 @@
 
         function triggerBlackout(duration) {
             const blackout = document.querySelector('.blackout');
+            if (!blackout) return;
             blackout.classList.add('active');
             setTimeout(() => blackout.classList.remove('active'), duration);
         }
 
         function triggerStrobe(duration) {
             const strobe = document.querySelector('.strobe');
+            if (!strobe) return;
             strobe.classList.add('active');
             setTimeout(() => strobe.classList.remove('active'), duration);
             if (navigator.vibrate) {
@@ -2935,6 +3849,7 @@
 
         function triggerChromatic() {
             const chromatic = document.querySelector('.chromatic');
+            if (!chromatic) return;
             chromatic.classList.add('active');
             setTimeout(() => chromatic.classList.remove('active'), 300);
         }
@@ -2942,13 +3857,15 @@
         function triggerWatching() {
             isWatching = true;
             const watching = document.querySelector('.watching-overlay');
+            const cursorEl = document.getElementById('cursor');
+            if (!watching || !cursorEl) return;
             watching.style.setProperty('--x', (mouseX / window.innerWidth * 100) + '%');
             watching.style.setProperty('--y', (mouseY / window.innerHeight * 100) + '%');
             watching.classList.add('active');
-            document.getElementById('cursor').classList.add('watching');
+            cursorEl.classList.add('watching');
             setTimeout(() => {
                 watching.classList.remove('active');
-                document.getElementById('cursor').classList.remove('watching');
+                cursorEl.classList.remove('watching');
                 isWatching = false;
             }, 5000);
             if (navigator.vibrate) {
@@ -2959,6 +3876,7 @@
         function triggerPeripheralHorror() {
             const side = Math.random() < 0.5 ? 'left' : 'right';
             const peripheral = document.querySelector(`.peripheral-horror.${side}`);
+            if (!peripheral) return;
             peripheral.classList.add('active');
             setTimeout(() => peripheral.classList.remove('active'), 150);
             if (navigator.vibrate && Math.random() < 0.4) {
@@ -2968,23 +3886,51 @@
 
         function triggerScreenTear() {
             const tear = document.querySelector('.screen-tear');
+            if (!tear) return;
             tear.classList.add('active');
             setTimeout(() => tear.classList.remove('active'), 600);
         }
 
         function triggerTimeDistortion() {
             const distortion = document.querySelector('.time-distortion');
+            if (!distortion) return;
             distortion.classList.add('active');
             setTimeout(() => distortion.classList.remove('active'), 4000);
         }
 
         function triggerRealityGlitch() {
             const glitch = document.querySelector('.reality-glitch');
+            if (!glitch) return;
             glitch.classList.add('active');
             setTimeout(() => glitch.classList.remove('active'), 400);
             if (navigator.vibrate) {
                 navigator.vibrate([60, 40, 60, 40, 60]);
             }
+        }
+
+        function updateCinematicFocus(index, text) {
+            const content = document.getElementById('content');
+            if (!content) return;
+            const progress = index / story.length;
+            const lower = text.toLowerCase();
+            const intense = lower.includes('никогда') || lower.includes('сейчас') || lower.includes('кров') || lower.includes('смер');
+            const baseScale = 1 + progress * 0.08;
+            const scaleBoost = intense ? 0.06 : 0.02 * Math.sin(progress * Math.PI);
+            const targetScale = baseScale + scaleBoost;
+            const rawPan = (Math.random() - 0.5) * (16 + progress * 60);
+            const pan = lastFocusPan + (rawPan - lastFocusPan) * 0.55;
+            lastFocusPan = pan;
+            const rawTilt = (Math.random() - 0.5) * (progress > 0.55 ? 8 : 4);
+            const tilt = lastFocusTilt + (rawTilt - lastFocusTilt) * 0.6;
+            lastFocusTilt = tilt;
+            const blur = progress > 0.72 ? Math.min(1.2, (progress - 0.72) * 6) : 0;
+            const contrast = 1.12 + progress * 0.45 + (intense ? 0.12 : 0);
+
+            content.style.setProperty('--focus-scale', targetScale.toFixed(3));
+            content.style.setProperty('--focus-pan', pan.toFixed(1) + 'px');
+            content.style.setProperty('--focus-tilt', tilt.toFixed(2) + 'deg');
+            content.style.setProperty('--focus-contrast', contrast.toFixed(2));
+            content.style.setProperty('--focus-blur', blur.toFixed(2) + 'px');
         }
 
         async function startExperience() {
@@ -2996,6 +3942,7 @@
                     const wait = parseInt(parts[1]);
                     const effects = parts.slice(2);
                     increaseIntensity(i);
+                    updateCinematicFocus(i, text);
                     content.innerHTML = '';
                     if (text.trim()) {
                         const div = document.createElement('div');
@@ -3027,135 +3974,160 @@
                             applyTremorToText(div);
                         }
                         
-                        for (const effect of effects) {
-                            if (effect === 'break') {
-                                div.classList.add('break-wall');
-                            }
-                            else if (effect === 'glitch') {
-                                setTimeout(() => div.classList.add('glitched'), 100);
-                                setTimeout(() => div.classList.remove('glitched'), 2000);
-                            }
-                            else if (effect === 'shake') {
-                                content.classList.add('shake');
-                            }
-                            else if (effect === 'distorted') {
-                                setTimeout(() => div.classList.add('distorted'), 100);
-                            }
-                            else if (effect === 'watching') {
-                                triggerWatching();
-                                // Добавляем парейдолию глаз при watching
-                                if (Math.random() < 0.4) {
-                                    setTimeout(() => createPareidoliaPattern('eyes'), 500);
+                        for (const rawEffect of effects) {
+                            const effect = (rawEffect || '').trim();
+                            if (!effect) continue;
+                            try {
+                                if (effect === 'break') {
+                                    div.classList.add('break-wall');
                                 }
-                            }
-                            else if (effect === 'cursormove' || effect === 'peripheralshadow') {
-                                triggerPeripheralShadows();
-                            }
-                            else if (effect === 'peripheral') {
-                                triggerPeripheralHorror();
-                                // Иногда добавляем фигуру
-                                if (Math.random() < 0.25) {
-                                    setTimeout(() => createPareidoliaPattern('figure'), 800);
+                                else if (effect === 'glitch') {
+                                    setTimeout(() => div.classList.add('glitched'), 100);
+                                    setTimeout(() => div.classList.remove('glitched'), 2000);
                                 }
-                            }
-                            else if (effect === 'chromatic') {
-                                triggerChromatic();
-                            }
-                            else if (effect === 'screentear') {
-                                triggerScreenTear();
-                            }
-                            else if (effect === 'timedistort') {
-                                triggerTimeDistortion();
-                            }
-                            else if (effect === 'reality') {
-                                triggerRealityGlitch();
-                            }
-                            else if (effect === 'heartbeat') {
-                                const hb = document.querySelector('.heartbeat');
-                                hb.classList.add('active');
-                                setTimeout(() => hb.classList.remove('active'), 3500);
-                            }
-                            else if (effect === 'water') {
-                                for (let j = 0; j < 4; j++) {
-                                    setTimeout(() => createWaterDrop(), j * 250);
+                                else if (effect === 'shake') {
+                                    content.classList.add('shake');
                                 }
-                            }
-                            else if (effect === 'blooddrop') {
-                                for (let j = 0; j < 3; j++) {
-                                    setTimeout(() => createBloodDrop(), j * 350);
+                                else if (effect === 'distorted') {
+                                    setTimeout(() => div.classList.add('distorted'), 100);
                                 }
-                            }
-                            else if (effect === 'wetstain') {
-                                createWetStain();
-                            }
-                            else if (effect === 'breathfog') {
-                                triggerBreathFog();
-                            }
-                            else if (effect === 'crack') {
-                                triggerScreenCrack();
-                            }
-                            else if (effect === 'finalhorror') {
-                                await triggerFinalHorror();
-                            }
-                            else if (effect === 'silence') {
-                                if (audioContext) {
-                                    ambientLayers.forEach(layer => {
-                                        if (layer && layer.gain) {
-                                            const time = audioContext.currentTime;
-                                            const current = layer.gain.gain.value;
-                                            layer.gain.gain.linearRampToValueAtTime(current * 0.08, time + 0.5);
-                                            setTimeout(() => {
-                                                layer.gain.gain.linearRampToValueAtTime(current, time + 2.5);
-                                            }, 1000);
+                                else if (effect === 'watching') {
+                                    triggerWatching();
+                                    if (Math.random() < 0.4) {
+                                        setTimeout(() => createPareidoliaPattern('eyes'), 500);
+                                    }
+                                }
+                                else if (effect === 'cursormove' || effect === 'peripheralshadow') {
+                                    triggerPeripheralShadows();
+                                }
+                                else if (effect === 'peripheral') {
+                                    triggerPeripheralHorror();
+                                    if (Math.random() < 0.25) {
+                                        setTimeout(() => createPareidoliaPattern('figure'), 800);
+                                    }
+                                }
+                                else if (effect === 'chromatic') {
+                                    triggerChromatic();
+                                }
+                                else if (effect === 'screentear') {
+                                    triggerScreenTear();
+                                }
+                                else if (effect === 'timedistort') {
+                                    triggerTimeDistortion();
+                                }
+                                else if (effect === 'reality') {
+                                    triggerRealityGlitch();
+                                }
+                                else if (effect === 'heartbeat') {
+                                    const hb = document.querySelector('.heartbeat');
+                                    if (hb) {
+                                        hb.classList.add('active');
+                                        setTimeout(() => hb.classList.remove('active'), 3500);
+                                    }
+                                }
+                                else if (effect === 'water') {
+                                    for (let j = 0; j < 4; j++) {
+                                        setTimeout(() => createWaterDrop(), j * 250);
+                                    }
+                                }
+                                else if (effect === 'blooddrop') {
+                                    for (let j = 0; j < 3; j++) {
+                                        setTimeout(() => createBloodDrop(), j * 350);
+                                    }
+                                }
+                                else if (effect === 'wetstain') {
+                                    createWetStain();
+                                }
+                                else if (effect === 'breathfog') {
+                                    triggerBreathFog();
+                                }
+                                else if (effect === 'crack') {
+                                    triggerScreenCrack();
+                                }
+                                else if (effect === 'finalhorror') {
+                                    await triggerFinalHorror();
+                                }
+                                else if (effect === 'silence') {
+                                    if (audioContext) {
+                                        ambientLayers.forEach(layer => {
+                                            if (layer && layer.gain) {
+                                                const time = audioContext.currentTime;
+                                                const current = layer.gain.gain.value;
+                                                layer.gain.gain.linearRampToValueAtTime(current * 0.08, time + 0.5);
+                                                setTimeout(() => {
+                                                    layer.gain.gain.linearRampToValueAtTime(current, time + 2.5);
+                                                }, 1000);
+                                            }
+                                        });
+                                        if (pendulumGain) {
+                                            const pTime = audioContext.currentTime;
+                                            const currentPend = pendulumGain.gain.value;
+                                            pendulumGain.gain.cancelScheduledValues(pTime);
+                                            pendulumGain.gain.setValueAtTime(currentPend, pTime);
+                                            pendulumGain.gain.linearRampToValueAtTime(Math.max(0.01, currentPend * 0.25), pTime + 0.6);
+                                            pendulumGain.gain.linearRampToValueAtTime(0.08 + progressionLevel * 0.12, pTime + 2.8);
                                         }
-                                    });
+                                    }
                                 }
-                            }
-                            else if (effect.startsWith('subliminal:')) {
-                                const msg = effect.split(':')[1];
-                                const subliminal = document.querySelector('.subliminal');
-                                subliminal.textContent = msg;
-                                subliminal.classList.add('active');
-                                setTimeout(() => subliminal.classList.remove('active'), 40);
-                            }
-                            else if (effect.startsWith('blackout:')) {
-                                const duration = parseInt(effect.split(':')[1]);
-                                setTimeout(() => triggerBlackout(duration), 100);
-                            }
-                            else if (effect.startsWith('strobe:')) {
-                                const duration = parseInt(effect.split(':')[1]);
-                                setTimeout(() => triggerStrobe(duration), 100);
-                            }
-                            else if (effect === 'shadow') {
-                                const side = Math.random() < 0.5 ? 'left' : 'right';
-                                const shadowEl = document.querySelector(`.shadow.${side}`);
-                                shadowEl.classList.add('active');
-                                setTimeout(() => shadowEl.classList.remove('active'), 3000);
-                            }
-                            else if (effect === 'blood') {
-                                div.classList.add('blood');
-                                document.querySelector('.blood-screen').classList.add('active');
-                                setTimeout(() => document.querySelector('.blood-screen').classList.remove('active'), 4000);
-                            }
-                            else if (effect === 'redFlicker') {
-                                const flickerEl = document.querySelector('.red-flicker');
-                                flickerEl.classList.add('active');
-                                setTimeout(() => flickerEl.classList.remove('active'), 3000);
-                            }
-                            else if (effect === 'trail') {
-                                setTimeout(() => div.classList.add('text-trail'), 100);
-                            }
-                            else if (effect === 'double') {
-                                setTimeout(() => div.classList.add('double-vision'), 100);
-                            }
-                            else if (effect === 'freeze') {
-                                setTimeout(() => div.classList.add('time-freeze'), 100);
-                            }
-                            else if (effect.startsWith('obsess:')) {
-                                addObsessiveWord(effect.split(':')[1]);
-                            }
-                            else if (effect.startsWith('sound:')) {
-                                playSound(effect.split(':')[1]);
+                                else if (effect.startsWith('subliminal:')) {
+                                    const msg = effect.split(':')[1];
+                                    const subliminal = document.querySelector('.subliminal');
+                                    if (subliminal) {
+                                        subliminal.textContent = msg;
+                                        subliminal.classList.add('active');
+                                        setTimeout(() => subliminal.classList.remove('active'), 40);
+                                    }
+                                }
+                                else if (effect.startsWith('blackout:')) {
+                                    const duration = parseInt(effect.split(':')[1]);
+                                    setTimeout(() => triggerBlackout(duration), 100);
+                                }
+                                else if (effect.startsWith('strobe:')) {
+                                    const duration = parseInt(effect.split(':')[1]);
+                                    setTimeout(() => triggerStrobe(duration), 100);
+                                }
+                                else if (effect === 'shadow') {
+                                    const side = Math.random() < 0.5 ? 'left' : 'right';
+                                    const shadowEl = document.querySelector(`.shadow.${side}`);
+                                    if (shadowEl) {
+                                        shadowEl.classList.add('active');
+                                        setTimeout(() => shadowEl.classList.remove('active'), 3000);
+                                    }
+                                }
+                                else if (effect === 'blood') {
+                                    div.classList.add('blood');
+                                    const bloodScreen = document.querySelector('.blood-screen');
+                                    if (bloodScreen) {
+                                        bloodScreen.classList.add('active');
+                                        setTimeout(() => bloodScreen.classList.remove('active'), 4000);
+                                    }
+                                }
+                                else if (effect === 'redFlicker') {
+                                    const flickerEl = document.querySelector('.red-flicker');
+                                    if (flickerEl) {
+                                        flickerEl.classList.add('active');
+                                        setTimeout(() => flickerEl.classList.remove('active'), 3000);
+                                    }
+                                }
+                                else if (effect === 'trail') {
+                                    setTimeout(() => div.classList.add('text-trail'), 100);
+                                }
+                                else if (effect === 'double') {
+                                    setTimeout(() => div.classList.add('double-vision'), 100);
+                                }
+                                else if (effect === 'freeze') {
+                                    setTimeout(() => div.classList.add('time-freeze'), 100);
+                                }
+                                else if (effect.startsWith('obsess:')) {
+                                    addObsessiveWord(effect.split(':')[1]);
+                                }
+                                else if (effect.startsWith('sound:')) {
+                                    playSound(effect.split(':')[1]);
+                                }
+                            } catch (effectError) {
+                                if (typeof console !== 'undefined' && console.warn) {
+                                    console.warn('Effect error:', effect, effectError);
+                                }
                             }
                         }
                         if (effects.includes('shake')) {
@@ -3181,6 +4153,7 @@
                             }
                         });
                     }
+                    stopPendulum();
                     location.reload();
                 }, 15000);
             } catch (err) {}
@@ -3288,6 +4261,42 @@
                             navigator.vibrate([110, 35, 70]);
                         }
                     }, i * 600);
+                }
+            }
+            else if (type === 'creak') {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                const filter = audioContext.createBiquadFilter();
+                const noiseBuffer = audioContext.createBuffer(1, 8192, audioContext.sampleRate);
+                const noiseData = noiseBuffer.getChannelData(0);
+                for (let i = 0; i < 8192; i++) {
+                    const env = Math.pow(1 - i / 8192, 2);
+                    noiseData[i] = (Math.random() * 2 - 1) * env * 0.6;
+                }
+                const noise = audioContext.createBufferSource();
+                noise.buffer = noiseBuffer;
+                noise.playbackRate.value = 0.55;
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(240, now);
+                osc.frequency.exponentialRampToValueAtTime(55, now + 1.1);
+                filter.type = 'bandpass';
+                filter.frequency.value = 320;
+                filter.Q.value = 8;
+                osc.connect(filter);
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioContext.destination);
+                gain.gain.setValueAtTime(0.0001, now);
+                gain.gain.exponentialRampToValueAtTime(0.18, now + 0.18);
+                gain.gain.exponentialRampToValueAtTime(0.02, now + 1.1);
+                osc.start(now);
+                noise.start(now);
+                try {
+                    osc.stop(now + 1.2);
+                    noise.stop(now + 1.2);
+                } catch(e) {}
+                if (navigator.vibrate) {
+                    navigator.vibrate([90, 40, 70]);
                 }
             }
             else if (type === 'metallic') {
@@ -3557,6 +4566,43 @@
                     navigator.vibrate(pattern);
                 }
             }
+            else if (type === 'hum') {
+                const osc = audioContext.createOscillator();
+                const humGain = audioContext.createGain();
+                const humFilter = audioContext.createBiquadFilter();
+                const noiseBuffer = audioContext.createBuffer(1, 32768, audioContext.sampleRate);
+                const noiseData = noiseBuffer.getChannelData(0);
+                for (let i = 0; i < 32768; i++) {
+                    noiseData[i] = (Math.random() * 2 - 1) * (1 - i / 32768);
+                }
+                const noise = audioContext.createBufferSource();
+                noise.buffer = noiseBuffer;
+                noise.playbackRate.value = 0.65;
+                const noiseFilter = audioContext.createBiquadFilter();
+                noiseFilter.type = 'bandpass';
+                noiseFilter.frequency.value = 180;
+                noiseFilter.Q.value = 7;
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(42 + Math.random() * 8, now);
+                humFilter.type = 'lowpass';
+                humFilter.frequency.value = 130;
+                humFilter.Q.value = 12;
+                osc.connect(humFilter);
+                humFilter.connect(humGain);
+                noise.connect(noiseFilter);
+                noiseFilter.connect(humGain);
+                humGain.connect(audioContext.destination);
+                humGain.gain.setValueAtTime(0, now);
+                humGain.gain.linearRampToValueAtTime(0.14, now + 0.4);
+                humGain.gain.linearRampToValueAtTime(0.1, now + 2.8);
+                humGain.gain.linearRampToValueAtTime(0.0001, now + 3.4);
+                osc.start(now);
+                noise.start(now);
+                try {
+                    osc.stop(now + 3.6);
+                    noise.stop(now + 3.6);
+                } catch(e) {}
+            }
             else if (type === 'breathing') {
                 for (let i = 0; i < 2; i++) {
                     setTimeout(() => {
@@ -3749,6 +4795,100 @@
                 } catch(e) {}
                 if (navigator.vibrate) {
                     navigator.vibrate([170, 60, 220, 60, 170]);
+                }
+            }
+            else if (type === 'feral') {
+                const noiseBuffer = audioContext.createBuffer(1, 11025, audioContext.sampleRate);
+                const noiseData = noiseBuffer.getChannelData(0);
+                for (let i = 0; i < 11025; i++) {
+                    const t = i / 11025;
+                    const envelope = Math.pow(t, 0.35) * Math.pow(1 - t, 2);
+                    noiseData[i] = (Math.random() * 2 - 1) * envelope;
+                }
+                const noise = audioContext.createBufferSource();
+                noise.buffer = noiseBuffer;
+                const filter = audioContext.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.value = 420;
+                filter.Q.value = 12;
+                const gain = audioContext.createGain();
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioContext.destination);
+                const osc = audioContext.createOscillator();
+                const oscGain = audioContext.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(160, now);
+                osc.frequency.exponentialRampToValueAtTime(88, now + 0.55);
+                oscGain.gain.setValueAtTime(0, now);
+                oscGain.gain.linearRampToValueAtTime(0.14, now + 0.08);
+                oscGain.gain.linearRampToValueAtTime(0.02, now + 0.7);
+                osc.connect(oscGain);
+                oscGain.connect(filter);
+                gain.gain.setValueAtTime(0.0001, now);
+                gain.gain.linearRampToValueAtTime(0.22, now + 0.1);
+                gain.gain.linearRampToValueAtTime(0.04, now + 0.8);
+                gain.gain.linearRampToValueAtTime(0.0001, now + 1.1);
+                noise.start(now);
+                osc.start(now);
+                try {
+                    noise.stop(now + 1.1);
+                    osc.stop(now + 1.1);
+                } catch(e) {}
+                if (navigator.vibrate) {
+                    navigator.vibrate([140, 50, 140]);
+                }
+            }
+            else if (type === 'feral_deep') {
+                const osc1 = audioContext.createOscillator();
+                const osc2 = audioContext.createOscillator();
+                const growlGain = audioContext.createGain();
+                const roarFilter = audioContext.createBiquadFilter();
+                const noiseBuffer = audioContext.createBuffer(1, 22050, audioContext.sampleRate);
+                const noiseData = noiseBuffer.getChannelData(0);
+                for (let i = 0; i < 22050; i++) {
+                    const t = i / 22050;
+                    const env = Math.pow(1 - t, 1.8);
+                    noiseData[i] = (Math.random() * 2 - 1) * env * 0.6;
+                }
+                const noise = audioContext.createBufferSource();
+                noise.buffer = noiseBuffer;
+                noise.playbackRate.value = 0.6;
+                osc1.type = 'sawtooth';
+                osc1.frequency.setValueAtTime(110, now);
+                osc1.frequency.exponentialRampToValueAtTime(48, now + 0.9);
+                osc2.type = 'square';
+                osc2.frequency.setValueAtTime(52, now);
+                roarFilter.type = 'bandpass';
+                roarFilter.frequency.value = 190;
+                roarFilter.Q.value = 6;
+                osc1.connect(roarFilter);
+                osc2.connect(roarFilter);
+                noise.connect(roarFilter);
+                roarFilter.connect(growlGain);
+                growlGain.connect(audioContext.destination);
+                growlGain.gain.setValueAtTime(0.0001, now);
+                growlGain.gain.linearRampToValueAtTime(0.32, now + 0.12);
+                growlGain.gain.linearRampToValueAtTime(0.08, now + 0.9);
+                growlGain.gain.linearRampToValueAtTime(0.0001, now + 1.6);
+                const tremor = audioContext.createOscillator();
+                const tremorGain = audioContext.createGain();
+                tremor.frequency.value = 7;
+                tremorGain.gain.value = 24;
+                tremor.connect(tremorGain);
+                tremorGain.connect(roarFilter.frequency);
+                osc1.start(now);
+                osc2.start(now);
+                noise.start(now);
+                tremor.start(now);
+                try {
+                    osc1.stop(now + 1.6);
+                    osc2.stop(now + 1.6);
+                    noise.stop(now + 1.6);
+                    tremor.stop(now + 1.6);
+                } catch(e) {}
+                if (navigator.vibrate) {
+                    navigator.vibrate([220, 90, 260, 90, 220]);
                 }
             }
             else if (type === 'crack') {
