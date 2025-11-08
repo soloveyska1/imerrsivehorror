@@ -2424,48 +2424,64 @@
             }
         });
 
-        // Emergency exit
-        document.getElementById('emergency-exit').addEventListener('click', () => {
-            if (confirm('Прервать опыт?')) {
-                location.reload();
-            }
-        });
+        function bindControlButtons() {
+            const warning = document.getElementById('warning');
+            const experience = document.getElementById('experience');
+            const enterButton = document.getElementById('enter');
+            const emergencyExit = document.getElementById('emergency-exit');
 
-        document.getElementById('enter').addEventListener('click', async () => {
-            // IMMEDIATE START - NO DELAY
-            document.getElementById('warning').style.display = 'none';
-            document.getElementById('experience').style.display = 'block';
-            
-            // Fullscreen attempt (silent fail on mobile)
-            try {
-                const elem = document.documentElement;
-                if (elem.requestFullscreen) {
-                    await elem.requestFullscreen();
-                } else if (elem.webkitRequestFullscreen) {
-                    elem.webkitRequestFullscreen();
-                } else if (elem.msRequestFullscreen) {
-                    elem.msRequestFullscreen();
-                }
-            } catch (err) {}
-            
-            // Audio initialization
-            try {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                if (audioContext.state === 'suspended') {
-                    await audioContext.resume();
-                }
-                const buffer = audioContext.createBuffer(1, 1, 22050);
-                const source = audioContext.createBufferSource();
-                source.buffer = buffer;
-                source.connect(audioContext.destination);
-                source.start(0);
-                initAtmosphere();
-            } catch (err) {}
-            
-            // START IMMEDIATELY
-            setTimeout(startExperience, 1500);
-            setInterval(triggerRandomSubliminal, 12000);
-        });
+            if (emergencyExit) {
+                emergencyExit.addEventListener('click', () => {
+                    if (confirm('Прервать опыт?')) {
+                        location.reload();
+                    }
+                });
+            }
+
+            if (enterButton && warning && experience) {
+                enterButton.addEventListener('click', async () => {
+                    // IMMEDIATE START - NO DELAY
+                    warning.style.display = 'none';
+                    experience.style.display = 'block';
+
+                    // Fullscreen attempt (silent fail on mobile)
+                    try {
+                        const elem = document.documentElement;
+                        if (elem.requestFullscreen) {
+                            await elem.requestFullscreen();
+                        } else if (elem.webkitRequestFullscreen) {
+                            elem.webkitRequestFullscreen();
+                        } else if (elem.msRequestFullscreen) {
+                            elem.msRequestFullscreen();
+                        }
+                    } catch (err) {}
+
+                    // Audio initialization
+                    try {
+                        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                        if (audioContext.state === 'suspended') {
+                            await audioContext.resume();
+                        }
+                        const buffer = audioContext.createBuffer(1, 1, 22050);
+                        const source = audioContext.createBufferSource();
+                        source.buffer = buffer;
+                        source.connect(audioContext.destination);
+                        source.start(0);
+                        initAtmosphere();
+                    } catch (err) {}
+
+                    // START IMMEDIATELY
+                    setTimeout(startExperience, 1500);
+                    setInterval(triggerRandomSubliminal, 12000);
+                });
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', bindControlButtons);
+        } else {
+            bindControlButtons();
+        }
 
         function createWaterDrop() {
             const drop = document.createElement('div');
