@@ -591,9 +591,36 @@
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: #000;
+            background: radial-gradient(circle at 50% 42%, #050100 0%, #010001 55%, #000 100%);
             overflow: hidden;
             perspective: 1200px;
+            isolation: isolate;
+        }
+        #experience::before {
+            content: '';
+            position: absolute;
+            inset: -18%;
+            background: radial-gradient(circle at 50% 48%, rgba(35, 0, 0, 0.35) 0%, rgba(5, 0, 0, 0.78) 55%, rgba(0, 0, 0, 0.94) 100%);
+            opacity: 0.85;
+            filter: blur(45px) contrast(1.3);
+            mix-blend-mode: multiply;
+            animation: dreadPulse 18s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 5;
+        }
+        @keyframes dreadPulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.75;
+            }
+            45% {
+                transform: scale(1.05) translateY(-2%);
+                opacity: 1;
+            }
+            65% {
+                transform: scale(1.08) translateY(2%);
+                opacity: 0.92;
+            }
         }
 
         #content {
@@ -609,20 +636,33 @@
             transform-origin: center;
             transition: transform 1.8s cubic-bezier(0.25, 0.1, 0.25, 1), filter 1.8s ease;
             z-index: 480;
+            isolation: isolate;
+        }
+        #content::before {
+            content: '';
+            position: absolute;
+            inset: clamp(30px, 8vh, 140px) clamp(18px, 9vw, 160px);
+            background: radial-gradient(circle at 50% 40%, rgba(8, 0, 0, 0.92) 0%, rgba(4, 0, 0, 0.75) 55%, rgba(0, 0, 0, 0.95) 100%);
+            filter: blur(38px) saturate(1.1);
+            opacity: 0.85;
+            pointer-events: none;
+            transition: opacity 1.6s ease;
+            z-index: -1;
         }
         
         /* HYPNOTIC TEXT STYLES */
         .line {
             font-size: clamp(22px, 4.5vw, 38px);
             line-height: 2.2;
-            color: #e4dcd5;
+            color: #f6f0e8;
             opacity: 0;
             margin: 0;
             letter-spacing: clamp(1px, 0.6vw, 3px);
             position: relative;
             text-shadow:
-                0 0 22px rgba(0, 0, 0, 0.9),
-                0 0 12px rgba(138, 0, 0, 0.35);
+                0 0 28px rgba(0, 0, 0, 0.98),
+                0 0 18px rgba(120, 0, 0, 0.55),
+                0 0 6px rgba(0, 0, 0, 0.85);
             transition: color 0.6s ease, text-shadow 0.6s ease, letter-spacing 0.6s ease;
         }
         .line.active {
@@ -695,25 +735,31 @@
             }
         }
         
-        .line .death { 
-            color: #3a3a3a;
-            text-shadow: 0 0 12px rgba(0, 0, 0, 0.7);
+        .line .death {
+            color: #c8b7b3;
+            text-shadow:
+                0 0 16px rgba(0, 0, 0, 0.9),
+                0 0 24px rgba(90, 0, 0, 0.55);
             letter-spacing: clamp(4px, 1.2vw, 7px);
-            opacity: 0.75;
+            opacity: 0.92;
             animation: deathStroopEffect 5s ease-in-out forwards;
         }
         @keyframes deathStroopEffect {
-            0% { 
-                color: #3a3a3a;
-                text-shadow: 0 0 12px rgba(0, 0, 0, 0.7);
+            0% {
+                color: #b79e99;
+                text-shadow:
+                    0 0 14px rgba(0, 0, 0, 0.8),
+                    0 0 18px rgba(90, 0, 0, 0.45);
             }
             60% {
-                color: #2a2a2a;
+                color: #d5c4c0;
             }
-            100% { 
-                color: #4a0000;
-                text-shadow: 0 0 18px rgba(74, 0, 0, 0.8);
-                opacity: 0.9;
+            100% {
+                color: #f0d3ce;
+                text-shadow:
+                    0 0 22px rgba(90, 0, 0, 0.75),
+                    0 0 32px rgba(0, 0, 0, 0.9);
+                opacity: 1;
             }
         }
         
@@ -809,12 +855,15 @@
             }
         }
         
-        .line .machine-word { 
-            color: #4a4a4a;
+        .line .machine-word {
+            color: #b8b2ac;
             letter-spacing: 2px;
             font-weight: 700;
             animation: mechanicalPulse 1.5s ease-in-out infinite;
             font-family: 'Courier Prime', monospace;
+            text-shadow:
+                0 0 18px rgba(0, 0, 0, 0.85),
+                0 0 24px rgba(90, 0, 0, 0.45);
         }
         @keyframes mechanicalPulse {
             0%, 100% {
@@ -1634,8 +1683,8 @@
             pointer-events: none;
             overflow: hidden;
             z-index: 40;
-            mix-blend-mode: screen;
-            filter: contrast(0.9) saturate(0.75) brightness(0.7);
+            mix-blend-mode: soft-light;
+            filter: contrast(1.35) saturate(0.65) brightness(0.45);
         }
         #obsessive-words::before {
             content: '';
@@ -1653,7 +1702,7 @@
             opacity: 0.75;
         }
         #obsessive-words[data-phase='0'] {
-            mix-blend-mode: normal;
+            mix-blend-mode: soft-light;
         }
 
         /* OBSESSIVE WORDS */
@@ -1661,7 +1710,7 @@
             position: absolute;
             font-family: 'Courier Prime', monospace;
             font-size: clamp(12px, 2.2vw, 20px);
-            color: #3a3a3a;
+            color: rgba(184, 170, 164, 0.38);
             pointer-events: none;
             opacity: 0;
             z-index: 70;
@@ -1670,8 +1719,9 @@
             transform: translate(-50%, -50%);
             transition: color 3s ease, text-shadow 3s ease;
             will-change: transform, opacity;
-            filter: blur(1.6px);
-            -webkit-text-stroke: 0.4px rgba(0, 0, 0, 0.35);
+            filter: blur(1.8px);
+            -webkit-text-stroke: 0.25px rgba(0, 0, 0, 0.5);
+            text-shadow: 0 0 32px rgba(0, 0, 0, 0.75);
         }
         .obsessive-word.active {
             animation: wordFadeInSlow 3s forwards;
@@ -1683,9 +1733,9 @@
                 filter: blur(5px);
             }
             100% {
-                opacity: 0.6;
+                opacity: 0.5;
                 transform: translate(-50%, -50%) scale(1);
-                filter: blur(1px);
+                filter: blur(1.2px);
             }
         }
 
@@ -2382,7 +2432,7 @@
         let forcedCursorActive = false, isWatching = false;
         let cursorTrails = [];
         let subliminalMessages = ['ЗАБУДЬ', 'БЕЗЫСХОДНОСТЬ', 'ПОВТОР', 'РАСПАД', 'ПУСТОТА', 'БОЛЬ', 'ЦИКЛ', 'НЕТ ВЫХОДА', 'ПОВИНУЙСЯ', 'СТРАХ', 'ТОНЕШЬ', 'ТЕРЯЕШЬСЯ'];
-        const microFlashSymbols = ['🙂', '💀', 'СЛУШАЙ', 'СЕКС', 'СМЕРТЬ', 'ТВОЯ ОЧЕРЕДЬ', 'СТАРИК', '👁️'];
+        const microFlashSymbols = ['ГНИЙ', 'НЕ СПАСЁШЬСЯ', 'СМОТРИ', 'ДЫШИ С НИМ', 'СТАРИК', 'БЕЗ ВЫХОДА', 'ПОД КОЖЕЙ', 'РАСПАД'];
         let waterDrops = [], bloodDrops = [], wetStains = [];
         let lastActivityTime = Date.now();
         let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -2984,12 +3034,14 @@
 
         function triggerBreathFog() {
             const fog = document.querySelector('.breath-fog');
+            if (!fog) return;
             fog.classList.add('active');
             setTimeout(() => fog.classList.remove('active'), 5000);
         }
 
         function triggerScreenCrack() {
             const crack = document.querySelector('.screen-crack');
+            if (!crack) return;
             crack.classList.add('active');
             if (navigator.vibrate) {
                 navigator.vibrate([350, 120, 350]);
@@ -3015,7 +3067,8 @@
                 x = Math.random() * (window.innerWidth - 250);
                 y = -50 + Math.random() * 150;
             }
-            
+
+            if (!shadow) return;
             shadow.style.left = x + 'px';
             shadow.style.top = y + 'px';
             shadow.classList.add('active');
@@ -3676,8 +3729,8 @@
             const subliminal = document.querySelector('.subliminal-flash');
             const subliminalImg = subliminal.querySelector('.subliminal-image');
             
-            const curatedSequence = ['🙂', '💀', '🙂', 'СЕКС', 'СМЕРТЬ', '💀', '🙂'];
-            const extraFlashes = ['😱', '👁️', '🩸', 'НЕ СПАСЁТСЯ', 'РАСПАД', '⚠️'];
+            const curatedSequence = ['ГНИЙ', 'ГЛАЗА', 'ПОД КОЖЕЙ', 'ХОЛОД', 'СМЕРТЬ', 'ПУСТОТА', 'НЕ СПАСЁШЬСЯ'];
+            const extraFlashes = ['НЕ ДЫШИ', 'ГЛАЗА', 'МОКРО', 'НЕ СПАСЁТСЯ', 'РАСПАД', 'НЕ СМОТРИ'];
             const totalFlashes = curatedSequence.length + 9;
 
             for (let i = 0; i < totalFlashes; i++) {
@@ -3775,12 +3828,14 @@
 
         function triggerBlackout(duration) {
             const blackout = document.querySelector('.blackout');
+            if (!blackout) return;
             blackout.classList.add('active');
             setTimeout(() => blackout.classList.remove('active'), duration);
         }
 
         function triggerStrobe(duration) {
             const strobe = document.querySelector('.strobe');
+            if (!strobe) return;
             strobe.classList.add('active');
             setTimeout(() => strobe.classList.remove('active'), duration);
             if (navigator.vibrate) {
@@ -3794,6 +3849,7 @@
 
         function triggerChromatic() {
             const chromatic = document.querySelector('.chromatic');
+            if (!chromatic) return;
             chromatic.classList.add('active');
             setTimeout(() => chromatic.classList.remove('active'), 300);
         }
@@ -3801,13 +3857,15 @@
         function triggerWatching() {
             isWatching = true;
             const watching = document.querySelector('.watching-overlay');
+            const cursorEl = document.getElementById('cursor');
+            if (!watching || !cursorEl) return;
             watching.style.setProperty('--x', (mouseX / window.innerWidth * 100) + '%');
             watching.style.setProperty('--y', (mouseY / window.innerHeight * 100) + '%');
             watching.classList.add('active');
-            document.getElementById('cursor').classList.add('watching');
+            cursorEl.classList.add('watching');
             setTimeout(() => {
                 watching.classList.remove('active');
-                document.getElementById('cursor').classList.remove('watching');
+                cursorEl.classList.remove('watching');
                 isWatching = false;
             }, 5000);
             if (navigator.vibrate) {
@@ -3818,6 +3876,7 @@
         function triggerPeripheralHorror() {
             const side = Math.random() < 0.5 ? 'left' : 'right';
             const peripheral = document.querySelector(`.peripheral-horror.${side}`);
+            if (!peripheral) return;
             peripheral.classList.add('active');
             setTimeout(() => peripheral.classList.remove('active'), 150);
             if (navigator.vibrate && Math.random() < 0.4) {
@@ -3827,18 +3886,21 @@
 
         function triggerScreenTear() {
             const tear = document.querySelector('.screen-tear');
+            if (!tear) return;
             tear.classList.add('active');
             setTimeout(() => tear.classList.remove('active'), 600);
         }
 
         function triggerTimeDistortion() {
             const distortion = document.querySelector('.time-distortion');
+            if (!distortion) return;
             distortion.classList.add('active');
             setTimeout(() => distortion.classList.remove('active'), 4000);
         }
 
         function triggerRealityGlitch() {
             const glitch = document.querySelector('.reality-glitch');
+            if (!glitch) return;
             glitch.classList.add('active');
             setTimeout(() => glitch.classList.remove('active'), 400);
             if (navigator.vibrate) {
@@ -3912,143 +3974,160 @@
                             applyTremorToText(div);
                         }
                         
-                        for (const effect of effects) {
-                            if (effect === 'break') {
-                                div.classList.add('break-wall');
-                            }
-                            else if (effect === 'glitch') {
-                                setTimeout(() => div.classList.add('glitched'), 100);
-                                setTimeout(() => div.classList.remove('glitched'), 2000);
-                            }
-                            else if (effect === 'shake') {
-                                content.classList.add('shake');
-                            }
-                            else if (effect === 'distorted') {
-                                setTimeout(() => div.classList.add('distorted'), 100);
-                            }
-                            else if (effect === 'watching') {
-                                triggerWatching();
-                                // Добавляем парейдолию глаз при watching
-                                if (Math.random() < 0.4) {
-                                    setTimeout(() => createPareidoliaPattern('eyes'), 500);
+                        for (const rawEffect of effects) {
+                            const effect = (rawEffect || '').trim();
+                            if (!effect) continue;
+                            try {
+                                if (effect === 'break') {
+                                    div.classList.add('break-wall');
                                 }
-                            }
-                            else if (effect === 'cursormove' || effect === 'peripheralshadow') {
-                                triggerPeripheralShadows();
-                            }
-                            else if (effect === 'peripheral') {
-                                triggerPeripheralHorror();
-                                // Иногда добавляем фигуру
-                                if (Math.random() < 0.25) {
-                                    setTimeout(() => createPareidoliaPattern('figure'), 800);
+                                else if (effect === 'glitch') {
+                                    setTimeout(() => div.classList.add('glitched'), 100);
+                                    setTimeout(() => div.classList.remove('glitched'), 2000);
                                 }
-                            }
-                            else if (effect === 'chromatic') {
-                                triggerChromatic();
-                            }
-                            else if (effect === 'screentear') {
-                                triggerScreenTear();
-                            }
-                            else if (effect === 'timedistort') {
-                                triggerTimeDistortion();
-                            }
-                            else if (effect === 'reality') {
-                                triggerRealityGlitch();
-                            }
-                            else if (effect === 'heartbeat') {
-                                const hb = document.querySelector('.heartbeat');
-                                hb.classList.add('active');
-                                setTimeout(() => hb.classList.remove('active'), 3500);
-                            }
-                            else if (effect === 'water') {
-                                for (let j = 0; j < 4; j++) {
-                                    setTimeout(() => createWaterDrop(), j * 250);
+                                else if (effect === 'shake') {
+                                    content.classList.add('shake');
                                 }
-                            }
-                            else if (effect === 'blooddrop') {
-                                for (let j = 0; j < 3; j++) {
-                                    setTimeout(() => createBloodDrop(), j * 350);
+                                else if (effect === 'distorted') {
+                                    setTimeout(() => div.classList.add('distorted'), 100);
                                 }
-                            }
-                            else if (effect === 'wetstain') {
-                                createWetStain();
-                            }
-                            else if (effect === 'breathfog') {
-                                triggerBreathFog();
-                            }
-                            else if (effect === 'crack') {
-                                triggerScreenCrack();
-                            }
-                            else if (effect === 'finalhorror') {
-                                await triggerFinalHorror();
-                            }
-                            else if (effect === 'silence') {
-                                if (audioContext) {
-                                    ambientLayers.forEach(layer => {
-                                        if (layer && layer.gain) {
-                                            const time = audioContext.currentTime;
-                                            const current = layer.gain.gain.value;
-                                            layer.gain.gain.linearRampToValueAtTime(current * 0.08, time + 0.5);
-                                            setTimeout(() => {
-                                                layer.gain.gain.linearRampToValueAtTime(current, time + 2.5);
-                                            }, 1000);
-                                        }
-                                    });
-                                    if (pendulumGain) {
-                                        const pTime = audioContext.currentTime;
-                                        const currentPend = pendulumGain.gain.value;
-                                        pendulumGain.gain.cancelScheduledValues(pTime);
-                                        pendulumGain.gain.setValueAtTime(currentPend, pTime);
-                                        pendulumGain.gain.linearRampToValueAtTime(Math.max(0.01, currentPend * 0.25), pTime + 0.6);
-                                        pendulumGain.gain.linearRampToValueAtTime(0.08 + progressionLevel * 0.12, pTime + 2.8);
+                                else if (effect === 'watching') {
+                                    triggerWatching();
+                                    if (Math.random() < 0.4) {
+                                        setTimeout(() => createPareidoliaPattern('eyes'), 500);
                                     }
                                 }
-                            }
-                            else if (effect.startsWith('subliminal:')) {
-                                const msg = effect.split(':')[1];
-                                const subliminal = document.querySelector('.subliminal');
-                                subliminal.textContent = msg;
-                                subliminal.classList.add('active');
-                                setTimeout(() => subliminal.classList.remove('active'), 40);
-                            }
-                            else if (effect.startsWith('blackout:')) {
-                                const duration = parseInt(effect.split(':')[1]);
-                                setTimeout(() => triggerBlackout(duration), 100);
-                            }
-                            else if (effect.startsWith('strobe:')) {
-                                const duration = parseInt(effect.split(':')[1]);
-                                setTimeout(() => triggerStrobe(duration), 100);
-                            }
-                            else if (effect === 'shadow') {
-                                const side = Math.random() < 0.5 ? 'left' : 'right';
-                                const shadowEl = document.querySelector(`.shadow.${side}`);
-                                shadowEl.classList.add('active');
-                                setTimeout(() => shadowEl.classList.remove('active'), 3000);
-                            }
-                            else if (effect === 'blood') {
-                                div.classList.add('blood');
-                                document.querySelector('.blood-screen').classList.add('active');
-                                setTimeout(() => document.querySelector('.blood-screen').classList.remove('active'), 4000);
-                            }
-                            else if (effect === 'redFlicker') {
-                                const flickerEl = document.querySelector('.red-flicker');
-                                flickerEl.classList.add('active');
-                                setTimeout(() => flickerEl.classList.remove('active'), 3000);
-                            }
-                            else if (effect === 'trail') {
-                                setTimeout(() => div.classList.add('text-trail'), 100);
-                            }
-                            else if (effect === 'double') {
-                                setTimeout(() => div.classList.add('double-vision'), 100);
-                            }
-                            else if (effect === 'freeze') {
-                                setTimeout(() => div.classList.add('time-freeze'), 100);
-                            }
-                            else if (effect.startsWith('obsess:')) {
-                                addObsessiveWord(effect.split(':')[1]);
-                            }
-                            else if (effect.startsWith('sound:')) {
-                                playSound(effect.split(':')[1]);
+                                else if (effect === 'cursormove' || effect === 'peripheralshadow') {
+                                    triggerPeripheralShadows();
+                                }
+                                else if (effect === 'peripheral') {
+                                    triggerPeripheralHorror();
+                                    if (Math.random() < 0.25) {
+                                        setTimeout(() => createPareidoliaPattern('figure'), 800);
+                                    }
+                                }
+                                else if (effect === 'chromatic') {
+                                    triggerChromatic();
+                                }
+                                else if (effect === 'screentear') {
+                                    triggerScreenTear();
+                                }
+                                else if (effect === 'timedistort') {
+                                    triggerTimeDistortion();
+                                }
+                                else if (effect === 'reality') {
+                                    triggerRealityGlitch();
+                                }
+                                else if (effect === 'heartbeat') {
+                                    const hb = document.querySelector('.heartbeat');
+                                    if (hb) {
+                                        hb.classList.add('active');
+                                        setTimeout(() => hb.classList.remove('active'), 3500);
+                                    }
+                                }
+                                else if (effect === 'water') {
+                                    for (let j = 0; j < 4; j++) {
+                                        setTimeout(() => createWaterDrop(), j * 250);
+                                    }
+                                }
+                                else if (effect === 'blooddrop') {
+                                    for (let j = 0; j < 3; j++) {
+                                        setTimeout(() => createBloodDrop(), j * 350);
+                                    }
+                                }
+                                else if (effect === 'wetstain') {
+                                    createWetStain();
+                                }
+                                else if (effect === 'breathfog') {
+                                    triggerBreathFog();
+                                }
+                                else if (effect === 'crack') {
+                                    triggerScreenCrack();
+                                }
+                                else if (effect === 'finalhorror') {
+                                    await triggerFinalHorror();
+                                }
+                                else if (effect === 'silence') {
+                                    if (audioContext) {
+                                        ambientLayers.forEach(layer => {
+                                            if (layer && layer.gain) {
+                                                const time = audioContext.currentTime;
+                                                const current = layer.gain.gain.value;
+                                                layer.gain.gain.linearRampToValueAtTime(current * 0.08, time + 0.5);
+                                                setTimeout(() => {
+                                                    layer.gain.gain.linearRampToValueAtTime(current, time + 2.5);
+                                                }, 1000);
+                                            }
+                                        });
+                                        if (pendulumGain) {
+                                            const pTime = audioContext.currentTime;
+                                            const currentPend = pendulumGain.gain.value;
+                                            pendulumGain.gain.cancelScheduledValues(pTime);
+                                            pendulumGain.gain.setValueAtTime(currentPend, pTime);
+                                            pendulumGain.gain.linearRampToValueAtTime(Math.max(0.01, currentPend * 0.25), pTime + 0.6);
+                                            pendulumGain.gain.linearRampToValueAtTime(0.08 + progressionLevel * 0.12, pTime + 2.8);
+                                        }
+                                    }
+                                }
+                                else if (effect.startsWith('subliminal:')) {
+                                    const msg = effect.split(':')[1];
+                                    const subliminal = document.querySelector('.subliminal');
+                                    if (subliminal) {
+                                        subliminal.textContent = msg;
+                                        subliminal.classList.add('active');
+                                        setTimeout(() => subliminal.classList.remove('active'), 40);
+                                    }
+                                }
+                                else if (effect.startsWith('blackout:')) {
+                                    const duration = parseInt(effect.split(':')[1]);
+                                    setTimeout(() => triggerBlackout(duration), 100);
+                                }
+                                else if (effect.startsWith('strobe:')) {
+                                    const duration = parseInt(effect.split(':')[1]);
+                                    setTimeout(() => triggerStrobe(duration), 100);
+                                }
+                                else if (effect === 'shadow') {
+                                    const side = Math.random() < 0.5 ? 'left' : 'right';
+                                    const shadowEl = document.querySelector(`.shadow.${side}`);
+                                    if (shadowEl) {
+                                        shadowEl.classList.add('active');
+                                        setTimeout(() => shadowEl.classList.remove('active'), 3000);
+                                    }
+                                }
+                                else if (effect === 'blood') {
+                                    div.classList.add('blood');
+                                    const bloodScreen = document.querySelector('.blood-screen');
+                                    if (bloodScreen) {
+                                        bloodScreen.classList.add('active');
+                                        setTimeout(() => bloodScreen.classList.remove('active'), 4000);
+                                    }
+                                }
+                                else if (effect === 'redFlicker') {
+                                    const flickerEl = document.querySelector('.red-flicker');
+                                    if (flickerEl) {
+                                        flickerEl.classList.add('active');
+                                        setTimeout(() => flickerEl.classList.remove('active'), 3000);
+                                    }
+                                }
+                                else if (effect === 'trail') {
+                                    setTimeout(() => div.classList.add('text-trail'), 100);
+                                }
+                                else if (effect === 'double') {
+                                    setTimeout(() => div.classList.add('double-vision'), 100);
+                                }
+                                else if (effect === 'freeze') {
+                                    setTimeout(() => div.classList.add('time-freeze'), 100);
+                                }
+                                else if (effect.startsWith('obsess:')) {
+                                    addObsessiveWord(effect.split(':')[1]);
+                                }
+                                else if (effect.startsWith('sound:')) {
+                                    playSound(effect.split(':')[1]);
+                                }
+                            } catch (effectError) {
+                                if (typeof console !== 'undefined' && console.warn) {
+                                    console.warn('Effect error:', effect, effectError);
+                                }
                             }
                         }
                         if (effects.includes('shake')) {
